@@ -23,7 +23,6 @@ const leadFormSchema = z.object({
   timeline: z.string().optional(),
   current_solution: z.string().optional(),
   requirements: z.string().optional(),
-  how_heard_about_us: z.string().optional(),
 });
 
 type LeadFormData = z.infer<typeof leadFormSchema>;
@@ -51,7 +50,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
     { title: 'Organization', fields: ['organization_name', 'organization_type', 'company_size'] },
     { title: 'Contact Info', fields: ['contact_name', 'email', 'phone'] },
     { title: 'Requirements', fields: ['expected_farmers', 'budget_range', 'timeline'] },
-    { title: 'Additional Info', fields: ['current_solution', 'requirements', 'how_heard_about_us'] },
+    { title: 'Additional Info', fields: ['current_solution', 'requirements'] },
   ];
 
   const handleNext = async () => {
@@ -81,13 +80,15 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
         timeline: data.timeline,
         current_solution: data.current_solution,
         requirements: data.requirements,
-        how_heard_about_us: data.how_heard_about_us,
         lead_source: source,
         status: 'new',
         priority: 'medium',
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
 
       setIsSuccess(true);
       toast({
@@ -319,11 +320,11 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         >
                           <option value="">Select budget range</option>
-                          <option value="under-50k">Under ₹50,000</option>
-                          <option value="50k-2L">₹50,000 - ₹2 Lakh</option>
-                          <option value="2L-5L">₹2 Lakh - ₹5 Lakh</option>
-                          <option value="5L-10L">₹5 Lakh - ₹10 Lakh</option>
-                          <option value="10L+">₹10 Lakh+</option>
+                          <option value="below_1_lakh">Below ₹1 Lakh</option>
+                          <option value="1_to_5_lakhs">₹1-5 Lakhs</option>
+                          <option value="5_to_10_lakhs">₹5-10 Lakhs</option>
+                          <option value="10_to_25_lakhs">₹10-25 Lakhs</option>
+                          <option value="25_lakhs_plus">₹25 Lakhs+</option>
                         </select>
                       </FormControl>
                       <FormMessage />
@@ -344,9 +345,9 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                         >
                           <option value="">Select timeline</option>
                           <option value="immediate">Immediate (within 1 month)</option>
-                          <option value="3-months">Within 3 months</option>
-                          <option value="6-months">Within 6 months</option>
-                          <option value="1-year">Within 1 year</option>
+                          <option value="3_months">Within 3 months</option>
+                          <option value="6_months">Within 6 months</option>
+                          <option value="1_year">Within 1 year</option>
                           <option value="planning">Still planning</option>
                         </select>
                       </FormControl>
@@ -391,31 +392,6 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                           placeholder="Tell us about your specific needs and goals"
                           rows={3}
                         />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="how_heard_about_us"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>How did you hear about us?</FormLabel>
-                      <FormControl>
-                        <select
-                          {...field}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        >
-                          <option value="">Select option</option>
-                          <option value="search-engine">Search Engine</option>
-                          <option value="social-media">Social Media</option>
-                          <option value="referral">Referral</option>
-                          <option value="event">Conference/Event</option>
-                          <option value="advertisement">Advertisement</option>
-                          <option value="other">Other</option>
-                        </select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
