@@ -42,7 +42,17 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
   const form = useForm<LeadFormData>({
     resolver: zodResolver(leadFormSchema),
     defaultValues: {
+      organization_name: '',
       organization_type: 'private_company',
+      company_size: '',
+      contact_name: '',
+      email: '',
+      phone: '',
+      expected_farmers: '',
+      budget_range: '',
+      timeline: '',
+      current_solution: '',
+      requirements: '',
     },
   });
 
@@ -71,15 +81,15 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
       const { error } = await supabase.from('leads').insert({
         organization_name: data.organization_name,
         organization_type: data.organization_type,
-        company_size: data.company_size,
+        company_size: data.company_size || null,
         contact_name: data.contact_name,
         email: data.email,
         phone: data.phone,
         expected_farmers: data.expected_farmers ? parseInt(data.expected_farmers) : null,
-        budget_range: data.budget_range,
-        timeline: data.timeline,
-        current_solution: data.current_solution,
-        requirements: data.requirements,
+        budget_range: data.budget_range || null,
+        timeline: data.timeline || null,
+        current_solution: data.current_solution || null,
+        requirements: data.requirements || null,
         lead_source: source,
         status: 'new',
         priority: 'medium',
@@ -118,7 +128,19 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
     onClose();
     setCurrentStep(1);
     setIsSuccess(false);
-    form.reset();
+    form.reset({
+      organization_name: '',
+      organization_type: 'private_company',
+      company_size: '',
+      contact_name: '',
+      email: '',
+      phone: '',
+      expected_farmers: '',
+      budget_range: '',
+      timeline: '',
+      current_solution: '',
+      requirements: '',
+    });
   };
 
   if (isSuccess) {
@@ -169,6 +191,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                       <FormControl>
                         <input
                           {...field}
+                          value={field.value || ''}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           placeholder="Enter your organization name"
                         />
@@ -187,6 +210,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                       <FormControl>
                         <select
                           {...field}
+                          value={field.value || 'private_company'}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         >
                           <option value="private_company">Private Company</option>
@@ -211,6 +235,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                       <FormControl>
                         <select
                           {...field}
+                          value={field.value || ''}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         >
                           <option value="">Select size</option>
@@ -238,6 +263,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                       <FormControl>
                         <input
                           {...field}
+                          value={field.value || ''}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           placeholder="Enter your full name"
                         />
@@ -256,6 +282,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                       <FormControl>
                         <input
                           {...field}
+                          value={field.value || ''}
                           type="email"
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           placeholder="Enter your email address"
@@ -275,6 +302,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                       <FormControl>
                         <input
                           {...field}
+                          value={field.value || ''}
                           type="tel"
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           placeholder="Enter your phone number"
@@ -298,6 +326,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                       <FormControl>
                         <input
                           {...field}
+                          value={field.value || ''}
                           type="number"
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           placeholder="e.g., 1000"
@@ -317,6 +346,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                       <FormControl>
                         <select
                           {...field}
+                          value={field.value || ''}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         >
                           <option value="">Select budget range</option>
@@ -341,6 +371,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                       <FormControl>
                         <select
                           {...field}
+                          value={field.value || ''}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         >
                           <option value="">Select timeline</option>
@@ -369,6 +400,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                       <FormControl>
                         <Textarea
                           {...field}
+                          value={field.value || ''}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           placeholder="Tell us about your current agricultural management system"
                           rows={3}
@@ -388,6 +420,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                       <FormControl>
                         <Textarea
                           {...field}
+                          value={field.value || ''}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                           placeholder="Tell us about your specific needs and goals"
                           rows={3}
