@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ArrowRight, ArrowLeft, Check, CheckCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -27,7 +26,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
 
   const [formData, setFormData] = useState<LeadData>({
     organization_name: '',
-    organization_type: 'Agri_Company',
+    organization_type: 'agri_company',
     contact_name: '',
     email: '',
     phone: '',
@@ -41,11 +40,11 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
   });
 
   const organizationTypes = [
-    { value: 'Agri_Company', label: 'Agricultural Company' },
-    { value: 'NGO', label: 'NGO' },
-    { value: 'University', label: 'University/Research' },
-    { value: 'Government', label: 'Government Agency' },
-    { value: 'Co-Operative', label: 'Cooperative' },
+    { value: 'agri_company', label: 'Agricultural Company' },
+    { value: 'ngo', label: 'NGO' },
+    { value: 'university', label: 'University/Research' },
+    { value: 'government', label: 'Government Agency' },
+    { value: 'cooperative', label: 'Cooperative' },
     { value: 'other', label: 'Other' },
   ];
 
@@ -95,8 +94,6 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
   };
 
   const validateStep = (stepNumber: number): boolean => {
-    const stepFields = steps[stepNumber - 1].fields;
-    
     if (stepNumber === 1) {
       if (!formData.organization_name.trim()) {
         setError('Organization name is required');
@@ -172,7 +169,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
           setCurrentStep(1);
           setFormData({
             organization_name: '',
-            organization_type: 'Agri_Company',
+            organization_type: 'agri_company',
             contact_name: '',
             email: '',
             phone: '',
@@ -215,7 +212,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
     setCustomOrgType('');
     setFormData({
       organization_name: '',
-      organization_type: 'Agri_Company',
+      organization_type: 'agri_company',
       contact_name: '',
       email: '',
       phone: '',
@@ -260,7 +257,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                 setCurrentStep(1);
                 setFormData({
                   organization_name: '',
-                  organization_type: 'Agri_Company',
+                  organization_type: 'agri_company',
                   contact_name: '',
                   email: '',
                   phone: '',
