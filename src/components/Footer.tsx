@@ -68,15 +68,15 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
-                <span className="text-gray-300">Agricultural Technology Hub, Bangalore, Karnataka, India</span>
+                <span className="text-gray-300">Vision Ai Private Limited, Kolhapur, India</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-green-400 flex-shrink-0" />
-                <span className="text-gray-300">+91 (800) 123-4567</span>
+                <span className="text-gray-300">+91 898 398 9495</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-green-400 flex-shrink-0" />
-                <span className="text-gray-300">contact@kisanshaktiai.com</span>
+                <span className="text-gray-300">contact@kisanshaktiai.in</span>
               </li>
             </ul>
             
