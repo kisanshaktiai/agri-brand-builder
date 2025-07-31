@@ -1,31 +1,15 @@
+
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { ArrowRight, ArrowLeft, Check } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Check, CheckCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 import { leadsService, type LeadData } from '@/services/LeadsService';
-
-const leadFormSchema = z.object({
-  organization_name: z.string().min(2, 'Organization name is required'),
-  organization_type: z.enum(['cooperative', 'private_company', 'government', 'ngo', 'individual', 'other']),
-  company_size: z.string().optional(),
-  contact_name: z.string().min(2, 'Contact name is required'),
-  email: z.string().email('Please enter a valid email'),
-  phone: z.string().min(10, 'Please enter a valid phone number'),
-  expected_farmers: z.string().optional(),
-  budget_range: z.string().optional(),
-  timeline: z.string().optional(),
-  current_solution: z.string().optional(),
-  requirements: z.string().optional(),
-  how_did_you_hear: z.string().optional(),
-});
-
-type LeadFormData = z.infer<typeof leadFormSchema>;
 
 interface LeadPopupFormProps {
   isOpen: boolean;
@@ -37,25 +21,56 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [customOrgType, setCustomOrgType] = useState('');
   const { toast } = useToast();
 
-  const form = useForm<LeadFormData>({
-    resolver: zodResolver(leadFormSchema),
-    defaultValues: {
-      organization_name: '',
-      organization_type: 'private_company',
-      company_size: '',
-      contact_name: '',
-      email: '',
-      phone: '',
-      expected_farmers: '',
-      budget_range: '',
-      timeline: '',
-      current_solution: '',
-      requirements: '',
-      how_did_you_hear: '',
-    },
+  const [formData, setFormData] = useState<LeadData>({
+    organization_name: '',
+    organization_type: 'Agri_Company',
+    contact_name: '',
+    email: '',
+    phone: '',
+    company_size: undefined,
+    expected_farmers: undefined,
+    budget_range: undefined,
+    timeline: undefined,
+    requirements: '',
+    current_solution: '',
+    how_did_you_hear: ''
   });
+
+  const organizationTypes = [
+    { value: 'Agri_Company', label: 'Agricultural Company' },
+    { value: 'NGO', label: 'NGO' },
+    { value: 'University', label: 'University/Research' },
+    { value: 'Government', label: 'Government Agency' },
+    { value: 'Co-Operative', label: 'Cooperative' },
+    { value: 'other', label: 'Other' },
+  ];
+
+  const companySizes = [
+    { value: '1-10', label: '1-10 employees' },
+    { value: '11-50', label: '11-50 employees' },
+    { value: '51-200', label: '51-200 employees' },
+    { value: '201-1000', label: '201-1000 employees' },
+    { value: '1000+', label: '1000+ employees' },
+  ];
+
+  const budgetRanges = [
+    { value: 'under_25k', label: 'Under ₹25,000' },
+    { value: '25k_50k', label: '₹25,000 - ₹50,000' },
+    { value: '50k_100k', label: '₹50,000 - ₹1,00,000' },
+    { value: '100k_plus', label: '₹1,00,000+' },
+  ];
+
+  const timelines = [
+    { value: 'immediate', label: 'Immediate (within 1 month)' },
+    { value: '1_month', label: '1-2 months' },
+    { value: '3_months', label: '3-6 months' },
+    { value: '6_months', label: '6+ months' },
+    { value: 'flexible', label: 'Flexible timeline' },
+  ];
 
   const steps = [
     { title: 'Organization', fields: ['organization_name', 'organization_type', 'company_size'] },
@@ -64,37 +79,85 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
     { title: 'Additional Info', fields: ['current_solution', 'requirements', 'how_did_you_hear'] },
   ];
 
-  const handleNext = async () => {
-    const currentFields = steps[currentStep - 1].fields;
-    const isValid = await form.trigger(currentFields as any);
-    if (isValid) {
+  const handleInputChange = (field: keyof LeadData, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    setError(null);
+  };
+
+  const handleOrgTypeChange = (value: string) => {
+    handleInputChange('organization_type', value as LeadData['organization_type']);
+    if (value !== 'other') {
+      setCustomOrgType('');
+    }
+  };
+
+  const validateStep = (stepNumber: number): boolean => {
+    const stepFields = steps[stepNumber - 1].fields;
+    
+    if (stepNumber === 1) {
+      if (!formData.organization_name.trim()) {
+        setError('Organization name is required');
+        return false;
+      }
+      if (formData.organization_type === 'other' && !customOrgType.trim()) {
+        setError('Please specify your organization type');
+        return false;
+      }
+    }
+    
+    if (stepNumber === 2) {
+      if (!formData.contact_name.trim()) {
+        setError('Contact name is required');
+        return false;
+      }
+      if (!formData.email.trim()) {
+        setError('Email is required');
+        return false;
+      }
+      const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+      if (!emailRegex.test(formData.email)) {
+        setError('Please enter a valid email address');
+        return false;
+      }
+    }
+    
+    setError(null);
+    return true;
+  };
+
+  const handleNext = () => {
+    if (validateStep(currentStep)) {
       setCurrentStep(prev => Math.min(prev + 1, steps.length));
     }
   };
 
   const handlePrevious = () => {
     setCurrentStep(prev => Math.max(prev - 1, 1));
+    setError(null);
   };
 
-  const onSubmit = async (data: LeadFormData) => {
-    setIsSubmitting(true);
-    try {
-      const leadData: LeadData = {
-        organization_name: data.organization_name,
-        organization_type: data.organization_type,
-        company_size: data.company_size || '',
-        contact_name: data.contact_name,
-        email: data.email,
-        phone: data.phone,
-        expected_farmers: data.expected_farmers ? parseInt(data.expected_farmers) : undefined,
-        budget_range: data.budget_range || '',
-        timeline: data.timeline || '',
-        current_solution: data.current_solution || '',
-        requirements: data.requirements || '',
-        how_did_you_hear: data.how_did_you_hear || '',
-      };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateStep(currentStep)) {
+      return;
+    }
 
-      const result = await leadsService.submitInquiry(leadData);
+    setError(null);
+    setIsSubmitting(true);
+
+    const submitData: LeadData = {
+      ...formData,
+      organization_type: formData.organization_type === 'other' 
+        ? (customOrgType || 'other') as LeadData['organization_type']
+        : formData.organization_type
+    };
+
+    try {
+      const result = await leadsService.submitInquiry(submitData);
 
       if (result.success) {
         setIsSuccess(true);
@@ -107,9 +170,24 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
           onClose();
           setIsSuccess(false);
           setCurrentStep(1);
-          form.reset();
-        }, 2000);
+          setFormData({
+            organization_name: '',
+            organization_type: 'Agri_Company',
+            contact_name: '',
+            email: '',
+            phone: '',
+            company_size: undefined,
+            expected_farmers: undefined,
+            budget_range: undefined,
+            timeline: undefined,
+            requirements: '',
+            current_solution: '',
+            how_did_you_hear: ''
+          });
+          setCustomOrgType('');
+        }, 3000);
       } else {
+        setError(result.error || 'Failed to submit your request. Please try again.');
         toast({
           title: "Error",
           description: result.error || "Failed to submit your request. Please try again.",
@@ -118,6 +196,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
       }
     } catch (error) {
       console.error('Error submitting lead:', error);
+      setError('An unexpected error occurred. Please try again.');
       toast({
         title: "Error",
         description: "An unexpected error occurred. Please try again.",
@@ -132,19 +211,74 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
     onClose();
     setCurrentStep(1);
     setIsSuccess(false);
-    form.reset();
+    setError(null);
+    setCustomOrgType('');
+    setFormData({
+      organization_name: '',
+      organization_type: 'Agri_Company',
+      contact_name: '',
+      email: '',
+      phone: '',
+      company_size: undefined,
+      expected_farmers: undefined,
+      budget_range: undefined,
+      timeline: undefined,
+      requirements: '',
+      current_solution: '',
+      how_did_you_hear: ''
+    });
   };
 
   if (isSuccess) {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-md">
-          <div className="flex flex-col items-center justify-center p-6 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-              <Check className="w-8 h-8 text-green-600" />
+          <div className="flex flex-col items-center justify-center p-6 text-center space-y-4">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+              <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Request Submitted!</h3>
-            <p className="text-gray-600">Thank you for your interest. Our team will contact you within 24 hours.</p>
+            <div className="space-y-2">
+              <h3 className="text-2xl font-bold text-green-600">
+                Thank you for your inquiry!
+              </h3>
+              <p className="text-gray-600">
+                We've received your information and our team will contact you within 24 hours.
+              </p>
+            </div>
+            <div className="p-4 bg-green-50 rounded-lg border border-green-200 w-full">
+              <h4 className="font-medium mb-2 text-green-800">What happens next?</h4>
+              <ul className="text-sm space-y-1 text-green-700 text-left">
+                <li>• A member of our team will reach out to you shortly</li>
+                <li>• We'll schedule a demo tailored to your needs</li>
+                <li>• You'll get a personalized proposal and pricing</li>
+                <li>• We'll help you get started with a free trial</li>
+              </ul>
+            </div>
+            <Button 
+              onClick={() => {
+                setIsSuccess(false);
+                setCurrentStep(1);
+                setFormData({
+                  organization_name: '',
+                  organization_type: 'Agri_Company',
+                  contact_name: '',
+                  email: '',
+                  phone: '',
+                  company_size: undefined,
+                  expected_farmers: undefined,
+                  budget_range: undefined,
+                  timeline: undefined,
+                  requirements: '',
+                  current_solution: '',
+                  how_did_you_hear: ''
+                });
+                setCustomOrgType('');
+              }} 
+              variant="outline"
+              className="w-full"
+            >
+              Submit Another Inquiry
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -170,334 +304,249 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
           </div>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {currentStep === 1 && (
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="organization_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Organization Name *</FormLabel>
-                      <FormControl>
-                        <input
-                          {...field}
-                          value={field.value || ''}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          placeholder="Enter your organization name"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="organization_type"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Organization Type *</FormLabel>
-                      <FormControl>
-                        <select
-                          {...field}
-                          value={field.value || 'private_company'}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        >
-                          <option value="private_company">Private Company</option>
-                          <option value="cooperative">Cooperative</option>
-                          <option value="government">Government</option>
-                          <option value="ngo">NGO</option>
-                          <option value="individual">Individual</option>
-                          <option value="other">Other</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="company_size"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Company Size</FormLabel>
-                      <FormControl>
-                        <select
-                          {...field}
-                          value={field.value || ''}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        >
-                          <option value="">Select size</option>
-                          <option value="1-10">1-10 employees</option>
-                          <option value="11-50">11-50 employees</option>
-                          <option value="51-200">51-200 employees</option>
-                          <option value="200+">200+ employees</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {currentStep === 1 && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="organization_name">Organization Name *</Label>
+                <Input
+                  id="organization_name"
+                  value={formData.organization_name}
+                  onChange={(e) => handleInputChange('organization_name', e.target.value)}
+                  placeholder="Enter your organization name"
+                  required
                 />
               </div>
-            )}
 
-            {currentStep === 2 && (
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="contact_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Contact Name *</FormLabel>
-                      <FormControl>
-                        <input
-                          {...field}
-                          value={field.value || ''}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          placeholder="Enter your full name"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email Address *</FormLabel>
-                      <FormControl>
-                        <input
-                          {...field}
-                          value={field.value || ''}
-                          type="email"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          placeholder="Enter your email address"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone Number *</FormLabel>
-                      <FormControl>
-                        <input
-                          {...field}
-                          value={field.value || ''}
-                          type="tel"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          placeholder="Enter your phone number"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            )}
-
-            {currentStep === 3 && (
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="expected_farmers"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Expected Number of Farmers</FormLabel>
-                      <FormControl>
-                        <input
-                          {...field}
-                          value={field.value || ''}
-                          type="number"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          placeholder="e.g., 1000"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="budget_range"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Budget Range</FormLabel>
-                      <FormControl>
-                        <select
-                          {...field}
-                          value={field.value || ''}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        >
-                          <option value="">Select budget range</option>
-                          <option value="below_1_lakh">Below ₹1 Lakh</option>
-                          <option value="1_to_5_lakhs">₹1-5 Lakhs</option>
-                          <option value="5_to_10_lakhs">₹5-10 Lakhs</option>
-                          <option value="10_to_25_lakhs">₹10-25 Lakhs</option>
-                          <option value="25_lakhs_plus">₹25 Lakhs+</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="timeline"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Implementation Timeline</FormLabel>
-                      <FormControl>
-                        <select
-                          {...field}
-                          value={field.value || ''}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        >
-                          <option value="">Select timeline</option>
-                          <option value="immediate">Immediate (within 1 month)</option>
-                          <option value="3_months">Within 3 months</option>
-                          <option value="6_months">Within 6 months</option>
-                          <option value="1_year">Within 1 year</option>
-                          <option value="planning">Still planning</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            )}
-
-            {currentStep === 4 && (
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="current_solution"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Current Solution (if any)</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          {...field}
-                          value={field.value || ''}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          placeholder="Tell us about your current agricultural management system"
-                          rows={3}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="requirements"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Specific Requirements</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          {...field}
-                          value={field.value || ''}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          placeholder="Tell us about your specific needs and goals"
-                          rows={3}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="how_did_you_hear"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>How did you hear about us?</FormLabel>
-                      <FormControl>
-                        <select
-                          {...field}
-                          value={field.value || ''}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                        >
-                          <option value="">Select an option</option>
-                          <option value="google_search">Google Search</option>
-                          <option value="social_media">Social Media</option>
-                          <option value="referral">Referral from friend/colleague</option>
-                          <option value="industry_event">Industry Event</option>
-                          <option value="online_ad">Online Advertisement</option>
-                          <option value="news_article">News Article</option>
-                          <option value="other">Other</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            )}
-
-            <div className="flex justify-between pt-6">
-              {currentStep > 1 ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handlePrevious}
-                  className="flex items-center space-x-2"
+              <div className="space-y-2">
+                <Label htmlFor="organization_type">Organization Type *</Label>
+                <Select 
+                  value={formData.organization_type} 
+                  onValueChange={handleOrgTypeChange}
                 >
-                  <ArrowLeft className="w-4 h-4" />
-                  <span>Previous</span>
-                </Button>
-              ) : (
-                <div />
-              )}
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {organizationTypes.map((type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {formData.organization_type === 'other' && (
+                  <Input
+                    value={customOrgType}
+                    onChange={(e) => setCustomOrgType(e.target.value)}
+                    placeholder="Please specify your organization type"
+                    required
+                    className="mt-2"
+                  />
+                )}
+              </div>
 
-              {currentStep < steps.length ? (
-                <Button
-                  type="button"
-                  onClick={handleNext}
-                  className="bg-green-600 hover:bg-green-700 text-white flex items-center space-x-2"
+              <div className="space-y-2">
+                <Label htmlFor="company_size">Company Size</Label>
+                <Select 
+                  value={formData.company_size || ''} 
+                  onValueChange={(value) => handleInputChange('company_size', value)}
                 >
-                  <span>Next</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              ) : (
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-green-600 hover:bg-green-700 text-white flex items-center space-x-2"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Submitting...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Submit Request</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              )}
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select company size" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {companySizes.map((size) => (
+                      <SelectItem key={size.value} value={size.value}>
+                        {size.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-          </form>
-        </Form>
+          )}
+
+          {currentStep === 2 && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="contact_name">Contact Name *</Label>
+                <Input
+                  id="contact_name"
+                  value={formData.contact_name}
+                  onChange={(e) => handleInputChange('contact_name', e.target.value)}
+                  placeholder="Enter your full name"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  placeholder="your.email@company.com"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  placeholder="Your phone number"
+                />
+              </div>
+            </div>
+          )}
+
+          {currentStep === 3 && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="expected_farmers">Expected Number of Farmers</Label>
+                <Input
+                  id="expected_farmers"
+                  type="number"
+                  value={formData.expected_farmers || ''}
+                  onChange={(e) => handleInputChange('expected_farmers', e.target.value ? parseInt(e.target.value) : undefined)}
+                  placeholder="e.g., 1000"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="budget_range">Budget Range (Annual)</Label>
+                <Select 
+                  value={formData.budget_range || ''} 
+                  onValueChange={(value) => handleInputChange('budget_range', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select budget range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {budgetRanges.map((budget) => (
+                      <SelectItem key={budget.value} value={budget.value}>
+                        {budget.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="timeline">Implementation Timeline</Label>
+                <Select 
+                  value={formData.timeline || ''} 
+                  onValueChange={(value) => handleInputChange('timeline', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select timeline" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {timelines.map((timeline) => (
+                      <SelectItem key={timeline.value} value={timeline.value}>
+                        {timeline.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 4 && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="current_solution">Current Solution (if any)</Label>
+                <Textarea
+                  id="current_solution"
+                  value={formData.current_solution}
+                  onChange={(e) => handleInputChange('current_solution', e.target.value)}
+                  placeholder="What tools or systems are you currently using?"
+                  rows={3}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="requirements">Specific Requirements</Label>
+                <Textarea
+                  id="requirements"
+                  value={formData.requirements}
+                  onChange={(e) => handleInputChange('requirements', e.target.value)}
+                  placeholder="Tell us about your specific needs, challenges, or features you're looking for..."
+                  rows={3}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="how_did_you_hear">How did you hear about us?</Label>
+                <Input
+                  id="how_did_you_hear"
+                  value={formData.how_did_you_hear}
+                  onChange={(e) => handleInputChange('how_did_you_hear', e.target.value)}
+                  placeholder="e.g., Google search, referral, etc."
+                />
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          <div className="flex justify-between pt-6">
+            {currentStep > 1 ? (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handlePrevious}
+                className="flex items-center space-x-2"
+                disabled={isSubmitting}
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Previous</span>
+              </Button>
+            ) : (
+              <div />
+            )}
+
+            {currentStep < steps.length ? (
+              <Button
+                type="button"
+                onClick={handleNext}
+                className="bg-green-600 hover:bg-green-700 text-white flex items-center space-x-2"
+                disabled={isSubmitting}
+              >
+                <span>Next</span>
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-green-600 hover:bg-green-700 text-white flex items-center space-x-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Submitting...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Submit Request</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   );
