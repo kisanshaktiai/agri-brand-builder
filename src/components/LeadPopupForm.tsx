@@ -1,15 +1,14 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { X, ArrowRight, ArrowLeft, Check } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { leadsService, type LeadData } from '@/services/LeadsService';
 
 const leadFormSchema = z.object({
   organization_name: z.string().min(2, 'Organization name is required'),
@@ -23,6 +22,7 @@ const leadFormSchema = z.object({
   timeline: z.string().optional(),
   current_solution: z.string().optional(),
   requirements: z.string().optional(),
+  how_did_you_hear: z.string().optional(),
 });
 
 type LeadFormData = z.infer<typeof leadFormSchema>;
@@ -53,6 +53,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
       timeline: '',
       current_solution: '',
       requirements: '',
+      how_did_you_hear: '',
     },
   });
 
@@ -60,7 +61,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
     { title: 'Organization', fields: ['organization_name', 'organization_type', 'company_size'] },
     { title: 'Contact Info', fields: ['contact_name', 'email', 'phone'] },
     { title: 'Requirements', fields: ['expected_farmers', 'budget_range', 'timeline'] },
-    { title: 'Additional Info', fields: ['current_solution', 'requirements'] },
+    { title: 'Additional Info', fields: ['current_solution', 'requirements', 'how_did_you_hear'] },
   ];
 
   const handleNext = async () => {
@@ -78,45 +79,48 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
   const onSubmit = async (data: LeadFormData) => {
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('leads').insert({
+      const leadData: LeadData = {
         organization_name: data.organization_name,
         organization_type: data.organization_type,
-        company_size: data.company_size || null,
+        company_size: data.company_size || '',
         contact_name: data.contact_name,
         email: data.email,
         phone: data.phone,
-        expected_farmers: data.expected_farmers ? parseInt(data.expected_farmers) : null,
-        budget_range: data.budget_range || null,
-        timeline: data.timeline || null,
-        current_solution: data.current_solution || null,
-        requirements: data.requirements || null,
-        lead_source: source,
-        status: 'new',
-        priority: 'medium',
-      });
+        expected_farmers: data.expected_farmers ? parseInt(data.expected_farmers) : undefined,
+        budget_range: data.budget_range || '',
+        timeline: data.timeline || '',
+        current_solution: data.current_solution || '',
+        requirements: data.requirements || '',
+        how_did_you_hear: data.how_did_you_hear || '',
+      };
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+      const result = await leadsService.submitInquiry(leadData);
+
+      if (result.success) {
+        setIsSuccess(true);
+        toast({
+          title: "Success!",
+          description: "Your request has been submitted. We'll contact you soon.",
+        });
+
+        setTimeout(() => {
+          onClose();
+          setIsSuccess(false);
+          setCurrentStep(1);
+          form.reset();
+        }, 2000);
+      } else {
+        toast({
+          title: "Error",
+          description: result.error || "Failed to submit your request. Please try again.",
+          variant: "destructive",
+        });
       }
-
-      setIsSuccess(true);
-      toast({
-        title: "Success!",
-        description: "Your request has been submitted. We'll contact you soon.",
-      });
-
-      setTimeout(() => {
-        onClose();
-        setIsSuccess(false);
-        setCurrentStep(1);
-        form.reset();
-      }, 2000);
     } catch (error) {
       console.error('Error submitting lead:', error);
       toast({
         title: "Error",
-        description: "Failed to submit your request. Please try again.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -128,19 +132,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
     onClose();
     setCurrentStep(1);
     setIsSuccess(false);
-    form.reset({
-      organization_name: '',
-      organization_type: 'private_company',
-      company_size: '',
-      contact_name: '',
-      email: '',
-      phone: '',
-      expected_farmers: '',
-      budget_range: '',
-      timeline: '',
-      current_solution: '',
-      requirements: '',
-    });
+    form.reset();
   };
 
   if (isSuccess) {
@@ -425,6 +417,33 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
                           placeholder="Tell us about your specific needs and goals"
                           rows={3}
                         />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="how_did_you_hear"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>How did you hear about us?</FormLabel>
+                      <FormControl>
+                        <select
+                          {...field}
+                          value={field.value || ''}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                        >
+                          <option value="">Select an option</option>
+                          <option value="google_search">Google Search</option>
+                          <option value="social_media">Social Media</option>
+                          <option value="referral">Referral from friend/colleague</option>
+                          <option value="industry_event">Industry Event</option>
+                          <option value="online_ad">Online Advertisement</option>
+                          <option value="news_article">News Article</option>
+                          <option value="other">Other</option>
+                        </select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
