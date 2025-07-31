@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, Check, CheckCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -38,6 +38,25 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
     current_solution: '',
     how_did_you_hear: ''
   });
+
+  // Test database connection when component mounts
+  useEffect(() => {
+    if (isOpen) {
+      const testConnection = async () => {
+        try {
+          const result = await leadsService.testConnection();
+          if (!result.connected) {
+            console.warn('Database connection test failed:', result.error);
+          } else {
+            console.log('Database connection verified');
+          }
+        } catch (error) {
+          console.warn('Connection test failed:', error);
+        }
+      };
+      testConnection();
+    }
+  }, [isOpen]);
 
   const organizationTypes = [
     { value: 'agri_company', label: 'Agricultural Company' },
@@ -143,6 +162,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
       return;
     }
 
+    console.log('Form submission started...');
     setError(null);
     setIsSubmitting(true);
 
@@ -153,8 +173,11 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
         : formData.organization_type
     };
 
+    console.log('Submitting data:', submitData);
+
     try {
       const result = await leadsService.submitInquiry(submitData);
+      console.log('Submission result:', result);
 
       if (result.success) {
         setIsSuccess(true);
@@ -184,6 +207,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
           setCustomOrgType('');
         }, 3000);
       } else {
+        console.error('Submission failed:', result.error);
         setError(result.error || 'Failed to submit your request. Please try again.');
         toast({
           title: "Error",
@@ -193,10 +217,11 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
       }
     } catch (error) {
       console.error('Error submitting lead:', error);
-      setError('An unexpected error occurred. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.';
+      setError(errorMessage);
       toast({
         title: "Error",
-        description: "An unexpected error occurred. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

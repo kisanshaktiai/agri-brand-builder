@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 
 export interface LeadData {
@@ -31,6 +32,9 @@ export interface Lead extends LeadData {
 export class LeadsService {
   async submitInquiry(leadData: LeadData): Promise<{ success: boolean; error?: string; lead?: Lead }> {
     try {
+      console.log('Starting lead submission process...');
+      console.log('Lead data:', leadData);
+
       // Validate required fields
       if (!leadData.organization_name.trim()) {
         return { success: false, error: 'Organization name is required' };
@@ -54,43 +58,97 @@ export class LeadsService {
         return { success: false, error: 'Please enter a valid email address' };
       }
 
+      // Validate organization type
+      const validOrgTypes = ['agri_company', 'ngo', 'university', 'government', 'cooperative', 'other'];
+      if (!validOrgTypes.includes(leadData.organization_type)) {
+        console.error('Invalid organization type:', leadData.organization_type);
+        return { success: false, error: 'Invalid organization type selected' };
+      }
+
+      console.log('Validation passed, preparing data for database...');
+
+      // Prepare the data for insertion
+      const insertData = {
+        organization_name: leadData.organization_name,
+        organization_type: leadData.organization_type,
+        contact_name: leadData.contact_name,
+        email: leadData.email,
+        phone: leadData.phone,
+        company_size: leadData.company_size || null,
+        expected_farmers: leadData.expected_farmers ? Number(leadData.expected_farmers) : null,
+        budget_range: leadData.budget_range || null,
+        timeline: leadData.timeline || null,
+        current_solution: leadData.current_solution || null,
+        requirements: leadData.requirements || null,
+        how_did_you_hear: leadData.how_did_you_hear || null,
+        lead_source: 'website',
+        status: 'new' as const,
+        priority: 'medium' as const,
+        metadata: {}
+      };
+
+      console.log('Data prepared for insertion:', insertData);
+
+      // Test connection first
+      const { data: testConnection } = await supabase
+        .from('leads')
+        .select('count')
+        .limit(1);
+
+      console.log('Connection test result:', testConnection);
+
       // Submit lead to database
+      console.log('Attempting to insert lead into database...');
       const { data, error } = await supabase
         .from('leads')
-        .insert({
-          organization_name: leadData.organization_name,
-          organization_type: leadData.organization_type,
-          company_size: leadData.company_size || null,
-          contact_name: leadData.contact_name,
-          email: leadData.email,
-          phone: leadData.phone,
-          expected_farmers: leadData.expected_farmers ? Number(leadData.expected_farmers) : null,
-          budget_range: leadData.budget_range || null,
-          timeline: leadData.timeline || null,
-          current_solution: leadData.current_solution || null,
-          requirements: leadData.requirements || null,
-          how_did_you_hear: leadData.how_did_you_hear || null,
-          lead_source: 'website',
-          status: 'new',
-          priority: 'medium',
-        })
+        .insert(insertData)
         .select()
         .single();
 
       if (error) {
-        console.error('Error submitting lead:', error);
-        return { success: false, error: 'Failed to submit inquiry. Please try again.' };
+        console.error('Supabase error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
+
+        // Provide more specific error messages based on error type
+        if (error.code === '42501') {
+          return { success: false, error: 'Database access denied. Please try again later.' };
+        } else if (error.code === '23514') {
+          return { success: false, error: 'Invalid data format. Please check your input and try again.' };
+        } else if (error.message.includes('row-level security')) {
+          return { success: false, error: 'Security validation failed. Please try again.' };
+        } else {
+          return { success: false, error: `Database error: ${error.message}` };
+        }
       }
 
+      if (!data) {
+        console.error('No data returned from insert operation');
+        return { success: false, error: 'Failed to save inquiry. Please try again.' };
+      }
+
+      console.log('Lead successfully inserted:', data);
       return { success: true, lead: data as Lead };
+
     } catch (error) {
       console.error('Unexpected error submitting lead:', error);
+      
+      // Handle network errors
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        return { success: false, error: 'Network connection error. Please check your internet connection and try again.' };
+      }
+
       return { success: false, error: 'An unexpected error occurred. Please try again.' };
     }
   }
 
   async getLeads(): Promise<Lead[]> {
     try {
+      console.log('Fetching leads from database...');
+      
       const { data, error } = await supabase
         .from('leads')
         .select('*')
@@ -101,6 +159,7 @@ export class LeadsService {
         return [];
       }
 
+      console.log(`Successfully fetched ${data?.length || 0} leads`);
       return (data || []) as Lead[];
     } catch (error) {
       console.error('Unexpected error fetching leads:', error);
@@ -110,6 +169,8 @@ export class LeadsService {
 
   async updateLeadStatus(leadId: string, status: Lead['status'], notes?: string): Promise<boolean> {
     try {
+      console.log(`Updating lead ${leadId} status to ${status}`);
+      
       const { error } = await supabase
         .from('leads')
         .update({ 
@@ -124,10 +185,34 @@ export class LeadsService {
         return false;
       }
 
+      console.log(`Successfully updated lead ${leadId} status`);
       return true;
     } catch (error) {
       console.error('Unexpected error updating lead:', error);
       return false;
+    }
+  }
+
+  // Add method to test database connection
+  async testConnection(): Promise<{ connected: boolean; error?: string }> {
+    try {
+      console.log('Testing database connection...');
+      
+      const { data, error } = await supabase
+        .from('leads')
+        .select('count')
+        .limit(1);
+
+      if (error) {
+        console.error('Connection test failed:', error);
+        return { connected: false, error: error.message };
+      }
+
+      console.log('Database connection successful');
+      return { connected: true };
+    } catch (error) {
+      console.error('Connection test error:', error);
+      return { connected: false, error: 'Failed to connect to database' };
     }
   }
 }
