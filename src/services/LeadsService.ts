@@ -116,6 +116,31 @@ export class LeadsService {
       return [];
     }
   }
+
+  async updateLeadStatus(leadId: string, status: Lead['status']): Promise<boolean> {
+    try {
+      console.log('Updating lead status:', leadId, status);
+
+      const { error } = await supabase
+        .from('leads')
+        .update({ 
+          status,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', leadId);
+
+      if (error) {
+        console.error('Error updating lead status:', error);
+        return false;
+      }
+
+      console.log('Lead status updated successfully');
+      return true;
+    } catch (error) {
+      console.error('Unexpected error updating lead status:', error);
+      return false;
+    }
+  }
 }
 
 export const leadsService = new LeadsService();
