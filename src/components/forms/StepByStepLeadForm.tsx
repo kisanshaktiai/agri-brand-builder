@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
-import { ArrowLeft, ArrowRight, CheckCircle, Building2, Users, DollarSign, Calendar, MessageSquare, Eye, Globe } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, Building2, Users, DollarSign, Calendar, MessageSquare, Eye, Globe, Building, UserCheck, Briefcase, Factory, Sparkles } from 'lucide-react';
 import { SelectionButtonGroup } from './SelectionButtonGroup';
 import { useToast } from '@/hooks/use-toast';
 import { LeadsService } from '@/services/LeadsService';
@@ -36,17 +36,17 @@ const organizationTypeOptions = [
   { value: 'agri_company', label: 'Agriculture Company', description: 'Commercial farming or agribusiness', icon: <Building2 className="w-5 h-5" /> },
   { value: 'ngo', label: 'NGO/Non-Profit', description: 'Agricultural development organization', icon: <Users className="w-5 h-5" /> },
   { value: 'university', label: 'University/Research', description: 'Academic or research institution', icon: <Eye className="w-5 h-5" /> },
-  { value: 'government', label: 'Government', description: 'Government department or agency', icon: <Building2 className="w-5 h-5" /> },
+  { value: 'government', label: 'Government', description: 'Government department or agency', icon: <Building className="w-5 h-5" /> },
   { value: 'cooperative', label: 'Cooperative', description: 'Farmer cooperative or collective', icon: <Users className="w-5 h-5" /> },
   { value: 'other', label: 'Other', description: 'Other type of organization', icon: <Building2 className="w-5 h-5" /> }
 ];
 
 const companySizeOptions = [
-  { value: '1-10', label: '1-10 employees', description: 'Small team or startup' },
-  { value: '11-50', label: '11-50 employees', description: 'Growing business' },
-  { value: '51-200', label: '51-200 employees', description: 'Medium-sized company' },
-  { value: '201-500', label: '201-500 employees', description: 'Large organization' },
-  { value: '500+', label: '500+ employees', description: 'Enterprise level' }
+  { value: '1-10', label: '1-10 employees', description: 'Small team or startup', icon: <UserCheck className="w-6 h-6" /> },
+  { value: '11-50', label: '11-50 employees', description: 'Growing business', icon: <Users className="w-6 h-6" /> },
+  { value: '51-200', label: '51-200 employees', description: 'Medium-sized company', icon: <Briefcase className="w-6 h-6" /> },
+  { value: '201-500', label: '201-500 employees', description: 'Large organization', icon: <Building className="w-6 h-6" /> },
+  { value: '500+', label: '500+ employees', description: 'Enterprise level', icon: <Factory className="w-6 h-6" /> }
 ];
 
 const budgetRangeOptions = [
@@ -288,27 +288,66 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
     return (
       <Card className="w-full max-w-2xl mx-auto">
         <CardContent className="p-4 sm:p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-8 h-8 text-green-600" />
+          <div className="animate-fade-in">
+            {/* Animated Logo */}
+            <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-scale-in shadow-lg">
+              <span className="text-2xl font-bold text-white animate-pulse">K</span>
+            </div>
+            
+            {/* Animated Welcome Message */}
+            <div className="mb-6 animate-slide-up">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Sparkles className="w-6 h-6 text-yellow-500 animate-pulse" />
+                <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent">
+                  Great! Welcome aboard!
+                </h2>
+                <Sparkles className="w-6 h-6 text-yellow-500 animate-pulse" />
+              </div>
+              <p className="text-lg text-gray-600 mb-4 animate-fade-in" style={{animationDelay: '0.5s'}}>
+                Thank you for choosing KisanShakti AI
+              </p>
+            </div>
+            
+            {/* Success Icon */}
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+              <CheckCircle className="w-8 h-8 text-green-600" />
+            </div>
+            
+            <p className="text-gray-600 mb-6 text-sm sm:text-base animate-fade-in" style={{animationDelay: '1s'}}>
+              We've received your information and our team will contact you within 24 hours.
+            </p>
+            
+            <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-6 mb-6 animate-slide-up" style={{animationDelay: '1.5s'}}>
+              <h3 className="font-semibold text-green-800 mb-3 flex items-center justify-center gap-2">
+                <Calendar className="w-5 h-5" />
+                What happens next?
+              </h3>
+              <ul className="text-sm text-green-700 space-y-2 text-left max-w-md mx-auto">
+                <li className="flex items-start gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  A member of our team will reach out to you shortly
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  We'll schedule a demo tailored to your needs
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  You'll get a personalized proposal and pricing
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  We'll help you get started with a free trial
+                </li>
+              </ul>
+            </div>
+            
+            {onClose && (
+              <Button onClick={onClose} variant="outline" className="w-full sm:w-auto animate-fade-in" style={{animationDelay: '2s'}}>
+                Close
+              </Button>
+            )}
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-green-600 mb-4">Thank you for your inquiry!</h2>
-          <p className="text-gray-600 mb-6 text-sm sm:text-base">
-            We've received your information and our team will contact you within 24 hours.
-          </p>
-          <div className="bg-green-50 rounded-lg p-4 mb-6">
-            <h3 className="font-medium text-green-800 mb-2">What happens next?</h3>
-            <ul className="text-sm text-green-700 space-y-1 text-left">
-              <li>• A member of our team will reach out to you shortly</li>
-              <li>• We'll schedule a demo tailored to your needs</li>
-              <li>• You'll get a personalized proposal and pricing</li>
-              <li>• We'll help you get started with a free trial</li>
-            </ul>
-          </div>
-          {onClose && (
-            <Button onClick={onClose} variant="outline" className="w-full sm:w-auto">
-              Close
-            </Button>
-          )}
         </CardContent>
       </Card>
     );
@@ -371,7 +410,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
           </div>
         )}
 
-        {/* Step 2: Company Size */}
+        {/* Step 2: Company Size - Enhanced Card View */}
         {currentStep === 2 && (
           <div className="space-y-6">
             <div>
@@ -386,7 +425,8 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
               name="company_size"
               label=""
               error={errors.company_size}
-              columns={1}
+              columns={2}
+              variant="cards"
             />
           </div>
         )}
@@ -472,7 +512,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
           </div>
         )}
 
-        {/* Step 4: Requirements & Budget */}
+        {/* Step 4: Budget & Timeline - Two Cards in One Row */}
         {currentStep === 4 && (
           <div className="space-y-6">
             <div>
@@ -480,30 +520,42 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
               <p className="text-gray-600 text-sm mb-4">Help us understand your project scope</p>
             </div>
             
-            <div>
-              <h4 className="font-medium mb-3">What's your budget range? *</h4>
-              <SelectionButtonGroup
-                options={budgetRangeOptions}
-                value={formData.budget_range}
-                onChange={(value) => updateFormData('budget_range', value)}
-                name="budget_range"
-                label=""
-                error={errors.budget_range}
-                columns={1}
-              />
-            </div>
+            <div className="grid gap-6 lg:grid-cols-2">
+              {/* Budget Range Card */}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h4 className="font-semibold mb-3 text-gray-800 flex items-center gap-2">
+                  <DollarSign className="w-5 h-5 text-green-600" />
+                  What's your budget range? *
+                </h4>
+                <SelectionButtonGroup
+                  options={budgetRangeOptions}
+                  value={formData.budget_range}
+                  onChange={(value) => updateFormData('budget_range', value)}
+                  name="budget_range"
+                  label=""
+                  error={errors.budget_range}
+                  columns={1}
+                  variant="compact"
+                />
+              </div>
 
-            <div>
-              <h4 className="font-medium mb-3">When do you want to get started? *</h4>
-              <SelectionButtonGroup
-                options={timelineOptions}
-                value={formData.timeline}
-                onChange={(value) => updateFormData('timeline', value)}
-                name="timeline"
-                label=""
-                error={errors.timeline}
-                columns={1}
-              />
+              {/* Timeline Card */}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h4 className="font-semibold mb-3 text-gray-800 flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-green-600" />
+                  When do you want to get started? *
+                </h4>
+                <SelectionButtonGroup
+                  options={timelineOptions}
+                  value={formData.timeline}
+                  onChange={(value) => updateFormData('timeline', value)}
+                  name="timeline"
+                  label=""
+                  error={errors.timeline}
+                  columns={1}
+                  variant="compact"
+                />
+              </div>
             </div>
 
             <div>
