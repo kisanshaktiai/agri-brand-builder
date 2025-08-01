@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -140,23 +141,21 @@ const InquiryForm = () => {
     try {
       const leadData = {
         organization_name: organizationName,
-        organization_type: organizationType,
+        organization_type: organizationType as any,
         contact_name: contactName,
         email: email.toLowerCase().trim(),
         phone: phone.trim(),
-        company_size: companySize || null,
-        expected_farmers: expectedFarmers ? parseInt(expectedFarmers) : null,
-        budget_range: budgetRange || null,
-        timeline: timeline || null,
-        current_solution: currentSolution.trim() || null,
-        requirements: requirements.trim() || null,
-        how_did_you_hear: howDidYouHear || null,
-        lead_source: 'website',
-        status: 'new' as const,
-        priority: 'medium' as const,
+        company_size: companySize || undefined,
+        expected_farmers: expectedFarmers ? parseInt(expectedFarmers) : undefined,
+        budget_range: budgetRange || undefined,
+        timeline: timeline || undefined,
+        current_solution: currentSolution.trim() || undefined,
+        requirements: requirements.trim() || undefined,
+        how_did_you_hear: howDidYouHear || undefined,
       };
 
-      const result = await LeadsService.createLead(leadData);
+      const leadsService = new LeadsService();
+      const result = await leadsService.submitInquiry(leadData);
 
       if (result.success) {
         toast({
@@ -220,7 +219,6 @@ const InquiryForm = () => {
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Organization Details */}
               <FormSection
-                icon={Building}
                 title="Organization Details"
                 description="Help us understand your organization"
               >
@@ -243,34 +241,28 @@ const InquiryForm = () => {
                     )}
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Organization Type *
-                    </label>
-                    <SelectionButtonGroup
-                      options={organizationTypeOptions}
-                      selectedValue={organizationType}
-                      onValueChange={setOrganizationType}
-                      error={errors.organizationType}
-                    />
-                  </div>
+                  <SelectionButtonGroup
+                    options={organizationTypeOptions}
+                    value={organizationType}
+                    onChange={setOrganizationType}
+                    name="organizationType"
+                    label="Organization Type"
+                    required
+                    error={errors.organizationType}
+                  />
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Company Size
-                    </label>
-                    <SelectionButtonGroup
-                      options={companySizeOptions}
-                      selectedValue={companySize}
-                      onValueChange={setCompanySize}
-                    />
-                  </div>
+                  <SelectionButtonGroup
+                    options={companySizeOptions}
+                    value={companySize}
+                    onChange={setCompanySize}
+                    name="companySize"
+                    label="Company Size"
+                  />
                 </div>
               </FormSection>
 
               {/* Contact Information */}
               <FormSection
-                icon={User}
                 title="Contact Information"
                 description="How can we reach you?"
               >
@@ -357,38 +349,30 @@ const InquiryForm = () => {
 
               {/* Requirements & Budget */}
               <FormSection
-                icon={DollarSign}
                 title="Requirements & Budget"
                 description="Help us understand your needs"
               >
                 <div className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Budget Range (Annual)
-                    </label>
-                    <SelectionButtonGroup
-                      options={budgetRangeOptions}
-                      selectedValue={budgetRange}
-                      onValueChange={setBudgetRange}
-                    />
-                  </div>
+                  <SelectionButtonGroup
+                    options={budgetRangeOptions}
+                    value={budgetRange}
+                    onChange={setBudgetRange}
+                    name="budgetRange"
+                    label="Budget Range (Annual)"
+                  />
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Implementation Timeline
-                    </label>
-                    <SelectionButtonGroup
-                      options={timelineOptions}
-                      selectedValue={timeline}
-                      onValueChange={setTimeline}
-                    />
-                  </div>
+                  <SelectionButtonGroup
+                    options={timelineOptions}
+                    value={timeline}
+                    onChange={setTimeline}
+                    name="timeline"
+                    label="Implementation Timeline"
+                  />
                 </div>
               </FormSection>
 
               {/* Additional Information */}
               <FormSection
-                icon={Lightbulb}
                 title="Additional Information"
                 description="Tell us more about your requirements"
               >
@@ -419,16 +403,13 @@ const InquiryForm = () => {
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      How did you hear about us?
-                    </label>
-                    <SelectionButtonGroup
-                      options={howDidYouHearOptions}
-                      selectedValue={howDidYouHear}
-                      onValueChange={setHowDidYouHear}
-                    />
-                  </div>
+                  <SelectionButtonGroup
+                    options={howDidYouHearOptions}
+                    value={howDidYouHear}
+                    onChange={setHowDidYouHear}
+                    name="howDidYouHear"
+                    label="How did you hear about us?"
+                  />
                 </div>
               </FormSection>
 
