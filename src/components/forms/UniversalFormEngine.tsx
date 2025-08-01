@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowRight, ArrowLeft, CheckCircle, Loader2, Save, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
@@ -317,6 +317,12 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="sr-only">Form Submission Successful</DialogTitle>
+            <DialogDescription className="sr-only">
+              Your form has been submitted successfully and we will contact you soon.
+            </DialogDescription>
+          </DialogHeader>
           <div className="flex flex-col items-center justify-center p-6 text-center space-y-4">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
               <CheckCircle className="w-8 h-8 text-green-600" />
@@ -452,9 +458,9 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
             <DialogTitle className="text-xl font-bold text-gray-900">
               {schema.title} - {currentStepConfig.title}
             </DialogTitle>
-            {currentStepConfig.description && (
-              <p className="text-gray-600">{currentStepConfig.description}</p>
-            )}
+            <DialogDescription>
+              {currentStepConfig.description || "Please fill out the form below to submit your request."}
+            </DialogDescription>
           </DialogHeader>
           {renderFormContent()}
         </DialogContent>

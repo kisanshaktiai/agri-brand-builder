@@ -85,6 +85,7 @@ export class AdvancedLeadsService {
       // Validate submission data
       const validation = this.validateSubmission(submissionData);
       if (!validation.isValid) {
+        console.error('Validation failed:', validation.errors);
         return {
           success: false,
           error: `Validation failed: ${Object.values(validation.errors).flat().join(', ')}`
@@ -171,11 +172,44 @@ export class AdvancedLeadsService {
       }
     }
 
+    // Validate form values against database constraints
+    const constraintErrors = this.validateConstraints(data.data);
+    Object.keys(constraintErrors).forEach(field => {
+      if (!errors[field]) errors[field] = [];
+      errors[field].push(...constraintErrors[field]);
+    });
+
     return {
       isValid: Object.keys(errors).length === 0,
       errors,
       warnings: Object.keys(warnings).length > 0 ? warnings : undefined
     };
+  }
+
+  private validateConstraints(data: Record<string, any>): Record<string, string[]> {
+    const errors: Record<string, string[]> = {};
+
+    // Validate organization_type
+    if (data.organization_type && !['agri_company', 'ngo', 'university', 'government', 'cooperative', 'other'].includes(data.organization_type)) {
+      errors.organization_type = ['Invalid organization type'];
+    }
+
+    // Validate budget_range
+    if (data.budget_range && !['under_25k', '25k_50k', '50k_100k', '100k_plus'].includes(data.budget_range)) {
+      errors.budget_range = ['Invalid budget range'];
+    }
+
+    // Validate timeline
+    if (data.timeline && !['immediate', '1_month', '3_months', '6_months', 'flexible'].includes(data.timeline)) {
+      errors.timeline = ['Invalid timeline'];
+    }
+
+    // Validate company_size
+    if (data.company_size && !['1-10', '11-50', '51-200', '201-1000', '1000+'].includes(data.company_size)) {
+      errors.company_size = ['Invalid company size'];
+    }
+
+    return errors;
   }
 
   private async checkForDuplicates(data: Record<string, any>): Promise<boolean> {
@@ -264,7 +298,13 @@ export class AdvancedLeadsService {
 
         if (error) {
           console.error('Supabase insertion error:', error);
-          throw new Error(`Database error: ${error.message}`);
+          console.error('Error details:', {
+            message: error.message,
+            details: error.details,
+            hint: error.hint,
+            code: error.code
+          });
+          throw new Error(`Database error: ${error.message}${error.hint ? ` (${error.hint})` : ''}`);
         }
 
         if (!data) {
@@ -299,7 +339,7 @@ export class AdvancedLeadsService {
 
   private transformSubmissionData(submissionData: FormSubmissionData, leadScore?: number) {
     // Transform data to match the leads table schema
-    return {
+    const transformedData = {
       organization_name: submissionData.data.organization_name || '',
       organization_type: submissionData.data.organization_type || 'other',
       contact_name: submissionData.data.contact_name || '',
@@ -326,6 +366,9 @@ export class AdvancedLeadsService {
         leadScore
       }
     };
+
+    console.log('Data transformation complete:', transformedData);
+    return transformedData;
   }
 
   private determinePriority(leadScore?: number): 'low' | 'medium' | 'high' {
