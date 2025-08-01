@@ -254,6 +254,7 @@ export class AdvancedLeadsService {
         console.log(`Submission attempt ${attempt}/${this.retryOptions.maxRetries}`);
 
         const leadData = this.transformSubmissionData(submissionData, leadScore);
+        console.log('Transformed lead data:', leadData);
         
         const { data, error } = await supabase
           .from('leads')
@@ -262,6 +263,7 @@ export class AdvancedLeadsService {
           .single();
 
         if (error) {
+          console.error('Supabase insertion error:', error);
           throw new Error(`Database error: ${error.message}`);
         }
 
@@ -296,6 +298,7 @@ export class AdvancedLeadsService {
   }
 
   private transformSubmissionData(submissionData: FormSubmissionData, leadScore?: number) {
+    // Transform data to match the leads table schema
     return {
       organization_name: submissionData.data.organization_name || '',
       organization_type: submissionData.data.organization_type || 'other',
@@ -309,9 +312,12 @@ export class AdvancedLeadsService {
       current_solution: submissionData.data.current_solution || null,
       requirements: submissionData.data.requirements || null,
       how_did_you_hear: submissionData.data.how_did_you_hear || null,
-      lead_source: submissionData.metadata.source || 'website',
+      lead_source: submissionData.metadata?.source || 'website',
       status: 'new' as const,
       priority: this.determinePriority(leadScore),
+      notes: null,
+      assigned_to: null,
+      follow_up_date: null,
       metadata: {
         formId: submissionData.formId,
         formVersion: submissionData.formVersion,
