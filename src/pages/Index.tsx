@@ -6,7 +6,6 @@ import AboutSection from '../components/AboutSection';
 import FeatureCards from '../components/FeatureCards';
 import HowItWorks from '../components/HowItWorks';
 import StatsSection from '../components/StatsSection';
-import InquiryForm from '../components/InquiryForm';
 import Footer from '../components/Footer';
 
 const Index = () => {
@@ -18,7 +17,6 @@ const Index = () => {
       <FeatureCards />
       <HowItWorks />
       <StatsSection />
-      <InquiryForm />
       <Footer />
     </div>
   );
