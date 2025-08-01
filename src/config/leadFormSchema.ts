@@ -1,4 +1,3 @@
-
 import type { FormConfiguration } from '@/types/UniversalForm';
 
 export const LEAD_FORM_SCHEMA: FormConfiguration = {
@@ -171,9 +170,22 @@ export const LEAD_FORM_SCHEMA: FormConfiguration = {
       },
       {
         id: 'how_did_you_hear',
-        type: 'text',
+        type: 'select',
         label: 'How did you hear about us?',
-        placeholder: 'e.g., Google search, referral, etc.',
+        placeholder: 'Select an option',
+        options: [
+          { label: 'Google Search', value: 'google_search' },
+          { label: 'Social Media (Facebook, LinkedIn, etc.)', value: 'social_media' },
+          { label: 'Referral from friend/colleague', value: 'referral' },
+          { label: 'Industry publication/magazine', value: 'publication' },
+          { label: 'Conference/event', value: 'conference' },
+          { label: 'Email marketing', value: 'email_marketing' },
+          { label: 'Online advertisement', value: 'advertisement' },
+          { label: 'Partner/vendor recommendation', value: 'partner' },
+          { label: 'Existing customer', value: 'existing_customer' },
+          { label: 'Word of mouth', value: 'word_of_mouth' },
+          { label: 'Other', value: 'other' }
+        ],
         step: 4
       }
     ],
@@ -253,7 +265,18 @@ export const LEAD_FORM_SCHEMA: FormConfiguration = {
         'form.error': 'There was an error submitting your request. Please try again.',
         'validation.required': 'This field is required',
         'validation.email': 'Please enter a valid email address',
-        'validation.phone': 'Please enter a valid phone number'
+        'validation.phone': 'Please enter a valid phone number',
+        'how_did_you_hear.google_search': 'Google Search',
+        'how_did_you_hear.social_media': 'Social Media',
+        'how_did_you_hear.referral': 'Referral from friend/colleague',
+        'how_did_you_hear.publication': 'Industry publication/magazine',
+        'how_did_you_hear.conference': 'Conference/event',
+        'how_did_you_hear.email_marketing': 'Email marketing',
+        'how_did_you_hear.advertisement': 'Online advertisement',
+        'how_did_you_hear.partner': 'Partner/vendor recommendation',
+        'how_did_you_hear.existing_customer': 'Existing customer',
+        'how_did_you_hear.word_of_mouth': 'Word of mouth',
+        'how_did_you_hear.other': 'Other'
       },
       hi: {
         'form.submit': 'अनुरोध भेजें',
@@ -261,7 +284,18 @@ export const LEAD_FORM_SCHEMA: FormConfiguration = {
         'form.previous': 'पिछला',
         'form.loading': 'प्रसंस्करण...',
         'form.success': 'धन्यवाद! आपका अनुरोध सफलतापूर्वक भेजा गया है।',
-        'form.error': 'आपका अनुरोध भेजने में त्रुटि हुई। कृपया पुनः प्रयास करें।'
+        'form.error': 'आपका अनुरोध भेजने में त्रुटि हुई। कृपया पुनः प्रयास करें।',
+        'how_did_you_hear.google_search': 'गूगल खोज',
+        'how_did_you_hear.social_media': 'सोशल मीडिया',
+        'how_did_you_hear.referral': 'मित्र/सहयोगी की सिफारिश',
+        'how_did_you_hear.publication': 'उद्योग प्रकाशन/पत्रिका',
+        'how_did_you_hear.conference': 'सम्मेलन/कार्यक्रम',
+        'how_did_you_hear.email_marketing': 'ईमेल मार्केटिंग',
+        'how_did_you_hear.advertisement': 'ऑनलाइन विज्ञापन',
+        'how_did_you_hear.partner': 'साझेदार/विक्रेता की सिफारिश',
+        'how_did_you_hear.existing_customer': 'मौजूदा ग्राहक',
+        'how_did_you_hear.word_of_mouth': 'मुंह की बात',
+        'how_did_you_hear.other': 'अन्य'
       }
     }
   }

@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Building2, Users, Target, Calendar, Send, CheckCircle, AlertCircle, Rocket, Phone, Mail, MapPin, Star } from 'lucide-react';
+import { Building2, Users, Target, Calendar, Send, CheckCircle, AlertCircle, Rocket, Phone, Mail, MapPin, Star, Globe, Share2, BookOpen, Building, MessageCircle, Megaphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -67,6 +66,20 @@ const InquiryForm = () => {
     { value: '3_months', label: '3-6 months', icon: <Calendar className="w-4 h-4" />, description: 'Standard implementation timeline' },
     { value: '6_months', label: '6+ months', icon: <Calendar className="w-4 h-4" />, description: 'Planned for future implementation' },
     { value: 'flexible', label: 'Flexible timeline', icon: <Calendar className="w-4 h-4" />, description: 'Open to discussion' }
+  ];
+
+  const howDidYouHearOptions = [
+    { value: 'google_search', label: 'Google Search', icon: <Globe className="w-4 h-4" />, description: 'Found us through search engines' },
+    { value: 'social_media', label: 'Social Media', icon: <Share2 className="w-4 h-4" />, description: 'Facebook, LinkedIn, Instagram, etc.' },
+    { value: 'referral', label: 'Friend/Colleague Referral', icon: <Users className="w-4 h-4" />, description: 'Recommended by someone you know' },
+    { value: 'publication', label: 'Industry Publication', icon: <BookOpen className="w-4 h-4" />, description: 'Magazine, journal, or blog article' },
+    { value: 'conference', label: 'Conference/Event', icon: <Building className="w-4 h-4" />, description: 'Industry events or trade shows' },
+    { value: 'email_marketing', label: 'Email Marketing', icon: <Mail className="w-4 h-4" />, description: 'Newsletter or promotional email' },
+    { value: 'advertisement', label: 'Online Advertisement', icon: <Megaphone className="w-4 h-4" />, description: 'Banner ads, sponsored content' },
+    { value: 'partner', label: 'Partner Recommendation', icon: <Building2 className="w-4 h-4" />, description: 'Vendor or business partner' },
+    { value: 'existing_customer', label: 'Existing Customer', icon: <CheckCircle className="w-4 h-4" />, description: 'Already using our services' },
+    { value: 'word_of_mouth', label: 'Word of Mouth', icon: <MessageCircle className="w-4 h-4" />, description: 'Heard about us from others' },
+    { value: 'other', label: 'Other', icon: <Star className="w-4 h-4" />, description: 'Different source not listed above' }
   ];
 
   const handleChange = (field: string, value: string) => {
@@ -356,32 +369,30 @@ const InquiryForm = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          How did you hear about us?
+                          Specific Requirements *
                         </label>
-                        <Input
-                          type="text"
-                          value={formData.how_did_you_hear}
-                          onChange={(e) => handleChange('how_did_you_hear', e.target.value)}
-                          placeholder="e.g., Google search, referral, etc."
+                        <Textarea
+                          value={formData.requirements}
+                          onChange={(e) => handleChange('requirements', e.target.value)}
+                          placeholder="Tell us about your specific needs, challenges, or features you're looking for..."
+                          rows={3}
+                          className={errors.requirements ? 'border-red-500' : ''}
                         />
+                        {errors.requirements && (
+                          <p className="text-sm text-red-600 mt-1">{errors.requirements}</p>
+                        )}
                       </div>
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Specific Requirements *
-                      </label>
-                      <Textarea
-                        value={formData.requirements}
-                        onChange={(e) => handleChange('requirements', e.target.value)}
-                        placeholder="Tell us about your specific needs, challenges, or features you're looking for..."
-                        rows={4}
-                        className={errors.requirements ? 'border-red-500' : ''}
-                      />
-                      {errors.requirements && (
-                        <p className="text-sm text-red-600 mt-1">{errors.requirements}</p>
-                      )}
-                    </div>
+                    <SelectionButtonGroup
+                      label="How did you hear about us?"
+                      options={howDidYouHearOptions}
+                      value={formData.how_did_you_hear}
+                      onChange={(value) => handleChange('how_did_you_hear', value)}
+                      name="how_did_you_hear"
+                      columns={3}
+                      description="Help us understand which marketing channels are most effective"
+                    />
                   </FormSection>
 
                   {/* Submit Button */}
