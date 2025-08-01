@@ -95,7 +95,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
     company_size: '',
     contact_name: '',
     email: '',
-    phone: '', // Required field - matches database constraint
+    phone: '',
     expected_farmers: '',
     budget_range: '',
     timeline: '',
@@ -186,7 +186,6 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
         else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
           newErrors.email = 'Please enter a valid email';
         }
-        // Phone is now required - matches database NOT NULL constraint
         if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
         break;
       case 4:
@@ -219,16 +218,13 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
     setIsSubmitting(true);
     try {
       console.log('Starting form submission...');
-      
-      // Ensure we're using anonymous access for lead submission
-      await leadsService.ensureAnonymousAccess();
 
       const leadData = {
         organization_name: formData.organization_name,
         organization_type: formData.organization_type as any,
         contact_name: formData.contact_name,
         email: formData.email,
-        phone: formData.phone, // Required field - constraint fixed
+        phone: formData.phone,
         company_size: formData.company_size,
         expected_farmers: formData.expected_farmers ? parseInt(formData.expected_farmers) : undefined,
         budget_range: formData.budget_range,

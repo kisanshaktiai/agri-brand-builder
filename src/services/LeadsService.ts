@@ -34,9 +34,8 @@ export class LeadsService {
     try {
       console.log('Starting lead submission process...');
       console.log('Lead data:', leadData);
-      console.log('Current Supabase session:', await supabase.auth.getSession());
 
-      // Basic validation - phone is now required and NOT NULL in database
+      // Basic validation - all required fields
       if (!leadData.organization_name?.trim()) {
         return { success: false, error: 'Organization name is required' };
       }
@@ -49,7 +48,6 @@ export class LeadsService {
         return { success: false, error: 'Email is required' };
       }
 
-      // Phone is now NOT NULL in database - must be validated
       if (!leadData.phone?.trim()) {
         return { success: false, error: 'Phone number is required' };
       }
@@ -74,7 +72,7 @@ export class LeadsService {
         organization_type: leadData.organization_type,
         contact_name: leadData.contact_name.trim(),
         email: leadData.email.trim().toLowerCase(),
-        phone: leadData.phone.trim(), // Now NOT NULL in database - constraint fixed
+        phone: leadData.phone.trim(),
         company_size: leadData.company_size || null,
         expected_farmers: leadData.expected_farmers ? Number(leadData.expected_farmers) : null,
         budget_range: leadData.budget_range || null,
@@ -90,15 +88,7 @@ export class LeadsService {
 
       console.log('Data prepared for insertion:', insertData);
 
-      // Test connection first
-      console.log('Testing database connection...');
-      const connectionTest = await this.testConnection();
-      if (!connectionTest.connected) {
-        console.error('Database connection failed:', connectionTest.error);
-        return { success: false, error: 'Unable to connect to database. Please try again.' };
-      }
-
-      // Submit lead to database with specific error handling
+      // Submit lead to database with anonymous access (RLS policies now allow this)
       console.log('Attempting to insert lead into database...');
       const { data, error } = await supabase
         .from('leads')
@@ -203,11 +193,11 @@ export class LeadsService {
     try {
       console.log('Testing database connection...');
       
-      // Simple query to test connection without requiring authentication
+      // Simple query to test connection - this should work with RLS policies
       const { error } = await supabase
         .from('leads')
         .select('id')
-        .limit(0); // Don't return any data, just test the connection
+        .limit(0);
 
       if (error) {
         console.error('Connection test failed:', error);
@@ -219,19 +209,6 @@ export class LeadsService {
     } catch (error) {
       console.error('Connection test error:', error);
       return { connected: false, error: 'Failed to connect to database' };
-    }
-  }
-
-  // New method to clear any authentication state that might interfere
-  async ensureAnonymousAccess(): Promise<void> {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        console.log('Found existing session, signing out for anonymous access...');
-        await supabase.auth.signOut();
-      }
-    } catch (error) {
-      console.warn('Error ensuring anonymous access:', error);
     }
   }
 }
