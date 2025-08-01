@@ -35,24 +35,24 @@ export class LeadsService {
       console.log('Starting lead submission process...');
       console.log('Lead data:', leadData);
 
-      // Validate required fields
-      if (!leadData.organization_name.trim()) {
+      // Basic validation
+      if (!leadData.organization_name?.trim()) {
         return { success: false, error: 'Organization name is required' };
       }
 
-      if (!leadData.contact_name.trim()) {
+      if (!leadData.contact_name?.trim()) {
         return { success: false, error: 'Contact name is required' };
       }
 
-      if (!leadData.email.trim()) {
+      if (!leadData.email?.trim()) {
         return { success: false, error: 'Email is required' };
       }
 
-      if (!leadData.phone.trim()) {
+      if (!leadData.phone?.trim()) {
         return { success: false, error: 'Phone number is required' };
       }
 
-      // Validate email format
+      // Email validation
       const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
       if (!emailRegex.test(leadData.email)) {
         return { success: false, error: 'Please enter a valid email address' };
@@ -61,7 +61,6 @@ export class LeadsService {
       // Validate organization type
       const validOrgTypes = ['agri_company', 'ngo', 'university', 'government', 'cooperative', 'other'];
       if (!validOrgTypes.includes(leadData.organization_type)) {
-        console.error('Invalid organization type:', leadData.organization_type);
         return { success: false, error: 'Invalid organization type selected' };
       }
 
@@ -69,11 +68,11 @@ export class LeadsService {
 
       // Prepare the data for insertion
       const insertData = {
-        organization_name: leadData.organization_name,
+        organization_name: leadData.organization_name.trim(),
         organization_type: leadData.organization_type,
-        contact_name: leadData.contact_name,
-        email: leadData.email,
-        phone: leadData.phone,
+        contact_name: leadData.contact_name.trim(),
+        email: leadData.email.trim().toLowerCase(),
+        phone: leadData.phone.trim(),
         company_size: leadData.company_size || null,
         expected_farmers: leadData.expected_farmers ? Number(leadData.expected_farmers) : null,
         budget_range: leadData.budget_range || null,
@@ -88,14 +87,6 @@ export class LeadsService {
       };
 
       console.log('Data prepared for insertion:', insertData);
-
-      // Test connection first
-      const { data: testConnection } = await supabase
-        .from('leads')
-        .select('count')
-        .limit(1);
-
-      console.log('Connection test result:', testConnection);
 
       // Submit lead to database
       console.log('Attempting to insert lead into database...');
@@ -113,16 +104,7 @@ export class LeadsService {
           code: error.code
         });
 
-        // Provide more specific error messages based on error type
-        if (error.code === '42501') {
-          return { success: false, error: 'Database access denied. Please try again later.' };
-        } else if (error.code === '23514') {
-          return { success: false, error: 'Invalid data format. Please check your input and try again.' };
-        } else if (error.message.includes('row-level security')) {
-          return { success: false, error: 'Security validation failed. Please try again.' };
-        } else {
-          return { success: false, error: `Database error: ${error.message}` };
-        }
+        return { success: false, error: `Submission failed: ${error.message}` };
       }
 
       if (!data) {
@@ -135,13 +117,8 @@ export class LeadsService {
 
     } catch (error) {
       console.error('Unexpected error submitting lead:', error);
-      
-      // Handle network errors
-      if (error instanceof TypeError && error.message.includes('fetch')) {
-        return { success: false, error: 'Network connection error. Please check your internet connection and try again.' };
-      }
-
-      return { success: false, error: 'An unexpected error occurred. Please try again.' };
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      return { success: false, error: errorMessage };
     }
   }
 
@@ -193,7 +170,6 @@ export class LeadsService {
     }
   }
 
-  // Add method to test database connection
   async testConnection(): Promise<{ connected: boolean; error?: string }> {
     try {
       console.log('Testing database connection...');

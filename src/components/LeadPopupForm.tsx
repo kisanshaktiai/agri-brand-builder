@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ArrowRight, ArrowLeft, Check, CheckCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -38,25 +38,6 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
     current_solution: '',
     how_did_you_hear: ''
   });
-
-  // Test database connection when component mounts
-  useEffect(() => {
-    if (isOpen) {
-      const testConnection = async () => {
-        try {
-          const result = await leadsService.testConnection();
-          if (!result.connected) {
-            console.warn('Database connection test failed:', result.error);
-          } else {
-            console.log('Database connection verified');
-          }
-        } catch (error) {
-          console.warn('Connection test failed:', error);
-        }
-      };
-      testConnection();
-    }
-  }, [isOpen]);
 
   const organizationTypes = [
     { value: 'agri_company', label: 'Agricultural Company' },
@@ -187,24 +168,7 @@ const LeadPopupForm: React.FC<LeadPopupFormProps> = ({ isOpen, onClose, source =
         });
 
         setTimeout(() => {
-          onClose();
-          setIsSuccess(false);
-          setCurrentStep(1);
-          setFormData({
-            organization_name: '',
-            organization_type: 'agri_company',
-            contact_name: '',
-            email: '',
-            phone: '',
-            company_size: undefined,
-            expected_farmers: undefined,
-            budget_range: undefined,
-            timeline: undefined,
-            requirements: '',
-            current_solution: '',
-            how_did_you_hear: ''
-          });
-          setCustomOrgType('');
+          handleClose();
         }, 3000);
       } else {
         console.error('Submission failed:', result.error);
