@@ -36,7 +36,7 @@ export class LeadsService {
       console.log('Lead data:', leadData);
       console.log('Current Supabase session:', await supabase.auth.getSession());
 
-      // Basic validation
+      // Basic validation - phone is now required and NOT NULL in database
       if (!leadData.organization_name?.trim()) {
         return { success: false, error: 'Organization name is required' };
       }
@@ -49,6 +49,7 @@ export class LeadsService {
         return { success: false, error: 'Email is required' };
       }
 
+      // Phone is now NOT NULL in database - must be validated
       if (!leadData.phone?.trim()) {
         return { success: false, error: 'Phone number is required' };
       }
@@ -59,7 +60,7 @@ export class LeadsService {
         return { success: false, error: 'Please enter a valid email address' };
       }
 
-      // Validate organization type
+      // Validate organization type matches database constraint exactly
       const validOrgTypes = ['agri_company', 'ngo', 'university', 'government', 'cooperative', 'other'];
       if (!validOrgTypes.includes(leadData.organization_type)) {
         return { success: false, error: 'Invalid organization type selected' };
@@ -73,7 +74,7 @@ export class LeadsService {
         organization_type: leadData.organization_type,
         contact_name: leadData.contact_name.trim(),
         email: leadData.email.trim().toLowerCase(),
-        phone: leadData.phone.trim(), // Now NOT NULL in database
+        phone: leadData.phone.trim(), // Now NOT NULL in database - constraint fixed
         company_size: leadData.company_size || null,
         expected_farmers: leadData.expected_farmers ? Number(leadData.expected_farmers) : null,
         budget_range: leadData.budget_range || null,

@@ -16,7 +16,7 @@ interface FormData {
   company_size: string;
   contact_name: string;
   email: string;
-  phone: string;
+  phone: string; // Now required - matches database NOT NULL constraint
   expected_farmers: string;
   budget_range: string;
   timeline: string;
@@ -32,6 +32,7 @@ interface StepByStepLeadFormProps {
 
 const TOTAL_STEPS = 6;
 
+// Organization type options - values match database constraint exactly
 const organizationTypeOptions = [
   { value: 'agri_company', label: 'Agriculture Company', description: 'Commercial farming or agribusiness', icon: <Building2 className="w-5 h-5" /> },
   { value: 'ngo', label: 'NGO/Non-Profit', description: 'Agricultural development organization', icon: <Users className="w-5 h-5" /> },
@@ -41,6 +42,7 @@ const organizationTypeOptions = [
   { value: 'other', label: 'Other', description: 'Other type of organization', icon: <Building2 className="w-5 h-5" /> }
 ];
 
+// Company size options - consistent values
 const companySizeOptions = [
   { value: '1-10', label: '1-10 employees', description: 'Small team or startup' },
   { value: '11-50', label: '11-50 employees', description: 'Growing business' },
@@ -49,6 +51,7 @@ const companySizeOptions = [
   { value: '500+', label: '500+ employees', description: 'Enterprise level' }
 ];
 
+// Budget range options - consistent values
 const budgetRangeOptions = [
   { value: 'under-50k', label: 'Under ₹50,000', description: 'Basic package', icon: <DollarSign className="w-4 h-4" /> },
   { value: '50k-2l', label: '₹50K - ₹2L', description: 'Standard solution', icon: <DollarSign className="w-4 h-4" /> },
@@ -57,6 +60,7 @@ const budgetRangeOptions = [
   { value: '10l+', label: '₹10L+', description: 'Custom enterprise', icon: <DollarSign className="w-4 h-4" /> }
 ];
 
+// Timeline options - consistent values
 const timelineOptions = [
   { value: 'immediate', label: 'Immediately', description: 'Ready to start now', icon: <Calendar className="w-4 h-4" /> },
   { value: '1-3months', label: '1-3 months', description: 'Planning phase', icon: <Calendar className="w-4 h-4" /> },
@@ -65,6 +69,7 @@ const timelineOptions = [
   { value: 'exploring', label: 'Just exploring', description: 'Research phase', icon: <Eye className="w-4 h-4" /> }
 ];
 
+// How did you hear options - consistent values
 const howDidYouHearOptions = [
   { value: 'youtube', label: 'YouTube', description: 'Found us on YouTube', icon: <MessageSquare className="w-4 h-4" /> },
   { value: 'facebook', label: 'Facebook', description: 'Social media discovery', icon: <MessageSquare className="w-4 h-4" /> },
@@ -90,7 +95,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
     company_size: '',
     contact_name: '',
     email: '',
-    phone: '',
+    phone: '', // Required field - matches database constraint
     expected_farmers: '',
     budget_range: '',
     timeline: '',
@@ -181,6 +186,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
         else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
           newErrors.email = 'Please enter a valid email';
         }
+        // Phone is now required - matches database NOT NULL constraint
         if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
         break;
       case 4:
@@ -222,7 +228,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
         organization_type: formData.organization_type as any,
         contact_name: formData.contact_name,
         email: formData.email,
-        phone: formData.phone,
+        phone: formData.phone, // Required field - constraint fixed
         company_size: formData.company_size,
         expected_farmers: formData.expected_farmers ? parseInt(formData.expected_farmers) : undefined,
         budget_range: formData.budget_range,
