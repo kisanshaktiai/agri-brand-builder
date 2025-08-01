@@ -1,7 +1,7 @@
 
 import React from 'react';
-import UniversalFormEngine from './forms/UniversalFormEngine';
-import { LEAD_FORM_SCHEMA } from '@/config/leadFormSchema';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import UnifiedLeadForm from './forms/UnifiedLeadForm';
 
 interface EnhancedLeadPopupFormProps {
   isOpen: boolean;
@@ -14,25 +14,30 @@ const EnhancedLeadPopupForm: React.FC<EnhancedLeadPopupFormProps> = ({
   onClose,
   source = 'website'
 }) => {
-  const handleSubmitSuccess = (leadId: string) => {
-    console.log('Lead submitted successfully:', leadId);
+  const handleSubmitSuccess = () => {
+    console.log('Lead submitted successfully');
     // Additional success handling can be added here
-  };
-
-  const handleSubmitError = (error: string) => {
-    console.error('Lead submission failed:', error);
-    // Additional error handling can be added here
+    setTimeout(() => {
+      onClose();
+    }, 3000); // Auto-close after 3 seconds
   };
 
   return (
-    <UniversalFormEngine
-      config={LEAD_FORM_SCHEMA}
-      isOpen={isOpen}
-      onClose={onClose}
-      onSubmitSuccess={handleSubmitSuccess}
-      onSubmitError={handleSubmitError}
-      source={source}
-    />
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Lead Form</DialogTitle>
+        </DialogHeader>
+        <div className="p-6">
+          <UnifiedLeadForm 
+            onSuccess={handleSubmitSuccess}
+            onClose={onClose}
+            source={source}
+            showTitle={false}
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
