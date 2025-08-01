@@ -1,506 +1,400 @@
+
 import React, { useState } from 'react';
-import { Building2, Users, Target, Calendar, Send, CheckCircle, AlertCircle, Rocket, Phone, Mail, MapPin, Star, Globe, Share2, BookOpen, Building, MessageCircle, Megaphone } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Loader2, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { SelectionButtonGroup } from './forms/SelectionButtonGroup';
-import { FormSection } from './forms/FormSection';
-import { AdvancedLeadsService } from '@/services/AdvancedLeadsService';
-import { LEAD_FORM_SCHEMA } from '@/config/leadFormSchema';
-import EnhancedLeadPopupForm from './EnhancedLeadPopupForm';
-import type { FormSubmissionData } from '@/types/UniversalForm';
+import { LeadsService } from '@/services/LeadsService';
 
-const InquiryForm = () => {
+interface FormData {
+  organizationName: string;
+  organizationType: string;
+  contactName: string;
+  email: string;
+  phone: string;
+  companySize: string;
+  expectedFarmers: string;
+  budgetRange: string;
+  timeline: string;
+  requirements: string;
+  currentSolution: string;
+  howDidYouHear: string;
+}
+
+const InquiryForm: React.FC = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
-  const [leadsService] = useState(() => new AdvancedLeadsService(LEAD_FORM_SCHEMA));
-  
-  const [formData, setFormData] = useState({
-    organization_name: '',
-    organization_type: '',
-    company_size: '',
-    contact_name: '',
+  const leadsService = new LeadsService();
+
+  const [formData, setFormData] = useState<FormData>({
+    organizationName: '',
+    organizationType: '',
+    contactName: '',
     email: '',
     phone: '',
-    expected_farmers: '',
-    budget_range: '',
+    companySize: '',
+    expectedFarmers: '',
+    budgetRange: '',
     timeline: '',
-    current_solution: '',
     requirements: '',
-    how_did_you_hear: ''
+    currentSolution: '',
+    howDidYouHear: ''
   });
-  
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitStatus, setSubmitStatus] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showEnhancedForm, setShowEnhancedForm] = useState(false);
 
-  // Selection options with icons
-  const organizationTypeOptions = [
-    { value: 'agri_company', label: 'Agricultural Company', icon: <Building2 className="w-4 h-4" />, description: 'Commercial farming or agribusiness' },
-    { value: 'ngo', label: 'NGO', icon: <Users className="w-4 h-4" />, description: 'Non-profit organization' },
-    { value: 'university', label: 'University/Research', icon: <Target className="w-4 h-4" />, description: 'Academic or research institution' },
-    { value: 'government', label: 'Government Agency', icon: <Building2 className="w-4 h-4" />, description: 'Government or public sector' },
-    { value: 'cooperative', label: 'Cooperative', icon: <Users className="w-4 h-4" />, description: 'Farmer cooperative or collective' },
-    { value: 'other', label: 'Other', icon: <Star className="w-4 h-4" />, description: 'Other type of organization' }
-  ];
+  const [errors, setErrors] = useState<Partial<FormData>>({});
 
-  const companySizeOptions = [
-    { value: '1-10', label: '1-10 employees', icon: <Users className="w-4 h-4" />, description: 'Small team or startup' },
-    { value: '11-50', label: '11-50 employees', icon: <Users className="w-4 h-4" />, description: 'Growing company' },
-    { value: '51-200', label: '51-200 employees', icon: <Users className="w-4 h-4" />, description: 'Medium-sized company' },
-    { value: '201-1000', label: '201-1000 employees', icon: <Users className="w-4 h-4" />, description: 'Large organization' },
-    { value: '1000+', label: '1000+ employees', icon: <Users className="w-4 h-4" />, description: 'Enterprise organization' }
-  ];
+  const validateForm = (): boolean => {
+    const newErrors: Partial<FormData> = {};
 
-  const budgetRangeOptions = [
-    { value: 'under_25k', label: 'Under ₹25,000', icon: <Target className="w-4 h-4" />, description: 'Basic package suitable for small operations' },
-    { value: '25k_50k', label: '₹25,000 - ₹50,000', icon: <Target className="w-4 h-4" />, description: 'Standard package for growing businesses' },
-    { value: '50k_100k', label: '₹50,000 - ₹1,00,000', icon: <Target className="w-4 h-4" />, description: 'Premium package with advanced features' },
-    { value: '100k_plus', label: '₹1,00,000+', icon: <Target className="w-4 h-4" />, description: 'Enterprise solutions with full customization' }
-  ];
-
-  const timelineOptions = [
-    { value: 'immediate', label: 'Immediate (within 1 month)', icon: <Calendar className="w-4 h-4" />, description: 'Ready to start right away' },
-    { value: '1_month', label: '1-2 months', icon: <Calendar className="w-4 h-4" />, description: 'Quick deployment needed' },
-    { value: '3_months', label: '3-6 months', icon: <Calendar className="w-4 h-4" />, description: 'Standard implementation timeline' },
-    { value: '6_months', label: '6+ months', icon: <Calendar className="w-4 h-4" />, description: 'Planned for future implementation' },
-    { value: 'flexible', label: 'Flexible timeline', icon: <Calendar className="w-4 h-4" />, description: 'Open to discussion' }
-  ];
-
-  const howDidYouHearOptions = [
-    { value: 'google_search', label: 'Google Search', icon: <Globe className="w-4 h-4" />, description: 'Found us through search engines' },
-    { value: 'social_media', label: 'Social Media', icon: <Share2 className="w-4 h-4" />, description: 'Facebook, LinkedIn, Instagram, etc.' },
-    { value: 'referral', label: 'Friend/Colleague Referral', icon: <Users className="w-4 h-4" />, description: 'Recommended by someone you know' },
-    { value: 'publication', label: 'Industry Publication', icon: <BookOpen className="w-4 h-4" />, description: 'Magazine, journal, or blog article' },
-    { value: 'conference', label: 'Conference/Event', icon: <Building className="w-4 h-4" />, description: 'Industry events or trade shows' },
-    { value: 'email_marketing', label: 'Email Marketing', icon: <Mail className="w-4 h-4" />, description: 'Newsletter or promotional email' },
-    { value: 'advertisement', label: 'Online Advertisement', icon: <Megaphone className="w-4 h-4" />, description: 'Banner ads, sponsored content' },
-    { value: 'partner', label: 'Partner Recommendation', icon: <Building2 className="w-4 h-4" />, description: 'Vendor or business partner' },
-    { value: 'existing_customer', label: 'Existing Customer', icon: <CheckCircle className="w-4 h-4" />, description: 'Already using our services' },
-    { value: 'word_of_mouth', label: 'Word of Mouth', icon: <MessageCircle className="w-4 h-4" />, description: 'Heard about us from others' },
-    { value: 'other', label: 'Other', icon: <Star className="w-4 h-4" />, description: 'Different source not listed above' }
-  ];
-
-  const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+    if (!formData.organizationName.trim()) {
+      newErrors.organizationName = 'Organization name is required';
     }
-  };
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
+    if (!formData.organizationType) {
+      newErrors.organizationType = 'Please select organization type';
+    }
 
-    if (!formData.organization_name.trim()) newErrors.organization_name = 'Organization name is required';
-    if (!formData.organization_type) newErrors.organization_type = 'Please select your organization type';
-    if (!formData.contact_name.trim()) newErrors.contact_name = 'Contact name is required';
+    if (!formData.contactName.trim()) {
+      newErrors.contactName = 'Contact name is required';
+    }
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
-    if (!formData.requirements.trim()) newErrors.requirements = 'Please tell us about your requirements';
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (field: keyof FormData) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData(prev => ({ ...prev, [field]: e.target.value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
+  };
+
+  const handleSelectChange = (field: keyof FormData) => (value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields correctly.",
+        variant: "destructive",
+      });
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const submissionData: FormSubmissionData = {
-        formId: 'inquiry-form-2025',
-        formVersion: '1.0.0',
-        data: formData,
-        metadata: {
-          submittedAt: new Date().toISOString(),
-          userAgent: navigator.userAgent,
-          referrer: document.referrer,
-          sessionId: crypto.randomUUID(),
-          completionTime: Date.now(),
-          source: 'inquiry_form'
-        }
+      const leadData = {
+        organization_name: formData.organizationName,
+        organization_type: formData.organizationType as 'agri_company' | 'ngo' | 'university' | 'government' | 'cooperative' | 'other',
+        contact_name: formData.contactName,
+        email: formData.email,
+        phone: formData.phone,
+        company_size: formData.companySize,
+        expected_farmers: formData.expectedFarmers ? parseInt(formData.expectedFarmers) : undefined,
+        budget_range: formData.budgetRange,
+        timeline: formData.timeline,
+        requirements: formData.requirements,
+        current_solution: formData.currentSolution,
+        how_did_you_hear: formData.howDidYouHear
       };
 
-      const result = await leadsService.submitLead(submissionData);
+      const result = await leadsService.submitInquiry(leadData);
 
       if (result.success) {
-        setSubmitStatus('success');
-        setFormData({
-          organization_name: '',
-          organization_type: '',
-          company_size: '',
-          contact_name: '',
-          email: '',
-          phone: '',
-          expected_farmers: '',
-          budget_range: '',
-          timeline: '',
-          current_solution: '',
-          requirements: '',
-          how_did_you_hear: ''
-        });
-
+        setIsSuccess(true);
         toast({
           title: "Success!",
-          description: "Your inquiry has been submitted successfully. We'll contact you within 24 hours.",
+          description: "Your inquiry has been submitted successfully. We'll contact you soon!",
         });
       } else {
-        throw new Error(result.error);
+        throw new Error(result.error || 'Submission failed');
       }
-
     } catch (error) {
       console.error('Form submission error:', error);
-      setSubmitStatus('error');
-      
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : 'Something went wrong. Please try again.',
+        description: error instanceof Error ? error.message : "Failed to submit inquiry. Please try again.",
         variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => setSubmitStatus(''), 5000);
     }
   };
 
+  if (isSuccess) {
+    return (
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardContent className="p-8 text-center">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Send className="w-8 h-8 text-green-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-green-600 mb-4">Thank you for your inquiry!</h2>
+          <p className="text-gray-600 mb-6">
+            We've received your information and our team will contact you within 24 hours.
+          </p>
+          <div className="bg-green-50 rounded-lg p-4">
+            <h3 className="font-medium text-green-800 mb-2">What happens next?</h3>
+            <ul className="text-sm text-green-700 space-y-1 text-left">
+              <li>• A member of our team will reach out to you shortly</li>
+              <li>• We'll schedule a demo tailored to your needs</li>
+              <li>• You'll get a personalized proposal and pricing</li>
+              <li>• We'll help you get started with a free trial</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <section id="contact" className="py-20 bg-gradient-to-br from-gray-50 via-green-50/30 to-blue-50/30">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Ready to Transform Your
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 block">Agricultural Operations?</span>
-            </h2>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Get in touch with our agricultural technology experts and discover how KisanShaktiAI can benefit your farming operations.
-            </p>
-            
-            {/* Enhanced Form Button */}
-            <div className="mb-8 p-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl border border-green-200/50 max-w-2xl mx-auto">
-              <div className="flex items-center justify-center mb-4">
-                <Rocket className="w-6 h-6 text-green-600 mr-2" />
-                <h3 className="text-lg font-semibold text-green-800">Try Our New Enhanced Form Experience</h3>
-              </div>
-              <p className="text-green-700 mb-4">
-                Experience our advanced multi-step form with smart validation, auto-save, and personalized lead scoring.
-              </p>
-              <Button
-                onClick={() => setShowEnhancedForm(true)}
-                className="bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                <Rocket className="w-4 h-4 mr-2" />
-                Open Enhanced Form
-              </Button>
+    <Card className="w-full max-w-2xl mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center text-green-700">
+          Get Started with KisanShakti AI
+        </CardTitle>
+        <p className="text-center text-gray-600">
+          Fill out the form below and our team will get in touch with you within 24 hours.
+        </p>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="organizationName">Organization Name *</Label>
+              <Input
+                id="organizationName"
+                value={formData.organizationName}
+                onChange={handleInputChange('organizationName')}
+                placeholder="Enter your organization name"
+                className={errors.organizationName ? 'border-red-500' : ''}
+              />
+              {errors.organizationName && (
+                <p className="text-sm text-red-600 mt-1">{errors.organizationName}</p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="organizationType">Organization Type *</Label>
+              <Select value={formData.organizationType} onValueChange={handleSelectChange('organizationType')}>
+                <SelectTrigger className={errors.organizationType ? 'border-red-500' : ''}>
+                  <SelectValue placeholder="Select organization type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="agri_company">Agriculture Company</SelectItem>
+                  <SelectItem value="ngo">NGO/Non-Profit</SelectItem>
+                  <SelectItem value="university">University/Research</SelectItem>
+                  <SelectItem value="government">Government</SelectItem>
+                  <SelectItem value="cooperative">Cooperative</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.organizationType && (
+                <p className="text-sm text-red-600 mt-1">{errors.organizationType}</p>
+              )}
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-            <div className="grid lg:grid-cols-3">
-              {/* Main Form - 2/3 width */}
-              <div className="lg:col-span-2 p-8 lg:p-12">
-                <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                    Get Your Personalized Demo
-                  </h3>
-                  <p className="text-gray-600">
-                    Fill out this form to receive a customized demonstration of our agricultural technology platform
-                  </p>
-                </div>
-                
-                <form onSubmit={handleSubmit} className="space-y-8">
-                  {/* Organization Information */}
-                  <FormSection 
-                    title="Organization Information" 
-                    description="Tell us about your organization"
-                  >
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Organization Name *
-                        </label>
-                        <Input
-                          type="text"
-                          value={formData.organization_name}
-                          onChange={(e) => handleChange('organization_name', e.target.value)}
-                          placeholder="Your organization name"
-                          className={errors.organization_name ? 'border-red-500' : ''}
-                        />
-                        {errors.organization_name && (
-                          <p className="text-sm text-red-600 mt-1">{errors.organization_name}</p>
-                        )}
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Expected Number of Farmers
-                        </label>
-                        <Input
-                          type="number"
-                          value={formData.expected_farmers}
-                          onChange={(e) => handleChange('expected_farmers', e.target.value)}
-                          placeholder="e.g., 1000"
-                        />
-                      </div>
-                    </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="contactName">Contact Name *</Label>
+              <Input
+                id="contactName"
+                value={formData.contactName}
+                onChange={handleInputChange('contactName')}
+                placeholder="Your full name"
+                className={errors.contactName ? 'border-red-500' : ''}
+              />
+              {errors.contactName && (
+                <p className="text-sm text-red-600 mt-1">{errors.contactName}</p>
+              )}
+            </div>
 
-                    <SelectionButtonGroup
-                      label="Organization Type"
-                      options={organizationTypeOptions}
-                      value={formData.organization_type}
-                      onChange={(value) => handleChange('organization_type', value)}
-                      name="organization_type"
-                      required
-                      error={errors.organization_type}
-                      columns={2}
-                    />
-
-                    <SelectionButtonGroup
-                      label="Company Size"
-                      options={companySizeOptions}
-                      value={formData.company_size}
-                      onChange={(value) => handleChange('company_size', value)}
-                      name="company_size"
-                      columns={2}
-                    />
-                  </FormSection>
-
-                  {/* Contact Information */}
-                  <FormSection 
-                    title="Contact Information" 
-                    description="How can we reach you?"
-                  >
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Contact Name *
-                        </label>
-                        <Input
-                          type="text"
-                          value={formData.contact_name}
-                          onChange={(e) => handleChange('contact_name', e.target.value)}
-                          placeholder="Your full name"
-                          className={errors.contact_name ? 'border-red-500' : ''}
-                        />
-                        {errors.contact_name && (
-                          <p className="text-sm text-red-600 mt-1">{errors.contact_name}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Phone Number *
-                        </label>
-                        <Input
-                          type="tel"
-                          value={formData.phone}
-                          onChange={(e) => handleChange('phone', e.target.value)}
-                          placeholder="+91 (800) 123-4567"
-                          className={errors.phone ? 'border-red-500' : ''}
-                        />
-                        {errors.phone && (
-                          <p className="text-sm text-red-600 mt-1">{errors.phone}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Email Address *
-                      </label>
-                      <Input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => handleChange('email', e.target.value)}
-                        placeholder="your.email@company.com"
-                        className={errors.email ? 'border-red-500' : ''}
-                      />
-                      {errors.email && (
-                        <p className="text-sm text-red-600 mt-1">{errors.email}</p>
-                      )}
-                    </div>
-                  </FormSection>
-
-                  {/* Requirements & Budget */}
-                  <FormSection 
-                    title="Requirements & Budget" 
-                    description="Help us understand your needs"
-                  >
-                    <SelectionButtonGroup
-                      label="Budget Range (Annual)"
-                      options={budgetRangeOptions}
-                      value={formData.budget_range}
-                      onChange={(value) => handleChange('budget_range', value)}
-                      name="budget_range"
-                      columns={2}
-                    />
-
-                    <SelectionButtonGroup
-                      label="Implementation Timeline"
-                      options={timelineOptions}
-                      value={formData.timeline}
-                      onChange={(value) => handleChange('timeline', value)}
-                      name="timeline"
-                      columns={2}
-                    />
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Current Solution
-                        </label>
-                        <Textarea
-                          value={formData.current_solution}
-                          onChange={(e) => handleChange('current_solution', e.target.value)}
-                          placeholder="What tools or systems are you currently using?"
-                          rows={3}
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Specific Requirements *
-                        </label>
-                        <Textarea
-                          value={formData.requirements}
-                          onChange={(e) => handleChange('requirements', e.target.value)}
-                          placeholder="Tell us about your specific needs, challenges, or features you're looking for..."
-                          rows={3}
-                          className={errors.requirements ? 'border-red-500' : ''}
-                        />
-                        {errors.requirements && (
-                          <p className="text-sm text-red-600 mt-1">{errors.requirements}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <SelectionButtonGroup
-                      label="How did you hear about us?"
-                      options={howDidYouHearOptions}
-                      value={formData.how_did_you_hear}
-                      onChange={(value) => handleChange('how_did_you_hear', value)}
-                      name="how_did_you_hear"
-                      columns={3}
-                      description="Help us understand which marketing channels are most effective"
-                    />
-                  </FormSection>
-
-                  {/* Submit Button */}
-                  <div className="pt-6">
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-lg transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Submitting...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-5 h-5" />
-                          <span>Submit Inquiry</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  {/* Status Messages */}
-                  {submitStatus === 'success' && (
-                    <div className="flex items-center space-x-2 p-4 bg-green-100 text-green-800 rounded-lg">
-                      <CheckCircle className="w-5 h-5" />
-                      <span>Thank you! Your inquiry has been submitted successfully. We'll get back to you within 24 hours.</span>
-                    </div>
-                  )}
-
-                  {submitStatus === 'error' && (
-                    <div className="flex items-center space-x-2 p-4 bg-red-100 text-red-800 rounded-lg">
-                      <AlertCircle className="w-5 h-5" />
-                      <span>Something went wrong. Please try again or contact us directly.</span>
-                    </div>
-                  )}
-                </form>
-              </div>
-
-              {/* Contact Info Sidebar - 1/3 width */}
-              <div className="bg-gradient-to-br from-green-600 to-blue-600 p-8 lg:p-12 text-white">
-                <h3 className="text-2xl font-bold mb-8">Get in Touch</h3>
-                
-                <div className="space-y-6 mb-8">
-                  <div className="flex items-start space-x-4">
-                    <Mail className="w-6 h-6 text-green-200 mt-1 flex-shrink-0" />
-                    <div>
-                      <div className="font-medium">Email</div>
-                      <div className="text-green-100">contact@kisanshaktiai.com</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-4">
-                    <Phone className="w-6 h-6 text-green-200 mt-1 flex-shrink-0" />
-                    <div>
-                      <div className="font-medium">Phone</div>
-                      <div className="text-green-100">+91 (800) 123-4567</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-4">
-                    <MapPin className="w-6 h-6 text-green-200 mt-1 flex-shrink-0" />
-                    <div>
-                      <div className="font-medium">Address</div>
-                      <div className="text-green-100">Agricultural Technology Hub<br />Bangalore, India</div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="space-y-4">
-                  <h4 className="text-lg font-semibold">Why Choose KisanShaktiAI?</h4>
-                  <ul className="space-y-3 text-green-100">
-                    <li className="flex items-start space-x-2">
-                      <CheckCircle className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
-                      <span>24/7 AI-powered agricultural support</span>
-                    </li>
-                    <li className="flex items-start space-x-2">
-                      <CheckCircle className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
-                      <span>Multi-language platform support</span>
-                    </li>
-                    <li className="flex items-start space-x-2">
-                      <CheckCircle className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
-                      <span>Real-time satellite monitoring</span>
-                    </li>
-                    <li className="flex items-start space-x-2">
-                      <CheckCircle className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
-                      <span>Proven track record with 25K+ farmers</span>
-                    </li>
-                    <li className="flex items-start space-x-2">
-                      <CheckCircle className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
-                      <span>Customizable solutions for every scale</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+            <div>
+              <Label htmlFor="email">Email Address *</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange('email')}
+                placeholder="your.email@company.com"
+                className={errors.email ? 'border-red-500' : ''}
+              />
+              {errors.email && (
+                <p className="text-sm text-red-600 mt-1">{errors.email}</p>
+              )}
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Enhanced Form Modal */}
-      <EnhancedLeadPopupForm
-        isOpen={showEnhancedForm}
-        onClose={() => setShowEnhancedForm(false)}
-        source="inquiry_form"
-      />
-    </section>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="phone">Phone Number *</Label>
+              <Input
+                id="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleInputChange('phone')}
+                placeholder="+91 98765 43210"
+                className={errors.phone ? 'border-red-500' : ''}
+              />
+              {errors.phone && (
+                <p className="text-sm text-red-600 mt-1">{errors.phone}</p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="companySize">Company Size</Label>
+              <Select value={formData.companySize} onValueChange={handleSelectChange('companySize')}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select company size" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1-10">1-10 employees</SelectItem>
+                  <SelectItem value="11-50">11-50 employees</SelectItem>
+                  <SelectItem value="51-200">51-200 employees</SelectItem>
+                  <SelectItem value="201-500">201-500 employees</SelectItem>
+                  <SelectItem value="500+">500+ employees</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="expectedFarmers">Expected Number of Farmers</Label>
+              <Input
+                id="expectedFarmers"
+                type="number"
+                value={formData.expectedFarmers}
+                onChange={handleInputChange('expectedFarmers')}
+                placeholder="e.g., 500"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="budgetRange">Budget Range</Label>
+              <Select value={formData.budgetRange} onValueChange={handleSelectChange('budgetRange')}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select budget range" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="under-50k">Under ₹50,000</SelectItem>
+                  <SelectItem value="50k-2l">₹50K - ₹2L</SelectItem>
+                  <SelectItem value="2l-5l">₹2L - ₹5L</SelectItem>
+                  <SelectItem value="5l-10l">₹5L - ₹10L</SelectItem>
+                  <SelectItem value="10l+">₹10L+</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="timeline">Implementation Timeline</Label>
+              <Select value={formData.timeline} onValueChange={handleSelectChange('timeline')}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select timeline" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="immediate">Immediately</SelectItem>
+                  <SelectItem value="1-3months">1-3 months</SelectItem>
+                  <SelectItem value="3-6months">3-6 months</SelectItem>
+                  <SelectItem value="6-12months">6-12 months</SelectItem>
+                  <SelectItem value="exploring">Just exploring</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="howDidYouHear">How did you hear about us?</Label>
+              <Select value={formData.howDidYouHear} onValueChange={handleSelectChange('howDidYouHear')}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select source" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="youtube">YouTube</SelectItem>
+                  <SelectItem value="facebook">Facebook</SelectItem>
+                  <SelectItem value="google">Google Search</SelectItem>
+                  <SelectItem value="linkedin">LinkedIn</SelectItem>
+                  <SelectItem value="referral">Referral</SelectItem>
+                  <SelectItem value="website">Website</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="requirements">Tell us about your requirements</Label>
+            <Textarea
+              id="requirements"
+              value={formData.requirements}
+              onChange={handleInputChange('requirements')}
+              placeholder="What specific features or solutions are you looking for?"
+              rows={4}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="currentSolution">What solution do you currently use?</Label>
+            <Input
+              id="currentSolution"
+              value={formData.currentSolution}
+              onChange={handleInputChange('currentSolution')}
+              placeholder="e.g., Excel sheets, other software, manual process"
+            />
+          </div>
+
+          <Button 
+            type="submit" 
+            className="w-full bg-green-600 hover:bg-green-700" 
+            size="lg"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <Send className="w-4 h-4 mr-2" />
+                Submit Inquiry
+              </>
+            )}
+          </Button>
+
+          <p className="text-xs text-gray-500 text-center">
+            By submitting this form, you agree to our Terms of Service and Privacy Policy.
+            We'll never share your information with third parties.
+          </p>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 
