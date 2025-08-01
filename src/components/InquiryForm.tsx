@@ -1,124 +1,107 @@
-
 import React, { useState } from 'react';
+import { Building2, Users, Target, Calendar, Send, CheckCircle, AlertCircle, Rocket, Phone, Mail, MapPin, Star, Globe, Share2, BookOpen, Building, MessageCircle, Megaphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Building, Users, DollarSign, Clock, Lightbulb, User, Mail, Phone, MessageSquare } from 'lucide-react';
 import { SelectionButtonGroup } from './forms/SelectionButtonGroup';
 import { FormSection } from './forms/FormSection';
-import { LeadsService } from '@/services/LeadsService';
-
-interface InquiryFormData {
-  organization_name: string;
-  organization_type: string;
-  contact_name: string;
-  email: string;
-  phone: string;
-  company_size?: string | null;
-  expected_farmers?: number | null;
-  budget_range?: string | null;
-  timeline?: string | null;
-  current_solution?: string | null;
-  requirements?: string | null;
-  how_did_you_hear?: string | null;
-  lead_source: 'website';
-  status: 'new';
-  priority: 'medium';
-}
-
-const organizationTypeOptions = [
-  { label: 'Agricultural Company', value: 'agri_company' },
-  { label: 'NGO', value: 'ngo' },
-  { label: 'University/Research', value: 'university' },
-  { label: 'Government Agency', value: 'government' },
-  { label: 'Cooperative', value: 'cooperative' },
-  { label: 'Other', value: 'other' },
-];
-
-const companySizeOptions = [
-  { label: '1-10 employees', value: '1-10' },
-  { label: '11-50 employees', value: '11-50' },
-  { label: '51-200 employees', value: '51-200' },
-  { label: '201-1000 employees', value: '201-1000' },
-  { label: '1000+ employees', value: '1000+' },
-];
-
-const budgetRangeOptions = [
-  { label: 'Under ₹25,000', value: 'under_25k' },
-  { label: '₹25,000 - ₹50,000', value: '25k_50k' },
-  { label: '₹50,000 - ₹1,00,000', value: '50k_100k' },
-  { label: '₹1,00,000+', value: '100k_plus' },
-];
-
-const timelineOptions = [
-  { label: 'Immediate (within 1 month)', value: 'immediate' },
-  { label: '1-2 months', value: '1_month' },
-  { label: '3-6 months', value: '3_months' },
-  { label: '6+ months', value: '6_months' },
-  { label: 'Flexible timeline', value: 'flexible' },
-];
-
-const howDidYouHearOptions = [
-  { label: 'Google Search', value: 'google_search' },
-  { label: 'Social Media (Facebook, LinkedIn, etc.)', value: 'social_media' },
-  { label: 'Referral from friend/colleague', value: 'referral' },
-  { label: 'Industry publication/magazine', value: 'publication' },
-  { label: 'Conference/event', value: 'conference' },
-  { label: 'Email marketing', value: 'email_marketing' },
-  { label: 'Online advertisement', value: 'advertisement' },
-  { label: 'Partner/vendor recommendation', value: 'partner' },
-  { label: 'Existing customer', value: 'existing_customer' },
-  { label: 'Word of mouth', value: 'word_of_mouth' },
-  { label: 'Other', value: 'other' },
-];
+import { AdvancedLeadsService } from '@/services/AdvancedLeadsService';
+import { LEAD_FORM_SCHEMA } from '@/config/leadFormSchema';
+import EnhancedLeadPopupForm from './EnhancedLeadPopupForm';
+import type { FormSubmissionData } from '@/types/UniversalForm';
 
 const InquiryForm = () => {
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [leadsService] = useState(() => new AdvancedLeadsService(LEAD_FORM_SCHEMA));
   
-  // Form state
-  const [organizationName, setOrganizationName] = useState('');
-  const [organizationType, setOrganizationType] = useState('');
-  const [contactName, setContactName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [companySize, setCompanySize] = useState('');
-  const [expectedFarmers, setExpectedFarmers] = useState('');
-  const [budgetRange, setBudgetRange] = useState('');
-  const [timeline, setTimeline] = useState('');
-  const [currentSolution, setCurrentSolution] = useState('');
-  const [requirements, setRequirements] = useState('');
-  const [howDidYouHear, setHowDidYouHear] = useState('');
-
-  // Form validation
+  const [formData, setFormData] = useState({
+    organization_name: '',
+    organization_type: '',
+    company_size: '',
+    contact_name: '',
+    email: '',
+    phone: '',
+    expected_farmers: '',
+    budget_range: '',
+    timeline: '',
+    current_solution: '',
+    requirements: '',
+    how_did_you_hear: ''
+  });
+  
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitStatus, setSubmitStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showEnhancedForm, setShowEnhancedForm] = useState(false);
 
-  const validateForm = (): boolean => {
+  // Selection options with icons
+  const organizationTypeOptions = [
+    { value: 'agri_company', label: 'Agricultural Company', icon: <Building2 className="w-4 h-4" />, description: 'Commercial farming or agribusiness' },
+    { value: 'ngo', label: 'NGO', icon: <Users className="w-4 h-4" />, description: 'Non-profit organization' },
+    { value: 'university', label: 'University/Research', icon: <Target className="w-4 h-4" />, description: 'Academic or research institution' },
+    { value: 'government', label: 'Government Agency', icon: <Building2 className="w-4 h-4" />, description: 'Government or public sector' },
+    { value: 'cooperative', label: 'Cooperative', icon: <Users className="w-4 h-4" />, description: 'Farmer cooperative or collective' },
+    { value: 'other', label: 'Other', icon: <Star className="w-4 h-4" />, description: 'Other type of organization' }
+  ];
+
+  const companySizeOptions = [
+    { value: '1-10', label: '1-10 employees', icon: <Users className="w-4 h-4" />, description: 'Small team or startup' },
+    { value: '11-50', label: '11-50 employees', icon: <Users className="w-4 h-4" />, description: 'Growing company' },
+    { value: '51-200', label: '51-200 employees', icon: <Users className="w-4 h-4" />, description: 'Medium-sized company' },
+    { value: '201-1000', label: '201-1000 employees', icon: <Users className="w-4 h-4" />, description: 'Large organization' },
+    { value: '1000+', label: '1000+ employees', icon: <Users className="w-4 h-4" />, description: 'Enterprise organization' }
+  ];
+
+  const budgetRangeOptions = [
+    { value: 'under_25k', label: 'Under ₹25,000', icon: <Target className="w-4 h-4" />, description: 'Basic package suitable for small operations' },
+    { value: '25k_50k', label: '₹25,000 - ₹50,000', icon: <Target className="w-4 h-4" />, description: 'Standard package for growing businesses' },
+    { value: '50k_100k', label: '₹50,000 - ₹1,00,000', icon: <Target className="w-4 h-4" />, description: 'Premium package with advanced features' },
+    { value: '100k_plus', label: '₹1,00,000+', icon: <Target className="w-4 h-4" />, description: 'Enterprise solutions with full customization' }
+  ];
+
+  const timelineOptions = [
+    { value: 'immediate', label: 'Immediate (within 1 month)', icon: <Calendar className="w-4 h-4" />, description: 'Ready to start right away' },
+    { value: '1_month', label: '1-2 months', icon: <Calendar className="w-4 h-4" />, description: 'Quick deployment needed' },
+    { value: '3_months', label: '3-6 months', icon: <Calendar className="w-4 h-4" />, description: 'Standard implementation timeline' },
+    { value: '6_months', label: '6+ months', icon: <Calendar className="w-4 h-4" />, description: 'Planned for future implementation' },
+    { value: 'flexible', label: 'Flexible timeline', icon: <Calendar className="w-4 h-4" />, description: 'Open to discussion' }
+  ];
+
+  const howDidYouHearOptions = [
+    { value: 'google_search', label: 'Google Search', icon: <Globe className="w-4 h-4" />, description: 'Found us through search engines' },
+    { value: 'social_media', label: 'Social Media', icon: <Share2 className="w-4 h-4" />, description: 'Facebook, LinkedIn, Instagram, etc.' },
+    { value: 'referral', label: 'Friend/Colleague Referral', icon: <Users className="w-4 h-4" />, description: 'Recommended by someone you know' },
+    { value: 'publication', label: 'Industry Publication', icon: <BookOpen className="w-4 h-4" />, description: 'Magazine, journal, or blog article' },
+    { value: 'conference', label: 'Conference/Event', icon: <Building className="w-4 h-4" />, description: 'Industry events or trade shows' },
+    { value: 'email_marketing', label: 'Email Marketing', icon: <Mail className="w-4 h-4" />, description: 'Newsletter or promotional email' },
+    { value: 'advertisement', label: 'Online Advertisement', icon: <Megaphone className="w-4 h-4" />, description: 'Banner ads, sponsored content' },
+    { value: 'partner', label: 'Partner Recommendation', icon: <Building2 className="w-4 h-4" />, description: 'Vendor or business partner' },
+    { value: 'existing_customer', label: 'Existing Customer', icon: <CheckCircle className="w-4 h-4" />, description: 'Already using our services' },
+    { value: 'word_of_mouth', label: 'Word of Mouth', icon: <MessageCircle className="w-4 h-4" />, description: 'Heard about us from others' },
+    { value: 'other', label: 'Other', icon: <Star className="w-4 h-4" />, description: 'Different source not listed above' }
+  ];
+
+  const handleChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!organizationName.trim()) {
-      newErrors.organizationName = 'Organization name is required';
-    }
-
-    if (!organizationType) {
-      newErrors.organizationType = 'Please select your organization type';
-    }
-
-    if (!contactName.trim()) {
-      newErrors.contactName = 'Contact name is required';
-    }
-
-    if (!email.trim()) {
+    if (!formData.organization_name.trim()) newErrors.organization_name = 'Organization name is required';
+    if (!formData.organization_type) newErrors.organization_type = 'Please select your organization type';
+    if (!formData.contact_name.trim()) newErrors.contact_name = 'Contact name is required';
+    if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
-    } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)) {
+    } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-
-    if (!phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    }
+    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
+    if (!formData.requirements.trim()) newErrors.requirements = 'Please tell us about your requirements';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -126,313 +109,397 @@ const InquiryForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (!validateForm()) {
-      toast({
-        title: "Validation Error",
-        description: "Please fix the errors in the form before submitting.",
-        variant: "destructive",
-      });
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const leadData = {
-        organization_name: organizationName,
-        organization_type: organizationType as any,
-        contact_name: contactName,
-        email: email.toLowerCase().trim(),
-        phone: phone.trim(),
-        company_size: companySize || undefined,
-        expected_farmers: expectedFarmers ? parseInt(expectedFarmers) : undefined,
-        budget_range: budgetRange || undefined,
-        timeline: timeline || undefined,
-        current_solution: currentSolution.trim() || undefined,
-        requirements: requirements.trim() || undefined,
-        how_did_you_hear: howDidYouHear || undefined,
+      const submissionData: FormSubmissionData = {
+        formId: 'inquiry-form-2025',
+        formVersion: '1.0.0',
+        data: formData,
+        metadata: {
+          submittedAt: new Date().toISOString(),
+          userAgent: navigator.userAgent,
+          referrer: document.referrer,
+          sessionId: crypto.randomUUID(),
+          completionTime: Date.now(),
+          source: 'inquiry_form'
+        }
       };
 
-      const leadsService = new LeadsService();
-      const result = await leadsService.submitInquiry(leadData);
+      const result = await leadsService.submitLead(submissionData);
 
       if (result.success) {
+        setSubmitStatus('success');
+        setFormData({
+          organization_name: '',
+          organization_type: '',
+          company_size: '',
+          contact_name: '',
+          email: '',
+          phone: '',
+          expected_farmers: '',
+          budget_range: '',
+          timeline: '',
+          current_solution: '',
+          requirements: '',
+          how_did_you_hear: ''
+        });
+
         toast({
           title: "Success!",
           description: "Your inquiry has been submitted successfully. We'll contact you within 24 hours.",
         });
-
-        // Reset form
-        setOrganizationName('');
-        setOrganizationType('');
-        setContactName('');
-        setEmail('');
-        setPhone('');
-        setCompanySize('');
-        setExpectedFarmers('');
-        setBudgetRange('');
-        setTimeline('');
-        setCurrentSolution('');
-        setRequirements('');
-        setHowDidYouHear('');
       } else {
-        throw new Error(result.error || 'Failed to submit inquiry');
+        throw new Error(result.error);
       }
+
     } catch (error) {
       console.error('Form submission error:', error);
+      setSubmitStatus('error');
+      
       toast({
         title: "Error",
-        description: "There was an error submitting your inquiry. Please try again.",
+        description: error instanceof Error ? error.message : 'Something went wrong. Please try again.',
         variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
+      setTimeout(() => setSubmitStatus(''), 5000);
     }
   };
 
   return (
-    <section id="contact" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Request a Demo
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Ready to transform your agricultural operations? Get a personalized demo of our platform 
-            and see how we can help you achieve your goals.
-          </p>
-        </div>
-
-        <Card className="shadow-lg">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MessageSquare className="h-6 w-6 text-green-600" />
-              Tell Us About Your Organization
-            </CardTitle>
-            <CardDescription>
-              Fill out the form below and our team will reach out to schedule your personalized demo.
-            </CardDescription>
-          </CardHeader>
-          
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Organization Details */}
-              <FormSection
-                title="Organization Details"
-                description="Help us understand your organization"
-              >
-                <div className="space-y-6">
-                  <div>
-                    <label htmlFor="organizationName" className="block text-sm font-medium text-gray-700 mb-2">
-                      Organization Name *
-                    </label>
-                    <Input
-                      id="organizationName"
-                      type="text"
-                      value={organizationName}
-                      onChange={(e) => setOrganizationName(e.target.value)}
-                      placeholder="Enter your organization name"
-                      className={errors.organizationName ? 'border-red-500' : ''}
-                      required
-                    />
-                    {errors.organizationName && (
-                      <p className="mt-1 text-sm text-red-600">{errors.organizationName}</p>
-                    )}
-                  </div>
-
-                  <SelectionButtonGroup
-                    options={organizationTypeOptions}
-                    value={organizationType}
-                    onChange={setOrganizationType}
-                    name="organizationType"
-                    label="Organization Type"
-                    required
-                    error={errors.organizationType}
-                  />
-
-                  <SelectionButtonGroup
-                    options={companySizeOptions}
-                    value={companySize}
-                    onChange={setCompanySize}
-                    name="companySize"
-                    label="Company Size"
-                  />
-                </div>
-              </FormSection>
-
-              {/* Contact Information */}
-              <FormSection
-                title="Contact Information"
-                description="How can we reach you?"
-              >
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="contactName" className="block text-sm font-medium text-gray-700 mb-2">
-                      Contact Name *
-                    </label>
-                    <Input
-                      id="contactName"
-                      type="text"
-                      value={contactName}
-                      onChange={(e) => setContactName(e.target.value)}
-                      placeholder="Your full name"
-                      className={errors.contactName ? 'border-red-500' : ''}
-                      required
-                    />
-                    {errors.contactName && (
-                      <p className="mt-1 text-sm text-red-600">{errors.contactName}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address *
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="your.email@company.com"
-                        className={`pl-10 ${errors.email ? 'border-red-500' : ''}`}
-                        required
-                      />
-                    </div>
-                    {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number *
-                    </label>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="phone"
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Your phone number"
-                        className={`pl-10 ${errors.phone ? 'border-red-500' : ''}`}
-                        required
-                      />
-                    </div>
-                    {errors.phone && (
-                      <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="expectedFarmers" className="block text-sm font-medium text-gray-700 mb-2">
-                      Expected Number of Farmers
-                    </label>
-                    <div className="relative">
-                      <Users className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="expectedFarmers"
-                        type="number"
-                        value={expectedFarmers}
-                        onChange={(e) => setExpectedFarmers(e.target.value)}
-                        placeholder="e.g., 1000"
-                        className="pl-10"
-                        min="1"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </FormSection>
-
-              {/* Requirements & Budget */}
-              <FormSection
-                title="Requirements & Budget"
-                description="Help us understand your needs"
-              >
-                <div className="space-y-6">
-                  <SelectionButtonGroup
-                    options={budgetRangeOptions}
-                    value={budgetRange}
-                    onChange={setBudgetRange}
-                    name="budgetRange"
-                    label="Budget Range (Annual)"
-                  />
-
-                  <SelectionButtonGroup
-                    options={timelineOptions}
-                    value={timeline}
-                    onChange={setTimeline}
-                    name="timeline"
-                    label="Implementation Timeline"
-                  />
-                </div>
-              </FormSection>
-
-              {/* Additional Information */}
-              <FormSection
-                title="Additional Information"
-                description="Tell us more about your requirements"
-              >
-                <div className="space-y-6">
-                  <div>
-                    <label htmlFor="currentSolution" className="block text-sm font-medium text-gray-700 mb-2">
-                      Current Solution
-                    </label>
-                    <Textarea
-                      id="currentSolution"
-                      value={currentSolution}
-                      onChange={(e) => setCurrentSolution(e.target.value)}
-                      placeholder="What tools or systems are you currently using? (Optional)"
-                      rows={3}
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="requirements" className="block text-sm font-medium text-gray-700 mb-2">
-                      Specific Requirements
-                    </label>
-                    <Textarea
-                      id="requirements"
-                      value={requirements}
-                      onChange={(e) => setRequirements(e.target.value)}
-                      placeholder="Tell us about your specific needs, challenges, or features you're looking for... (Optional)"
-                      rows={4}
-                    />
-                  </div>
-
-                  <SelectionButtonGroup
-                    options={howDidYouHearOptions}
-                    value={howDidYouHear}
-                    onChange={setHowDidYouHear}
-                    name="howDidYouHear"
-                    label="How did you hear about us?"
-                  />
-                </div>
-              </FormSection>
-
-              <div className="flex justify-center pt-6">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 min-w-[200px]"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Submitting...
-                    </>
-                  ) : (
-                    'Request Demo'
-                  )}
-                </Button>
+    <section id="contact" className="py-20 bg-gradient-to-br from-gray-50 via-green-50/30 to-blue-50/30">
+      <div className="container mx-auto px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              Ready to Transform Your
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 block">Agricultural Operations?</span>
+            </h2>
+            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              Get in touch with our agricultural technology experts and discover how KisanShaktiAI can benefit your farming operations.
+            </p>
+            
+            {/* Enhanced Form Button */}
+            <div className="mb-8 p-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl border border-green-200/50 max-w-2xl mx-auto">
+              <div className="flex items-center justify-center mb-4">
+                <Rocket className="w-6 h-6 text-green-600 mr-2" />
+                <h3 className="text-lg font-semibold text-green-800">Try Our New Enhanced Form Experience</h3>
               </div>
-            </form>
-          </CardContent>
-        </Card>
+              <p className="text-green-700 mb-4">
+                Experience our advanced multi-step form with smart validation, auto-save, and personalized lead scoring.
+              </p>
+              <Button
+                onClick={() => setShowEnhancedForm(true)}
+                className="bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <Rocket className="w-4 h-4 mr-2" />
+                Open Enhanced Form
+              </Button>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+            <div className="grid lg:grid-cols-3">
+              {/* Main Form - 2/3 width */}
+              <div className="lg:col-span-2 p-8 lg:p-12">
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    Get Your Personalized Demo
+                  </h3>
+                  <p className="text-gray-600">
+                    Fill out this form to receive a customized demonstration of our agricultural technology platform
+                  </p>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  {/* Organization Information */}
+                  <FormSection 
+                    title="Organization Information" 
+                    description="Tell us about your organization"
+                  >
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Organization Name *
+                        </label>
+                        <Input
+                          type="text"
+                          value={formData.organization_name}
+                          onChange={(e) => handleChange('organization_name', e.target.value)}
+                          placeholder="Your organization name"
+                          className={errors.organization_name ? 'border-red-500' : ''}
+                        />
+                        {errors.organization_name && (
+                          <p className="text-sm text-red-600 mt-1">{errors.organization_name}</p>
+                        )}
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Expected Number of Farmers
+                        </label>
+                        <Input
+                          type="number"
+                          value={formData.expected_farmers}
+                          onChange={(e) => handleChange('expected_farmers', e.target.value)}
+                          placeholder="e.g., 1000"
+                        />
+                      </div>
+                    </div>
+
+                    <SelectionButtonGroup
+                      label="Organization Type"
+                      options={organizationTypeOptions}
+                      value={formData.organization_type}
+                      onChange={(value) => handleChange('organization_type', value)}
+                      name="organization_type"
+                      required
+                      error={errors.organization_type}
+                      columns={2}
+                    />
+
+                    <SelectionButtonGroup
+                      label="Company Size"
+                      options={companySizeOptions}
+                      value={formData.company_size}
+                      onChange={(value) => handleChange('company_size', value)}
+                      name="company_size"
+                      columns={2}
+                    />
+                  </FormSection>
+
+                  {/* Contact Information */}
+                  <FormSection 
+                    title="Contact Information" 
+                    description="How can we reach you?"
+                  >
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Contact Name *
+                        </label>
+                        <Input
+                          type="text"
+                          value={formData.contact_name}
+                          onChange={(e) => handleChange('contact_name', e.target.value)}
+                          placeholder="Your full name"
+                          className={errors.contact_name ? 'border-red-500' : ''}
+                        />
+                        {errors.contact_name && (
+                          <p className="text-sm text-red-600 mt-1">{errors.contact_name}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Phone Number *
+                        </label>
+                        <Input
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) => handleChange('phone', e.target.value)}
+                          placeholder="+91 (800) 123-4567"
+                          className={errors.phone ? 'border-red-500' : ''}
+                        />
+                        {errors.phone && (
+                          <p className="text-sm text-red-600 mt-1">{errors.phone}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Email Address *
+                      </label>
+                      <Input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => handleChange('email', e.target.value)}
+                        placeholder="your.email@company.com"
+                        className={errors.email ? 'border-red-500' : ''}
+                      />
+                      {errors.email && (
+                        <p className="text-sm text-red-600 mt-1">{errors.email}</p>
+                      )}
+                    </div>
+                  </FormSection>
+
+                  {/* Requirements & Budget */}
+                  <FormSection 
+                    title="Requirements & Budget" 
+                    description="Help us understand your needs"
+                  >
+                    <SelectionButtonGroup
+                      label="Budget Range (Annual)"
+                      options={budgetRangeOptions}
+                      value={formData.budget_range}
+                      onChange={(value) => handleChange('budget_range', value)}
+                      name="budget_range"
+                      columns={2}
+                    />
+
+                    <SelectionButtonGroup
+                      label="Implementation Timeline"
+                      options={timelineOptions}
+                      value={formData.timeline}
+                      onChange={(value) => handleChange('timeline', value)}
+                      name="timeline"
+                      columns={2}
+                    />
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Current Solution
+                        </label>
+                        <Textarea
+                          value={formData.current_solution}
+                          onChange={(e) => handleChange('current_solution', e.target.value)}
+                          placeholder="What tools or systems are you currently using?"
+                          rows={3}
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Specific Requirements *
+                        </label>
+                        <Textarea
+                          value={formData.requirements}
+                          onChange={(e) => handleChange('requirements', e.target.value)}
+                          placeholder="Tell us about your specific needs, challenges, or features you're looking for..."
+                          rows={3}
+                          className={errors.requirements ? 'border-red-500' : ''}
+                        />
+                        {errors.requirements && (
+                          <p className="text-sm text-red-600 mt-1">{errors.requirements}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <SelectionButtonGroup
+                      label="How did you hear about us?"
+                      options={howDidYouHearOptions}
+                      value={formData.how_did_you_hear}
+                      onChange={(value) => handleChange('how_did_you_hear', value)}
+                      name="how_did_you_hear"
+                      columns={3}
+                      description="Help us understand which marketing channels are most effective"
+                    />
+                  </FormSection>
+
+                  {/* Submit Button */}
+                  <div className="pt-6">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-lg transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>Submitting...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-5 h-5" />
+                          <span>Submit Inquiry</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Status Messages */}
+                  {submitStatus === 'success' && (
+                    <div className="flex items-center space-x-2 p-4 bg-green-100 text-green-800 rounded-lg">
+                      <CheckCircle className="w-5 h-5" />
+                      <span>Thank you! Your inquiry has been submitted successfully. We'll get back to you within 24 hours.</span>
+                    </div>
+                  )}
+
+                  {submitStatus === 'error' && (
+                    <div className="flex items-center space-x-2 p-4 bg-red-100 text-red-800 rounded-lg">
+                      <AlertCircle className="w-5 h-5" />
+                      <span>Something went wrong. Please try again or contact us directly.</span>
+                    </div>
+                  )}
+                </form>
+              </div>
+
+              {/* Contact Info Sidebar - 1/3 width */}
+              <div className="bg-gradient-to-br from-green-600 to-blue-600 p-8 lg:p-12 text-white">
+                <h3 className="text-2xl font-bold mb-8">Get in Touch</h3>
+                
+                <div className="space-y-6 mb-8">
+                  <div className="flex items-start space-x-4">
+                    <Mail className="w-6 h-6 text-green-200 mt-1 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Email</div>
+                      <div className="text-green-100">contact@kisanshaktiai.com</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start space-x-4">
+                    <Phone className="w-6 h-6 text-green-200 mt-1 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Phone</div>
+                      <div className="text-green-100">+91 (800) 123-4567</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start space-x-4">
+                    <MapPin className="w-6 h-6 text-green-200 mt-1 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Address</div>
+                      <div className="text-green-100">Agricultural Technology Hub<br />Bangalore, India</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <h4 className="text-lg font-semibold">Why Choose KisanShaktiAI?</h4>
+                  <ul className="space-y-3 text-green-100">
+                    <li className="flex items-start space-x-2">
+                      <CheckCircle className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
+                      <span>24/7 AI-powered agricultural support</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <CheckCircle className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
+                      <span>Multi-language platform support</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <CheckCircle className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
+                      <span>Real-time satellite monitoring</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <CheckCircle className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
+                      <span>Proven track record with 25K+ farmers</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <CheckCircle className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
+                      <span>Customizable solutions for every scale</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* Enhanced Form Modal */}
+      <EnhancedLeadPopupForm
+        isOpen={showEnhancedForm}
+        onClose={() => setShowEnhancedForm(false)}
+        source="inquiry_form"
+      />
     </section>
   );
 };
