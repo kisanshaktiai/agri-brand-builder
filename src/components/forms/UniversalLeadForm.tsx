@@ -30,19 +30,18 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
   const [embedCode, setEmbedCode] = useState('');
   const { toast } = useToast();
 
-  const generateShortUrl = (baseUrl: string): string => {
-    // Generate a short, branded URL for KisanShakti
-    const shortId = Math.random().toString(36).substring(2, 8);
-    return `${window.location.origin}/ks/${shortId}`;
+  const generateShortUrl = (): string => {
+    // Create a working short URL that points to the actual lead form page
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/lead-form`;
   };
 
   useEffect(() => {
     if (enableSharing) {
-      const baseUrl = window.location.origin + '/lead-form';
-      const shortUrl = generateShortUrl(baseUrl);
-      setGeneratedUrl(shareableUrl || shortUrl);
+      const shortUrl = shareableUrl || generateShortUrl();
+      setGeneratedUrl(shortUrl);
       
-      // Generate embed code with the short URL
+      // Generate embed code with the working URL
       const embedHtml = `<iframe src="${shortUrl}" width="100%" height="600" frameborder="0" style="border: none; border-radius: 8px;"></iframe>`;
       setEmbedCode(embedHtml);
     }
@@ -131,7 +130,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
             {showShareOptions && (
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="share-url">Short URL</Label>
+                  <Label htmlFor="share-url">Share URL</Label>
                   <div className="flex mt-1">
                     <Input
                       id="share-url"
@@ -140,7 +139,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
                       className="rounded-r-none"
                     />
                     <Button
-                      onClick={() => copyToClipboard(generatedUrl, 'Short URL')}
+                      onClick={() => copyToClipboard(generatedUrl, 'Share URL')}
                       variant="outline"
                       size="sm"
                       className="rounded-l-none border-l-0"
