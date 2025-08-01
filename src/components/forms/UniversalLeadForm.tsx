@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -31,14 +30,20 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
   const [embedCode, setEmbedCode] = useState('');
   const { toast } = useToast();
 
+  const generateShortUrl = (baseUrl: string): string => {
+    // Generate a short, branded URL for KisanShakti
+    const shortId = Math.random().toString(36).substring(2, 8);
+    return `${window.location.origin}/ks/${shortId}`;
+  };
+
   useEffect(() => {
     if (enableSharing) {
-      const currentUrl = window.location.origin + '/lead-form';
-      const urlWithUTM = `${currentUrl}?utm_source=share&utm_medium=direct&utm_campaign=lead_generation`;
-      setGeneratedUrl(shareableUrl || urlWithUTM);
+      const baseUrl = window.location.origin + '/lead-form';
+      const shortUrl = generateShortUrl(baseUrl);
+      setGeneratedUrl(shareableUrl || shortUrl);
       
-      // Generate embed code
-      const embedHtml = `<iframe src="${urlWithUTM}" width="100%" height="600" frameborder="0" style="border: none; border-radius: 8px;"></iframe>`;
+      // Generate embed code with the short URL
+      const embedHtml = `<iframe src="${shortUrl}" width="100%" height="600" frameborder="0" style="border: none; border-radius: 8px;"></iframe>`;
       setEmbedCode(embedHtml);
     }
   }, [shareableUrl, enableSharing]);
@@ -70,7 +75,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
   };
 
   const shareToSocial = (platform: string) => {
-    const text = "Check out KisanShakti AI - Transform your agricultural operations with AI";
+    const text = "Transform your agricultural operations with KisanShakti AI";
     let shareUrl = '';
 
     switch (platform) {
@@ -86,6 +91,17 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
       case 'whatsapp':
         shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + generatedUrl)}`;
         break;
+      case 'instagram':
+        // Instagram doesn't support direct URL sharing, so we copy to clipboard with instructions
+        copyToClipboard(
+          `${text}\n\n${generatedUrl}\n\n#KisanShaktiAI #AgricultureTechnology #AIForFarming`,
+          'Instagram post content'
+        );
+        toast({
+          title: "Instagram Content Ready!",
+          description: "Post content copied to clipboard. Paste it in Instagram with your image.",
+        });
+        return;
     }
 
     if (shareUrl) {
@@ -115,7 +131,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
             {showShareOptions && (
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="share-url">Shareable URL</Label>
+                  <Label htmlFor="share-url">Short URL</Label>
                   <div className="flex mt-1">
                     <Input
                       id="share-url"
@@ -124,7 +140,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
                       className="rounded-r-none"
                     />
                     <Button
-                      onClick={() => copyToClipboard(generatedUrl, 'URL')}
+                      onClick={() => copyToClipboard(generatedUrl, 'Short URL')}
                       variant="outline"
                       size="sm"
                       className="rounded-l-none border-l-0"
@@ -168,6 +184,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
                     onClick={() => shareToSocial('twitter')}
                     variant="outline"
                     size="sm"
+                    className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
                   >
                     Twitter
                   </Button>
@@ -176,6 +193,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
                     onClick={() => shareToSocial('facebook')}
                     variant="outline"
                     size="sm"
+                    className="bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-200"
                   >
                     Facebook
                   </Button>
@@ -184,6 +202,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
                     onClick={() => shareToSocial('linkedin')}
                     variant="outline"
                     size="sm"
+                    className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
                   >
                     LinkedIn
                   </Button>
@@ -192,8 +211,18 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
                     onClick={() => shareToSocial('whatsapp')}
                     variant="outline"
                     size="sm"
+                    className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
                   >
                     WhatsApp
+                  </Button>
+                  
+                  <Button
+                    onClick={() => shareToSocial('instagram')}
+                    variant="outline"
+                    size="sm"
+                    className="bg-gradient-to-r from-purple-50 to-pink-50 hover:from-purple-100 hover:to-pink-100 text-purple-700 border-purple-200"
+                  >
+                    Instagram
                   </Button>
                 </div>
               </div>
