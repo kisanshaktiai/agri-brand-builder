@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
-import { Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Send, CheckCircle, AlertCircle, Rocket } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import EnhancedLeadPopupForm from './EnhancedLeadPopupForm';
 
 const InquiryForm = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +15,7 @@ const InquiryForm = () => {
   
   const [submitStatus, setSubmitStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showEnhancedForm, setShowEnhancedForm] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -53,15 +56,41 @@ const InquiryForm = () => {
               Ready to Transform Your
               <span className="text-agri-gradient block">Agricultural Operations?</span>
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-600 mb-8">
               Get in touch with our agricultural technology experts and discover how KisanShaktiAI can benefit your farming operations.
             </p>
+            
+            {/* New Enhanced Form Button */}
+            <div className="mb-8 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-green-200">
+              <div className="flex items-center justify-center mb-4">
+                <Rocket className="w-6 h-6 text-green-600 mr-2" />
+                <h3 className="text-lg font-semibold text-green-800">Try Our New Enhanced Form Experience</h3>
+              </div>
+              <p className="text-green-700 mb-4">
+                Experience our advanced multi-step form with smart validation, auto-save, and personalized lead scoring.
+              </p>
+              <Button
+                onClick={() => setShowEnhancedForm(true)}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                Open Enhanced Form
+              </Button>
+            </div>
           </div>
 
           <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
             <div className="grid lg:grid-cols-2">
-              {/* Form */}
+              {/* Original Form */}
               <div className="p-8 lg:p-12">
+                <div className="mb-6">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    Traditional Contact Form
+                  </h3>
+                  <p className="text-gray-600">
+                    Use our standard contact form for quick inquiries
+                  </p>
+                </div>
+                
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
@@ -211,6 +240,13 @@ const InquiryForm = () => {
           </div>
         </div>
       </div>
+
+      {/* Enhanced Form Modal */}
+      <EnhancedLeadPopupForm
+        isOpen={showEnhancedForm}
+        onClose={() => setShowEnhancedForm(false)}
+        source="inquiry_form"
+      />
     </section>
   );
 };
