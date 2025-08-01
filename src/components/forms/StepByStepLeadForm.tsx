@@ -16,7 +16,7 @@ interface FormData {
   company_size: string;
   contact_name: string;
   email: string;
-  phone: string; // Now required - matches database NOT NULL constraint
+  phone: string;
   expected_farmers: string;
   budget_range: string;
   timeline: string;
@@ -32,7 +32,6 @@ interface StepByStepLeadFormProps {
 
 const TOTAL_STEPS = 6;
 
-// Organization type options - values match database constraint exactly
 const organizationTypeOptions = [
   { value: 'agri_company', label: 'Agriculture Company', description: 'Commercial farming or agribusiness', icon: <Building2 className="w-5 h-5" /> },
   { value: 'ngo', label: 'NGO/Non-Profit', description: 'Agricultural development organization', icon: <Users className="w-5 h-5" /> },
@@ -42,7 +41,6 @@ const organizationTypeOptions = [
   { value: 'other', label: 'Other', description: 'Other type of organization', icon: <Building2 className="w-5 h-5" /> }
 ];
 
-// Company size options - consistent values
 const companySizeOptions = [
   { value: '1-10', label: '1-10 employees', description: 'Small team or startup' },
   { value: '11-50', label: '11-50 employees', description: 'Growing business' },
@@ -51,7 +49,6 @@ const companySizeOptions = [
   { value: '500+', label: '500+ employees', description: 'Enterprise level' }
 ];
 
-// Budget range options - consistent values
 const budgetRangeOptions = [
   { value: 'under-50k', label: 'Under ₹50,000', description: 'Basic package', icon: <DollarSign className="w-4 h-4" /> },
   { value: '50k-2l', label: '₹50K - ₹2L', description: 'Standard solution', icon: <DollarSign className="w-4 h-4" /> },
@@ -60,7 +57,6 @@ const budgetRangeOptions = [
   { value: '10l+', label: '₹10L+', description: 'Custom enterprise', icon: <DollarSign className="w-4 h-4" /> }
 ];
 
-// Timeline options - consistent values
 const timelineOptions = [
   { value: 'immediate', label: 'Immediately', description: 'Ready to start now', icon: <Calendar className="w-4 h-4" /> },
   { value: '1-3months', label: '1-3 months', description: 'Planning phase', icon: <Calendar className="w-4 h-4" /> },
@@ -69,7 +65,6 @@ const timelineOptions = [
   { value: 'exploring', label: 'Just exploring', description: 'Research phase', icon: <Eye className="w-4 h-4" /> }
 ];
 
-// How did you hear options - consistent values
 const howDidYouHearOptions = [
   { value: 'youtube', label: 'YouTube', description: 'Found us on YouTube', icon: <MessageSquare className="w-4 h-4" /> },
   { value: 'facebook', label: 'Facebook', description: 'Social media discovery', icon: <MessageSquare className="w-4 h-4" /> },
@@ -218,6 +213,9 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
     setIsSubmitting(true);
     try {
       console.log('Starting form submission...');
+      
+      // Ensure we're using anonymous access for lead submission
+      await leadsService.ensureAnonymousAccess();
 
       const leadData = {
         organization_name: formData.organization_name,

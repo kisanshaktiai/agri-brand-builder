@@ -4,9 +4,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MessageSquare, Share2, Copy, QrCode } from 'lucide-react';
+import { MessageSquare, Share2, Copy, QrCode, ExternalLink } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import UnifiedLeadForm from './UnifiedLeadForm';
+import StepByStepLeadForm from './StepByStepLeadForm';
 
 interface UniversalLeadFormProps {
   trigger?: 'button' | 'popup' | 'embed';
@@ -37,6 +37,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
       const urlWithUTM = `${currentUrl}?utm_source=share&utm_medium=direct&utm_campaign=lead_generation`;
       setGeneratedUrl(shareableUrl || urlWithUTM);
       
+      // Generate embed code
       const embedHtml = `<iframe src="${urlWithUTM}" width="100%" height="600" frameborder="0" style="border: none; border-radius: 8px;"></iframe>`;
       setEmbedCode(embedHtml);
     }
@@ -95,7 +96,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
   if (trigger === 'embed') {
     return (
       <div className="w-full">
-        <UnifiedLeadForm onSuccess={onSuccess} showTitle={true} />
+        <StepByStepLeadForm onSuccess={onSuccess} />
         
         {enableSharing && (
           <div className="mt-8 p-4 bg-gray-50 rounded-lg border">
@@ -154,24 +155,44 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <Button onClick={generateQRCode} variant="outline" size="sm">
+                  <Button
+                    onClick={generateQRCode}
+                    variant="outline"
+                    size="sm"
+                  >
                     <QrCode className="w-4 h-4 mr-2" />
                     QR Code
                   </Button>
                   
-                  <Button onClick={() => shareToSocial('twitter')} variant="outline" size="sm">
+                  <Button
+                    onClick={() => shareToSocial('twitter')}
+                    variant="outline"
+                    size="sm"
+                  >
                     Twitter
                   </Button>
                   
-                  <Button onClick={() => shareToSocial('facebook')} variant="outline" size="sm">
+                  <Button
+                    onClick={() => shareToSocial('facebook')}
+                    variant="outline"
+                    size="sm"
+                  >
                     Facebook
                   </Button>
                   
-                  <Button onClick={() => shareToSocial('linkedin')} variant="outline" size="sm">
+                  <Button
+                    onClick={() => shareToSocial('linkedin')}
+                    variant="outline"
+                    size="sm"
+                  >
                     LinkedIn
                   </Button>
                   
-                  <Button onClick={() => shareToSocial('whatsapp')} variant="outline" size="sm">
+                  <Button
+                    onClick={() => shareToSocial('whatsapp')}
+                    variant="outline"
+                    size="sm"
+                  >
                     WhatsApp
                   </Button>
                 </div>
@@ -191,7 +212,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
             <DialogTitle>Lead Form</DialogTitle>
           </DialogHeader>
           <div className="p-6">
-            <UnifiedLeadForm onSuccess={handleSuccess} onClose={() => setIsOpen(false)} showTitle={false} />
+            <StepByStepLeadForm onSuccess={handleSuccess} onClose={() => setIsOpen(false)} />
           </div>
         </DialogContent>
       </Dialog>
@@ -215,7 +236,7 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
             <DialogTitle>Lead Form</DialogTitle>
           </DialogHeader>
           <div className="p-6">
-            <UnifiedLeadForm onSuccess={handleSuccess} onClose={() => setIsOpen(false)} showTitle={false} />
+            <StepByStepLeadForm onSuccess={handleSuccess} onClose={() => setIsOpen(false)} />
           </div>
         </DialogContent>
       </Dialog>
