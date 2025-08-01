@@ -66,7 +66,7 @@ export class LeadsService {
 
       console.log('Validation passed, preparing data for database...');
 
-      // Prepare the data for insertion
+      // Prepare the data for insertion - only include fields that exist in the table
       const insertData = {
         organization_name: leadData.organization_name.trim(),
         organization_type: leadData.organization_type,
