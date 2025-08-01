@@ -2431,6 +2431,7 @@ export type Database = {
           company_size: string | null
           contact_name: string
           created_at: string | null
+          created_by: string | null
           current_solution: string | null
           email: string
           expected_farmers: number | null
@@ -2442,7 +2443,7 @@ export type Database = {
           notes: string | null
           organization_name: string
           organization_type: string
-          phone: string | null
+          phone: string
           priority: string | null
           requirements: string | null
           status: string
@@ -2455,6 +2456,7 @@ export type Database = {
           company_size?: string | null
           contact_name: string
           created_at?: string | null
+          created_by?: string | null
           current_solution?: string | null
           email: string
           expected_farmers?: number | null
@@ -2466,7 +2468,7 @@ export type Database = {
           notes?: string | null
           organization_name: string
           organization_type: string
-          phone?: string | null
+          phone: string
           priority?: string | null
           requirements?: string | null
           status?: string
@@ -2479,6 +2481,7 @@ export type Database = {
           company_size?: string | null
           contact_name?: string
           created_at?: string | null
+          created_by?: string | null
           current_solution?: string | null
           email?: string
           expected_farmers?: number | null
@@ -2490,7 +2493,7 @@ export type Database = {
           notes?: string | null
           organization_name?: string
           organization_type?: string
-          phone?: string | null
+          phone?: string
           priority?: string | null
           requirements?: string | null
           status?: string

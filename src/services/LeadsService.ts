@@ -24,6 +24,7 @@ export interface Lead extends LeadData {
   notes?: string;
   assigned_to?: string;
   follow_up_date?: string;
+  created_by?: string;
   metadata: Record<string, any>;
   created_at: string;
   updated_at: string;
@@ -34,7 +35,6 @@ export class LeadsService {
     try {
       console.log('Starting lead submission process...');
       console.log('Lead data:', leadData);
-      console.log('Current Supabase session:', await supabase.auth.getSession());
 
       // Basic validation
       if (!leadData.organization_name?.trim()) {
@@ -67,13 +67,13 @@ export class LeadsService {
 
       console.log('Validation passed, preparing data for database...');
 
-      // Prepare the data for insertion with all required fields
+      // Prepare the data for insertion
       const insertData = {
         organization_name: leadData.organization_name.trim(),
         organization_type: leadData.organization_type,
         contact_name: leadData.contact_name.trim(),
         email: leadData.email.trim().toLowerCase(),
-        phone: leadData.phone.trim(), // Now NOT NULL in database
+        phone: leadData.phone.trim(),
         company_size: leadData.company_size || null,
         expected_farmers: leadData.expected_farmers ? Number(leadData.expected_farmers) : null,
         budget_range: leadData.budget_range || null,
@@ -89,15 +89,7 @@ export class LeadsService {
 
       console.log('Data prepared for insertion:', insertData);
 
-      // Test connection first
-      console.log('Testing database connection...');
-      const connectionTest = await this.testConnection();
-      if (!connectionTest.connected) {
-        console.error('Database connection failed:', connectionTest.error);
-        return { success: false, error: 'Unable to connect to database. Please try again.' };
-      }
-
-      // Submit lead to database with specific error handling
+      // Submit lead to database
       console.log('Attempting to insert lead into database...');
       const { data, error } = await supabase
         .from('leads')
@@ -195,42 +187,6 @@ export class LeadsService {
     } catch (error) {
       console.error('Unexpected error updating lead:', error);
       return false;
-    }
-  }
-
-  async testConnection(): Promise<{ connected: boolean; error?: string }> {
-    try {
-      console.log('Testing database connection...');
-      
-      // Simple query to test connection without requiring authentication
-      const { error } = await supabase
-        .from('leads')
-        .select('id')
-        .limit(0); // Don't return any data, just test the connection
-
-      if (error) {
-        console.error('Connection test failed:', error);
-        return { connected: false, error: error.message };
-      }
-
-      console.log('Database connection successful');
-      return { connected: true };
-    } catch (error) {
-      console.error('Connection test error:', error);
-      return { connected: false, error: 'Failed to connect to database' };
-    }
-  }
-
-  // New method to clear any authentication state that might interfere
-  async ensureAnonymousAccess(): Promise<void> {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        console.log('Found existing session, signing out for anonymous access...');
-        await supabase.auth.signOut();
-      }
-    } catch (error) {
-      console.warn('Error ensuring anonymous access:', error);
     }
   }
 }
