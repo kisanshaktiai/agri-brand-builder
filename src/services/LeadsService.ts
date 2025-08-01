@@ -34,6 +34,7 @@ export class LeadsService {
     try {
       console.log('Starting lead submission process...');
       console.log('Lead data:', leadData);
+      console.log('Current Supabase session:', await supabase.auth.getSession());
 
       // Basic validation
       if (!leadData.organization_name?.trim()) {
@@ -66,13 +67,13 @@ export class LeadsService {
 
       console.log('Validation passed, preparing data for database...');
 
-      // Prepare the data for insertion - only include fields that exist in the table
+      // Prepare the data for insertion with all required fields
       const insertData = {
         organization_name: leadData.organization_name.trim(),
         organization_type: leadData.organization_type,
         contact_name: leadData.contact_name.trim(),
         email: leadData.email.trim().toLowerCase(),
-        phone: leadData.phone.trim(),
+        phone: leadData.phone.trim(), // Now NOT NULL in database
         company_size: leadData.company_size || null,
         expected_farmers: leadData.expected_farmers ? Number(leadData.expected_farmers) : null,
         budget_range: leadData.budget_range || null,
@@ -88,7 +89,15 @@ export class LeadsService {
 
       console.log('Data prepared for insertion:', insertData);
 
-      // Submit lead to database
+      // Test connection first
+      console.log('Testing database connection...');
+      const connectionTest = await this.testConnection();
+      if (!connectionTest.connected) {
+        console.error('Database connection failed:', connectionTest.error);
+        return { success: false, error: 'Unable to connect to database. Please try again.' };
+      }
+
+      // Submit lead to database with specific error handling
       console.log('Attempting to insert lead into database...');
       const { data, error } = await supabase
         .from('leads')
@@ -104,6 +113,19 @@ export class LeadsService {
           code: error.code
         });
 
+        // Handle specific error types
+        if (error.code === '42501') {
+          return { success: false, error: 'Permission denied. Please refresh the page and try again.' };
+        }
+        
+        if (error.code === '23514') {
+          return { success: false, error: 'Invalid data format. Please check your entries and try again.' };
+        }
+
+        if (error.code === '23505') {
+          return { success: false, error: 'A lead with this information already exists.' };
+        }
+
         return { success: false, error: `Submission failed: ${error.message}` };
       }
 
@@ -117,6 +139,12 @@ export class LeadsService {
 
     } catch (error) {
       console.error('Unexpected error submitting lead:', error);
+      
+      // Handle network/connection errors
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        return { success: false, error: 'Network error. Please check your internet connection and try again.' };
+      }
+      
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       return { success: false, error: errorMessage };
     }
@@ -174,10 +202,11 @@ export class LeadsService {
     try {
       console.log('Testing database connection...');
       
-      const { data, error } = await supabase
+      // Simple query to test connection without requiring authentication
+      const { error } = await supabase
         .from('leads')
-        .select('count')
-        .limit(1);
+        .select('id')
+        .limit(0); // Don't return any data, just test the connection
 
       if (error) {
         console.error('Connection test failed:', error);
@@ -189,6 +218,19 @@ export class LeadsService {
     } catch (error) {
       console.error('Connection test error:', error);
       return { connected: false, error: 'Failed to connect to database' };
+    }
+  }
+
+  // New method to clear any authentication state that might interfere
+  async ensureAnonymousAccess(): Promise<void> {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        console.log('Found existing session, signing out for anonymous access...');
+        await supabase.auth.signOut();
+      }
+    } catch (error) {
+      console.warn('Error ensuring anonymous access:', error);
     }
   }
 }

@@ -212,6 +212,11 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
 
     setIsSubmitting(true);
     try {
+      console.log('Starting form submission...');
+      
+      // Ensure we're using anonymous access for lead submission
+      await leadsService.ensureAnonymousAccess();
+
       const leadData = {
         organization_name: formData.organization_name,
         organization_type: formData.organization_type as any,
@@ -227,9 +232,12 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
         how_did_you_hear: formData.how_did_you_hear
       };
 
+      console.log('Submitting lead data:', leadData);
+
       const result = await leadsService.submitInquiry(leadData);
 
       if (result.success) {
+        console.log('Lead submission successful:', result.lead);
         setIsSuccess(true);
         localStorage.removeItem('kisanshakti_lead_form');
         toast({
@@ -240,13 +248,29 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
           onSuccess?.();
         }, 3000);
       } else {
+        console.error('Lead submission failed:', result.error);
         throw new Error(result.error || 'Submission failed');
       }
     } catch (error) {
       console.error('Form submission error:', error);
+      
+      let errorMessage = 'Failed to submit form. Please try again.';
+      
+      if (error instanceof Error) {
+        if (error.message.includes('Permission denied')) {
+          errorMessage = 'There was a permission issue. Please refresh the page and try again.';
+        } else if (error.message.includes('Network error')) {
+          errorMessage = 'Network connection issue. Please check your internet and try again.';
+        } else if (error.message.includes('Invalid data format')) {
+          errorMessage = 'Please check your form entries and try again.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to submit form. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
