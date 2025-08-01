@@ -214,9 +214,6 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
     try {
       console.log('Starting form submission...');
       
-      // Ensure we're using anonymous access for lead submission
-      await leadsService.ensureAnonymousAccess();
-
       const leadData = {
         organization_name: formData.organization_name,
         organization_type: formData.organization_type as any,
