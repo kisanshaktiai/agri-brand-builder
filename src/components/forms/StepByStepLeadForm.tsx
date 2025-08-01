@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
-import { ArrowLeft, ArrowRight, CheckCircle, Building2, Users, DollarSign, Calendar, MessageSquare, Eye } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, Building2, Users, DollarSign, Calendar, MessageSquare, Eye, Globe } from 'lucide-react';
 import { SelectionButtonGroup } from './SelectionButtonGroup';
 import { useToast } from '@/hooks/use-toast';
 import { LeadsService } from '@/services/LeadsService';
@@ -51,29 +50,29 @@ const companySizeOptions = [
 ];
 
 const budgetRangeOptions = [
-  { value: 'under-50k', label: 'Under ₹50,000', description: 'Basic package' },
-  { value: '50k-2l', label: '₹50K - ₹2L', description: 'Standard solution' },
-  { value: '2l-5l', label: '₹2L - ₹5L', description: 'Professional tier' },
-  { value: '5l-10l', label: '₹5L - ₹10L', description: 'Enterprise solution' },
-  { value: '10l+', label: '₹10L+', description: 'Custom enterprise' }
+  { value: 'under-50k', label: 'Under ₹50,000', description: 'Basic package', icon: <DollarSign className="w-4 h-4" /> },
+  { value: '50k-2l', label: '₹50K - ₹2L', description: 'Standard solution', icon: <DollarSign className="w-4 h-4" /> },
+  { value: '2l-5l', label: '₹2L - ₹5L', description: 'Professional tier', icon: <DollarSign className="w-4 h-4" /> },
+  { value: '5l-10l', label: '₹5L - ₹10L', description: 'Enterprise solution', icon: <DollarSign className="w-4 h-4" /> },
+  { value: '10l+', label: '₹10L+', description: 'Custom enterprise', icon: <DollarSign className="w-4 h-4" /> }
 ];
 
 const timelineOptions = [
-  { value: 'immediate', label: 'Immediately', description: 'Ready to start now' },
-  { value: '1-3months', label: '1-3 months', description: 'Planning phase' },
-  { value: '3-6months', label: '3-6 months', description: 'Evaluation period' },
-  { value: '6-12months', label: '6-12 months', description: 'Long-term planning' },
-  { value: 'exploring', label: 'Just exploring', description: 'Research phase' }
+  { value: 'immediate', label: 'Immediately', description: 'Ready to start now', icon: <Calendar className="w-4 h-4" /> },
+  { value: '1-3months', label: '1-3 months', description: 'Planning phase', icon: <Calendar className="w-4 h-4" /> },
+  { value: '3-6months', label: '3-6 months', description: 'Evaluation period', icon: <Calendar className="w-4 h-4" /> },
+  { value: '6-12months', label: '6-12 months', description: 'Long-term planning', icon: <Calendar className="w-4 h-4" /> },
+  { value: 'exploring', label: 'Just exploring', description: 'Research phase', icon: <Eye className="w-4 h-4" /> }
 ];
 
 const howDidYouHearOptions = [
-  { value: 'youtube', label: 'YouTube', description: 'Found us on YouTube' },
-  { value: 'facebook', label: 'Facebook', description: 'Social media discovery' },
-  { value: 'google', label: 'Google Search', description: 'Search engine results' },
-  { value: 'linkedin', label: 'LinkedIn', description: 'Professional network' },
-  { value: 'referral', label: 'Referral', description: 'Word of mouth' },
-  { value: 'website', label: 'Website', description: 'Direct website visit' },
-  { value: 'other', label: 'Other', description: 'Other source' }
+  { value: 'youtube', label: 'YouTube', description: 'Found us on YouTube', icon: <MessageSquare className="w-4 h-4" /> },
+  { value: 'facebook', label: 'Facebook', description: 'Social media discovery', icon: <MessageSquare className="w-4 h-4" /> },
+  { value: 'google', label: 'Google Search', description: 'Search engine results', icon: <Globe className="w-4 h-4" /> },
+  { value: 'linkedin', label: 'LinkedIn', description: 'Professional network', icon: <Users className="w-4 h-4" /> },
+  { value: 'referral', label: 'Referral', description: 'Word of mouth', icon: <Users className="w-4 h-4" /> },
+  { value: 'website', label: 'Website', description: 'Direct website visit', icon: <Globe className="w-4 h-4" /> },
+  { value: 'other', label: 'Other', description: 'Other source', icon: <MessageSquare className="w-4 h-4" /> }
 ];
 
 export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSuccess, onClose }) => {
@@ -81,6 +80,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [detectedSource, setDetectedSource] = useState<string>('');
+  const [sourceDetails, setSourceDetails] = useState<Record<string, string>>({});
   const { toast } = useToast();
   const leadsService = new LeadsService();
 
@@ -102,26 +102,49 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
   const [errors, setErrors] = useState<Partial<FormData>>({});
 
   useEffect(() => {
-    // Detect source from URL parameters or referrer
+    // Enhanced source detection
     const urlParams = new URLSearchParams(window.location.search);
-    const utmSource = urlParams.get('utm_source');
     const referrer = document.referrer;
     
+    const utmSource = urlParams.get('utm_source');
+    const utmMedium = urlParams.get('utm_medium');
+    const utmCampaign = urlParams.get('utm_campaign');
+    
     let source = 'website';
+    let sourceLabel = 'Direct Website Visit';
+    const details: Record<string, string> = {};
+
     if (utmSource) {
       source = utmSource;
-      setDetectedSource(`${utmSource.charAt(0).toUpperCase() + utmSource.slice(1)}`);
-    } else if (referrer) {
-      if (referrer.includes('youtube')) source = 'youtube';
-      else if (referrer.includes('facebook')) source = 'facebook';
-      else if (referrer.includes('google')) source = 'google';
-      else if (referrer.includes('linkedin')) source = 'linkedin';
+      sourceLabel = `${utmSource.charAt(0).toUpperCase() + utmSource.slice(1)}`;
       
-      if (source !== 'website') {
-        setDetectedSource(`${source.charAt(0).toUpperCase() + source.slice(1)}`);
+      if (utmMedium) details.medium = utmMedium;
+      if (utmCampaign) details.campaign = utmCampaign;
+    } else if (referrer) {
+      if (referrer.includes('youtube.com')) {
+        source = 'youtube';
+        sourceLabel = 'YouTube';
+      } else if (referrer.includes('facebook.com')) {
+        source = 'facebook';
+        sourceLabel = 'Facebook';
+      } else if (referrer.includes('google.com')) {
+        source = 'google';
+        sourceLabel = 'Google Search';
+      } else if (referrer.includes('linkedin.com')) {
+        source = 'linkedin';
+        sourceLabel = 'LinkedIn';
+      } else if (referrer.includes('twitter.com') || referrer.includes('x.com')) {
+        source = 'other';
+        sourceLabel = 'Twitter/X';
+      } else if (referrer && !referrer.includes(window.location.hostname)) {
+        source = 'referral';
+        sourceLabel = 'External Referral';
+        details.referrer = new URL(referrer).hostname;
       }
     }
 
+    setDetectedSource(sourceLabel);
+    setSourceDetails(details);
     setFormData(prev => ({ ...prev, how_did_you_hear: source }));
 
     // Load from localStorage if available
@@ -129,7 +152,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
     if (saved) {
       try {
         const parsedData = JSON.parse(saved);
-        setFormData(prev => ({ ...prev, ...parsedData }));
+        setFormData(prev => ({ ...prev, ...parsedData, how_did_you_hear: source }));
       } catch (error) {
         console.warn('Failed to load saved form data');
       }
@@ -243,12 +266,12 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
   if (isSuccess) {
     return (
       <Card className="w-full max-w-2xl mx-auto">
-        <CardContent className="p-8 text-center">
+        <CardContent className="p-4 sm:p-8 text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-2xl font-bold text-green-600 mb-4">Thank you for your inquiry!</h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-green-600 mb-4">Thank you for your inquiry!</h2>
+          <p className="text-gray-600 mb-6 text-sm sm:text-base">
             We've received your information and our team will contact you within 24 hours.
           </p>
           <div className="bg-green-50 rounded-lg p-4 mb-6">
@@ -261,7 +284,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
             </ul>
           </div>
           {onClose && (
-            <Button onClick={onClose} variant="outline">
+            <Button onClick={onClose} variant="outline" className="w-full sm:w-auto">
               Close
             </Button>
           )}
@@ -272,9 +295,9 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader className="pb-4">
+      <CardHeader className="pb-4 px-4 sm:px-6">
         <div className="flex items-center justify-between mb-4">
-          <CardTitle className="text-xl">Get Started with KisanShakti AI</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">Get Started with KisanShakti AI</CardTitle>
           {onClose && (
             <Button variant="ghost" size="sm" onClick={onClose}>
               ✕
@@ -285,7 +308,14 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
         {detectedSource && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
             <p className="text-sm text-blue-800">
-              📍 You're filling this form from: <strong>{detectedSource}</strong>
+              📍 Source: <strong>{detectedSource}</strong>
+              {Object.keys(sourceDetails).length > 0 && (
+                <span className="block text-xs mt-1 opacity-75">
+                  {Object.entries(sourceDetails).map(([key, value]) => 
+                    `${key}: ${value}`
+                  ).join(' • ')}
+                </span>
+              )}
             </p>
           </div>
         )}
@@ -299,7 +329,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
         </div>
       </CardHeader>
 
-      <CardContent className="pt-0">
+      <CardContent className="pt-0 px-4 sm:px-6">
         {/* Step 1: Organization Type */}
         {currentStep === 1 && (
           <div className="space-y-6">
@@ -315,7 +345,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
               name="organization_type"
               label=""
               error={errors.organization_type}
-              columns={2}
+              columns={window.innerWidth < 640 ? 1 : 2}
             />
           </div>
         )}
@@ -493,7 +523,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
               name="how_did_you_hear"
               label=""
               error={errors.how_did_you_hear}
-              columns={2}
+              columns={window.innerWidth < 640 ? 1 : 2}
             />
           </div>
         )}
@@ -506,7 +536,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
               <p className="text-gray-600 text-sm mb-4">Please confirm your details before submitting</p>
             </div>
             
-            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+            <div className="bg-gray-50 rounded-lg p-4 space-y-3 text-sm">
               <div><strong>Organization:</strong> {formData.organization_name}</div>
               <div><strong>Type:</strong> {organizationTypeOptions.find(opt => opt.value === formData.organization_type)?.label}</div>
               <div><strong>Size:</strong> {formData.company_size}</div>
@@ -520,11 +550,12 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
           </div>
         )}
 
-        <div className="flex justify-between pt-6">
+        <div className="flex flex-col sm:flex-row justify-between gap-3 pt-6">
           <Button 
             variant="outline" 
             onClick={handlePrev}
             disabled={currentStep === 1}
+            className="order-2 sm:order-1"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Previous
@@ -534,7 +565,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
             <Button 
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-green-600 hover:bg-green-700 order-1 sm:order-2"
             >
               {isSubmitting ? 'Submitting...' : 'Submit Inquiry'}
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -542,7 +573,7 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
           ) : (
             <Button 
               onClick={handleNext}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-green-600 hover:bg-green-700 order-1 sm:order-2"
             >
               Next
               <ArrowRight className="w-4 h-4 ml-2" />

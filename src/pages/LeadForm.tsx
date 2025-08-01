@@ -15,7 +15,10 @@ const LeadFormPage: React.FC = () => {
           </p>
         </div>
         
-        <UniversalLeadForm trigger="embed" />
+        <UniversalLeadForm 
+          trigger="embed" 
+          enableSharing={true}
+        />
         
         <div className="mt-12 text-center">
           <p className="text-sm text-gray-500">
