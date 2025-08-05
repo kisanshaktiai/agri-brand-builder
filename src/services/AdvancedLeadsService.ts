@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import type { FormSubmissionData, FormValidationResult, FormConfiguration } from '@/types/UniversalForm';
 
@@ -290,6 +289,7 @@ export class AdvancedLeadsService {
         const leadData = this.transformSubmissionData(submissionData, leadScore);
         console.log('Transformed lead data:', leadData);
         
+        // Use anonymous access for lead submission
         const { data, error } = await supabase
           .from('leads')
           .insert(leadData)
@@ -298,12 +298,6 @@ export class AdvancedLeadsService {
 
         if (error) {
           console.error('Supabase insertion error:', error);
-          console.error('Error details:', {
-            message: error.message,
-            details: error.details,
-            hint: error.hint,
-            code: error.code
-          });
           throw new Error(`Database error: ${error.message}${error.hint ? ` (${error.hint})` : ''}`);
         }
 
@@ -355,15 +349,14 @@ export class AdvancedLeadsService {
       lead_source: submissionData.metadata?.source || 'website',
       status: 'new' as const,
       priority: this.determinePriority(leadScore),
-      notes: null,
-      assigned_to: null,
-      follow_up_date: null,
       metadata: {
         formId: submissionData.formId,
         formVersion: submissionData.formVersion,
         submissionMetadata: submissionData.metadata,
         analytics: submissionData.analytics,
-        leadScore
+        leadScore,
+        submission_source: 'advanced_form',
+        timestamp: new Date().toISOString()
       }
     };
 
@@ -431,7 +424,6 @@ export class AdvancedLeadsService {
 
   private async trackAnalytics(submissionData: FormSubmissionData, leadId: string): Promise<void> {
     try {
-      // This would integrate with your analytics service
       console.log('Tracking analytics for lead:', leadId, submissionData.analytics);
     } catch (error) {
       console.warn('Analytics tracking failed:', error);

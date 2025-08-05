@@ -18,13 +18,18 @@ export interface LeadData {
 
 export interface Lead extends LeadData {
   id: string;
-  status: 'new' | 'contacted' | 'qualified' | 'proposal_sent' | 'negotiation' | 'closed_won' | 'closed_lost';
+  status: 'new' | 'contacted' | 'qualified' | 'proposal_sent' | 'negotiation' | 'closed_won' | 'closed_lost' | 'assigned' | 'converted';
   priority: 'low' | 'medium' | 'high';
   lead_source: string;
   notes?: string;
   assigned_to?: string;
+  assigned_at?: string;
   follow_up_date?: string;
   created_by?: string;
+  converted_tenant_id?: string;
+  converted_at?: string;
+  lead_score?: number;
+  last_activity?: string;
   metadata: Record<string, any>;
   created_at: string;
   updated_at: string;
@@ -67,7 +72,7 @@ export class LeadsService {
 
       console.log('Validation passed, preparing data for database...');
 
-      // Prepare the data for insertion
+      // Prepare the data for insertion - only include fields that exist in the database
       const insertData = {
         organization_name: leadData.organization_name.trim(),
         organization_type: leadData.organization_type,
@@ -84,12 +89,16 @@ export class LeadsService {
         lead_source: 'website',
         status: 'new' as const,
         priority: 'medium' as const,
-        metadata: {}
+        metadata: {
+          submission_source: 'website_form',
+          user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+          timestamp: new Date().toISOString()
+        }
       };
 
       console.log('Data prepared for insertion:', insertData);
 
-      // Submit lead to database
+      // Submit lead to database - using anonymous access
       console.log('Attempting to insert lead into database...');
       const { data, error } = await supabase
         .from('leads')
@@ -168,13 +177,19 @@ export class LeadsService {
     try {
       console.log(`Updating lead ${leadId} status to ${status}`);
       
+      const updateData: any = { 
+        status,
+        last_activity: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      if (notes) {
+        updateData.notes = notes;
+      }
+
       const { error } = await supabase
         .from('leads')
-        .update({ 
-          status,
-          notes: notes || undefined,
-          updated_at: new Date().toISOString()
-        })
+        .update(updateData)
         .eq('id', leadId);
 
       if (error) {
