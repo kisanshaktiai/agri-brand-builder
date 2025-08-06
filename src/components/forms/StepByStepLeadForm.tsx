@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -213,25 +214,62 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
 
     setIsSubmitting(true);
     try {
-      console.log('Starting form submission...');
+      console.log('🔄 Starting comprehensive session cleanup for anonymous submission...');
       
-      // CRITICAL: Ensure we're truly anonymous before submission
-      console.log('Checking current session state...');
-      const { data: currentSession } = await supabase.auth.getSession();
-      console.log('Current session:', currentSession);
+      // CRITICAL: Complete session cleanup as recommended
+      console.log('🚪 Signing out from current session...');
+      await supabase.auth.signOut();
       
-      if (currentSession.session) {
-        console.log('Found existing session, signing out to ensure anonymous submission...');
-        await supabase.auth.signOut();
-        console.log('Successfully signed out');
-        
-        // Small delay to ensure signOut is processed
-        await new Promise(resolve => setTimeout(resolve, 100));
+      console.log('🧹 Clearing all cached tokens from storage...');
+      localStorage.removeItem('supabase.auth.token');
+      sessionStorage.removeItem('supabase.auth.token');
+      
+      // Clear any other Supabase-related keys that might exist
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.includes('supabase')) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach(key => localStorage.removeItem(key));
+      
+      // Also clear sessionStorage
+      const sessionKeysToRemove = [];
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key && key.includes('supabase')) {
+          sessionKeysToRemove.push(key);
+        }
+      }
+      sessionKeysToRemove.forEach(key => sessionStorage.removeItem(key));
+      
+      console.log('⏳ Waiting for session cleanup to complete...');
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      // Verify session is truly anonymous
+      console.log('🔍 Verifying session state...');
+      const { data: session } = await supabase.auth.getSession();
+      console.log("📊 Session state before lead insert:", {
+        hasSession: !!session,
+        hasUser: !!session?.session?.user,
+        accessToken: session?.session?.access_token ? 'EXISTS' : 'NULL',
+        role: session?.session?.user?.role || 'anon',
+        fullSessionData: session
+      });
+      
+      // Safety check - ensure we're truly anonymous
+      if (session?.session?.user) {
+        console.error('❌ Session cleanup failed - user still exists in session');
+        throw new Error('Session cleanup failed. Please refresh the page and try again.');
       }
       
-      // Verify we're now anonymous
-      const { data: verifySession } = await supabase.auth.getSession();
-      console.log('Verified session state after signout:', verifySession);
+      if (session?.session?.access_token) {
+        console.error('❌ Session cleanup failed - access token still exists');
+        throw new Error('Session cleanup failed. Please refresh the page and try again.');
+      }
+      
+      console.log('✅ Session successfully cleaned - proceeding with anonymous submission');
       
       const leadData = {
         organization_name: formData.organization_name,
@@ -248,12 +286,12 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
         how_did_you_hear: formData.how_did_you_hear
       };
 
-      console.log('Submitting lead data:', leadData);
+      console.log('📤 Submitting lead data as anonymous user:', leadData);
 
       const result = await leadsService.submitInquiry(leadData);
 
       if (result.success) {
-        console.log('Lead submission successful:', result.lead);
+        console.log('✅ Lead submission successful:', result.lead);
         setIsSuccess(true);
         localStorage.removeItem('kisanshakti_lead_form');
         toast({
@@ -264,17 +302,22 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
           onSuccess?.();
         }, 3000);
       } else {
-        console.error('Lead submission failed:', result.error);
+        console.error('❌ Lead submission failed:', result.error);
         throw new Error(result.error || 'Submission failed');
       }
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error('💥 Form submission error:', error);
       
       let errorMessage = 'Failed to submit form. Please try again.';
       
       if (error instanceof Error) {
-        if (error.message.includes('Permission denied') || error.message.includes('RLS')) {
-          errorMessage = 'Authentication issue detected. Please refresh the page and try again.';
+        if (error.message.includes('Session cleanup failed')) {
+          errorMessage = 'Please refresh the page and try submitting again.';
+          // Show additional debug info
+          console.log('🔧 Debug: Try opening in incognito mode if the issue persists');
+        } else if (error.message.includes('Permission denied') || error.message.includes('RLS') || error.message.includes('row-level security')) {
+          errorMessage = 'Authentication issue detected. Please refresh the page and try again in incognito mode.';
+          console.log('🔧 Debug: RLS policy violation detected - session may still be contaminated');
         } else if (error.message.includes('Network error')) {
           errorMessage = 'Network connection issue. Please check your internet and try again.';
         } else if (error.message.includes('Invalid data format')) {

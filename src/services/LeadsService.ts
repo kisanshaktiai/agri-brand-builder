@@ -38,24 +38,32 @@ export interface Lead extends LeadData {
 export class LeadsService {
   async submitInquiry(leadData: LeadData): Promise<{ success: boolean; error?: string; lead?: Lead }> {
     try {
-      console.log('Starting lead submission process...');
-      console.log('Lead data:', leadData);
-
-      // CRITICAL: Ensure we're truly anonymous for RLS policy compliance
-      console.log('Ensuring anonymous session state...');
-      const { data: currentSession } = await supabase.auth.getSession();
+      console.log('🔍 LeadsService: Verifying anonymous session state...');
       
+      // Double-check session state in service layer
+      const { data: currentSession } = await supabase.auth.getSession();
+      console.log('📊 LeadsService session check:', {
+        hasSession: !!currentSession.session,
+        hasUser: !!currentSession.session?.user,
+        accessToken: currentSession.session?.access_token ? 'EXISTS' : 'NULL',
+        role: currentSession.session?.user?.role || 'anon'
+      });
+      
+      // If somehow there's still a session, force cleanup
       if (currentSession.session) {
-        console.log('Found existing session, signing out for anonymous submission...');
+        console.warn('⚠️ LeadsService: Unexpected session found, forcing cleanup...');
         await supabase.auth.signOut();
+        await new Promise(resolve => setTimeout(resolve, 100));
         
-        // Small delay to ensure signOut completes
-        await new Promise(resolve => setTimeout(resolve, 50));
+        // Verify cleanup worked
+        const { data: verifySession } = await supabase.auth.getSession();
+        if (verifySession.session) {
+          console.error('❌ LeadsService: Session cleanup failed');
+          return { success: false, error: 'Session cleanup failed. Please refresh the page and try again.' };
+        }
       }
 
-      // Verify anonymous state
-      const { data: verifySession } = await supabase.auth.getSession();
-      console.log('Verified session state:', verifySession.session ? 'authenticated' : 'anonymous');
+      console.log('✅ LeadsService: Confirmed anonymous state');
 
       // Basic validation
       if (!leadData.organization_name?.trim()) {
@@ -86,7 +94,7 @@ export class LeadsService {
         return { success: false, error: 'Invalid organization type selected' };
       }
 
-      console.log('Validation passed, preparing data for database...');
+      console.log('✅ LeadsService: Validation passed, preparing data for database...');
 
       // Prepare the data for insertion - only include fields that exist in the database
       const insertData = {
@@ -109,14 +117,12 @@ export class LeadsService {
           submission_source: 'website_form',
           user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
           timestamp: new Date().toISOString(),
-          anonymous_submission: true
+          anonymous_submission: true,
+          session_cleanup_verified: true
         }
       };
 
-      console.log('Data prepared for insertion:', insertData);
-
-      // Submit lead to database - MUST be anonymous for RLS policy to work
-      console.log('Attempting to insert lead into database as anonymous user...');
+      console.log('📤 LeadsService: Inserting lead into database as anonymous user...');
       const { data, error } = await supabase
         .from('leads')
         .insert(insertData)
@@ -124,17 +130,19 @@ export class LeadsService {
         .single();
 
       if (error) {
-        console.error('Supabase error details:', {
+        console.error('💥 LeadsService: Supabase error details:', {
           message: error.message,
           details: error.details,
           hint: error.hint,
-          code: error.code
+          code: error.code,
+          timestamp: new Date().toISOString()
         });
 
-        // Handle specific error types
-        if (error.code === '42501' || error.message.includes('RLS')) {
-          console.error('RLS policy violation - session may not be truly anonymous');
-          return { success: false, error: 'Authentication issue. Please refresh the page and try again.' };
+        // Handle specific error types with enhanced debugging
+        if (error.code === '42501' || error.message.includes('RLS') || error.message.includes('row-level security')) {
+          console.error('🚨 RLS policy violation detected - this should not happen with anonymous submissions');
+          console.error('🔧 Debug info: Check if the RLS policy allows auth.role() = \'anon\' for INSERT');
+          return { success: false, error: 'Permission denied. Please refresh the page and try again in incognito mode.' };
         }
         
         if (error.code === '23514') {
@@ -149,15 +157,15 @@ export class LeadsService {
       }
 
       if (!data) {
-        console.error('No data returned from insert operation');
+        console.error('❌ LeadsService: No data returned from insert operation');
         return { success: false, error: 'Failed to save inquiry. Please try again.' };
       }
 
-      console.log('Lead successfully inserted:', data);
+      console.log('✅ LeadsService: Lead successfully inserted:', data.id);
       return { success: true, lead: data as Lead };
 
     } catch (error) {
-      console.error('Unexpected error submitting lead:', error);
+      console.error('💥 LeadsService: Unexpected error submitting lead:', error);
       
       // Handle network/connection errors
       if (error instanceof TypeError && error.message.includes('fetch')) {
