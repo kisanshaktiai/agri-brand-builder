@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -238,6 +239,9 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
           <DialogHeader className="sr-only">
             <DialogTitle>Lead Form</DialogTitle>
+            <DialogDescription>
+              Fill out this form to get started with KisanShakti AI and transform your agricultural operations.
+            </DialogDescription>
           </DialogHeader>
           <div className="p-6">
             <StepByStepLeadForm onSuccess={handleSuccess} onClose={() => setIsOpen(false)} />
@@ -262,6 +266,9 @@ export const UniversalLeadForm: React.FC<UniversalLeadFormProps> = ({
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
           <DialogHeader className="sr-only">
             <DialogTitle>Lead Form</DialogTitle>
+            <DialogDescription>
+              Fill out this form to get started with KisanShakti AI and transform your agricultural operations.
+            </DialogDescription>
           </DialogHeader>
           <div className="p-6">
             <StepByStepLeadForm onSuccess={handleSuccess} onClose={() => setIsOpen(false)} />
