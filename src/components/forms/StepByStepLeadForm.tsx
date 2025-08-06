@@ -9,6 +9,7 @@ import { ArrowLeft, ArrowRight, CheckCircle, Building2, Users, DollarSign, Calen
 import { SelectionButtonGroup } from './SelectionButtonGroup';
 import { useToast } from '@/hooks/use-toast';
 import { LeadsService } from '@/services/LeadsService';
+import { supabase } from '@/integrations/supabase/client';
 
 interface FormData {
   organization_name: string;
@@ -214,6 +215,24 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
     try {
       console.log('Starting form submission...');
       
+      // CRITICAL: Ensure we're truly anonymous before submission
+      console.log('Checking current session state...');
+      const { data: currentSession } = await supabase.auth.getSession();
+      console.log('Current session:', currentSession);
+      
+      if (currentSession.session) {
+        console.log('Found existing session, signing out to ensure anonymous submission...');
+        await supabase.auth.signOut();
+        console.log('Successfully signed out');
+        
+        // Small delay to ensure signOut is processed
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      
+      // Verify we're now anonymous
+      const { data: verifySession } = await supabase.auth.getSession();
+      console.log('Verified session state after signout:', verifySession);
+      
       const leadData = {
         organization_name: formData.organization_name,
         organization_type: formData.organization_type as any,
@@ -254,8 +273,8 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
       let errorMessage = 'Failed to submit form. Please try again.';
       
       if (error instanceof Error) {
-        if (error.message.includes('Permission denied')) {
-          errorMessage = 'There was a permission issue. Please refresh the page and try again.';
+        if (error.message.includes('Permission denied') || error.message.includes('RLS')) {
+          errorMessage = 'Authentication issue detected. Please refresh the page and try again.';
         } else if (error.message.includes('Network error')) {
           errorMessage = 'Network connection issue. Please check your internet and try again.';
         } else if (error.message.includes('Invalid data format')) {

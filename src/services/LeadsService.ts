@@ -41,6 +41,22 @@ export class LeadsService {
       console.log('Starting lead submission process...');
       console.log('Lead data:', leadData);
 
+      // CRITICAL: Ensure we're truly anonymous for RLS policy compliance
+      console.log('Ensuring anonymous session state...');
+      const { data: currentSession } = await supabase.auth.getSession();
+      
+      if (currentSession.session) {
+        console.log('Found existing session, signing out for anonymous submission...');
+        await supabase.auth.signOut();
+        
+        // Small delay to ensure signOut completes
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+
+      // Verify anonymous state
+      const { data: verifySession } = await supabase.auth.getSession();
+      console.log('Verified session state:', verifySession.session ? 'authenticated' : 'anonymous');
+
       // Basic validation
       if (!leadData.organization_name?.trim()) {
         return { success: false, error: 'Organization name is required' };
@@ -92,14 +108,15 @@ export class LeadsService {
         metadata: {
           submission_source: 'website_form',
           user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          anonymous_submission: true
         }
       };
 
       console.log('Data prepared for insertion:', insertData);
 
-      // Submit lead to database - using anonymous access (allowed by RLS policy)
-      console.log('Attempting to insert lead into database...');
+      // Submit lead to database - MUST be anonymous for RLS policy to work
+      console.log('Attempting to insert lead into database as anonymous user...');
       const { data, error } = await supabase
         .from('leads')
         .insert(insertData)
@@ -115,8 +132,9 @@ export class LeadsService {
         });
 
         // Handle specific error types
-        if (error.code === '42501') {
-          return { success: false, error: 'Permission denied. Please refresh the page and try again.' };
+        if (error.code === '42501' || error.message.includes('RLS')) {
+          console.error('RLS policy violation - session may not be truly anonymous');
+          return { success: false, error: 'Authentication issue. Please refresh the page and try again.' };
         }
         
         if (error.code === '23514') {
@@ -164,7 +182,7 @@ export class LeadsService {
       if (error) {
         console.error('Error fetching leads:', error);
         // If it's a permission error, provide more context
-        if (error.code === '42501') {
+        if (error.code === '42501' || error.message.includes('RLS')) {
           throw new Error('You don\'t have permission to view leads. Admin access required.');
         }
         throw new Error(`Failed to fetch leads: ${error.message}`);
@@ -200,7 +218,7 @@ export class LeadsService {
 
       if (error) {
         console.error('Error updating lead status:', error);
-        if (error.code === '42501') {
+        if (error.code === '42501' || error.message.includes('RLS')) {
           throw new Error('You don\'t have permission to update leads. Admin access required.');
         }
         throw new Error(`Failed to update lead: ${error.message}`);
