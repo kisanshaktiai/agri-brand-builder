@@ -5,17 +5,63 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { supabase } from '@/integrations/supabase/client';
 
 const LeadManagement: React.FC = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
-    loadLeads();
+    checkAdminStatus();
   }, []);
 
+  const checkAdminStatus = async () => {
+    try {
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError || !user) {
+        console.log('No authenticated user found');
+        setIsAdmin(false);
+        setCheckingAuth(false);
+        setLoading(false);
+        return;
+      }
+
+      // Check if user is an admin
+      const { data: adminUser, error: adminError } = await supabase
+        .from('admin_users')
+        .select('id, is_active')
+        .eq('id', user.id)
+        .eq('is_active', true)
+        .single();
+
+      if (adminError || !adminUser) {
+        console.log('User is not an admin');
+        setIsAdmin(false);
+      } else {
+        console.log('User is an admin');
+        setIsAdmin(true);
+        // Only load leads if user is admin
+        loadLeads();
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      setIsAdmin(false);
+    } finally {
+      setCheckingAuth(false);
+      setLoading(false);
+    }
+  };
+
   const loadLeads = async () => {
+    if (!isAdmin) {
+      console.log('User is not admin, cannot load leads');
+      return;
+    }
+
     setLoading(true);
     try {
       const fetchedLeads = await leadsService.getLeads();
@@ -24,7 +70,7 @@ const LeadManagement: React.FC = () => {
       console.error('Error loading leads:', error);
       toast({
         title: "Error",
-        description: "Failed to load leads",
+        description: "Failed to load leads. You may not have permission to view leads.",
         variant: "destructive",
       });
     } finally {
@@ -33,6 +79,15 @@ const LeadManagement: React.FC = () => {
   };
 
   const updateStatus = async (leadId: string, status: Lead['status']) => {
+    if (!isAdmin) {
+      toast({
+        title: "Error",
+        description: "You don't have permission to update leads",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       const success = await leadsService.updateLeadStatus(leadId, status);
       if (success) {
@@ -71,10 +126,36 @@ const LeadManagement: React.FC = () => {
     }
   };
 
+  if (checkingAuth) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+        <span className="ml-2">Checking permissions...</span>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="text-center py-12">
+        <div className="max-w-md mx-auto">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Restricted</h2>
+          <p className="text-gray-600 mb-4">
+            You need administrator privileges to access lead management.
+          </p>
+          <p className="text-sm text-gray-500">
+            Please contact your system administrator if you believe you should have access to this feature.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+        <span className="ml-2">Loading leads...</span>
       </div>
     );
   }

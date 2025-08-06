@@ -98,7 +98,7 @@ export class LeadsService {
 
       console.log('Data prepared for insertion:', insertData);
 
-      // Submit lead to database - using anonymous access
+      // Submit lead to database - using anonymous access (allowed by RLS policy)
       console.log('Attempting to insert lead into database...');
       const { data, error } = await supabase
         .from('leads')
@@ -155,6 +155,7 @@ export class LeadsService {
     try {
       console.log('Fetching leads from database...');
       
+      // This method requires admin authentication - RLS policy enforces this
       const { data, error } = await supabase
         .from('leads')
         .select('*')
@@ -162,14 +163,18 @@ export class LeadsService {
 
       if (error) {
         console.error('Error fetching leads:', error);
-        return [];
+        // If it's a permission error, provide more context
+        if (error.code === '42501') {
+          throw new Error('You don\'t have permission to view leads. Admin access required.');
+        }
+        throw new Error(`Failed to fetch leads: ${error.message}`);
       }
 
       console.log(`Successfully fetched ${data?.length || 0} leads`);
       return (data || []) as Lead[];
     } catch (error) {
       console.error('Unexpected error fetching leads:', error);
-      return [];
+      throw error; // Re-throw to let the calling component handle it
     }
   }
 
@@ -187,6 +192,7 @@ export class LeadsService {
         updateData.notes = notes;
       }
 
+      // This method requires admin authentication - RLS policy enforces this
       const { error } = await supabase
         .from('leads')
         .update(updateData)
@@ -194,14 +200,17 @@ export class LeadsService {
 
       if (error) {
         console.error('Error updating lead status:', error);
-        return false;
+        if (error.code === '42501') {
+          throw new Error('You don\'t have permission to update leads. Admin access required.');
+        }
+        throw new Error(`Failed to update lead: ${error.message}`);
       }
 
       console.log(`Successfully updated lead ${leadId} status`);
       return true;
     } catch (error) {
       console.error('Unexpected error updating lead:', error);
-      return false;
+      throw error; // Re-throw to let the calling component handle it
     }
   }
 }

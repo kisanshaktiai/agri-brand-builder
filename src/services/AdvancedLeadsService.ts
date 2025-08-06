@@ -213,18 +213,10 @@ export class AdvancedLeadsService {
 
   private async checkForDuplicates(data: Record<string, any>): Promise<boolean> {
     try {
-      const { data: existingLeads, error } = await supabase
-        .from('leads')
-        .select('id')
-        .eq('email', data.email)
-        .limit(1);
-
-      if (error) {
-        console.warn('Duplicate check failed:', error);
-        return false;
-      }
-
-      return existingLeads && existingLeads.length > 0;
+      // Use anonymous access to check for duplicates - this requires admin permissions
+      // so we'll skip duplicate checking for anonymous submissions
+      console.log('Skipping duplicate check for anonymous submission');
+      return false;
     } catch (error) {
       console.warn('Duplicate check error:', error);
       return false;
@@ -289,7 +281,7 @@ export class AdvancedLeadsService {
         const leadData = this.transformSubmissionData(submissionData, leadScore);
         console.log('Transformed lead data:', leadData);
         
-        // Use anonymous access for lead submission
+        // Use anonymous access for lead submission - allowed by RLS policy
         const { data, error } = await supabase
           .from('leads')
           .insert(leadData)
@@ -459,12 +451,29 @@ export class AdvancedLeadsService {
 
   async testConnection(): Promise<{ connected: boolean; error?: string }> {
     try {
+      // Test connection by trying to access leads table - requires admin permissions
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        return { 
+          connected: false, 
+          error: 'Not authenticated - cannot test admin connection' 
+        };
+      }
+
+      // Try to access leads table - this will fail if user is not admin
       const { error } = await supabase
         .from('leads')
         .select('count')
         .limit(1);
 
       if (error) {
+        if (error.code === '42501') {
+          return { 
+            connected: false, 
+            error: 'Admin permissions required to access leads' 
+          };
+        }
         return { connected: false, error: error.message };
       }
 
