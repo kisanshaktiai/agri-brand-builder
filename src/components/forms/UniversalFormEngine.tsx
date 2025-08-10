@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowRight, ArrowLeft, CheckCircle, Loader2, Save, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,6 +9,7 @@ import type { FormConfiguration, FormSubmissionData } from '@/types/UniversalFor
 import { AdvancedLeadsService } from '@/services/AdvancedLeadsService';
 import { FormFieldRenderer } from './FormFieldRenderer';
 import { FormProgress } from './FormProgress';
+import { supabase } from '@/integrations/supabase/client'; // Added for email existence check
 
 interface UniversalFormEngineProps {
   config: FormConfiguration;
@@ -63,6 +63,13 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
       stepTimes: { '0': Date.now() },
       abandonmentPoints: []
     }
+  });
+
+  // Local email-only validation state (added)
+  const [emailCheck, setEmailCheck] = useState<{ checking: boolean; exists: boolean; error: string | null }>({
+    checking: false,
+    exists: false,
+    error: null
   });
 
   const { schema } = config;
@@ -222,9 +229,79 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
     }));
   };
 
+  // Debounced email validation: format + uniqueness via Edge Function (added)
+  useEffect(() => {
+    const rawEmail = (formState.data?.['email'] || '').toString().trim();
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    // Reset when empty
+    if (!rawEmail) {
+      setEmailCheck({ checking: false, exists: false, error: null });
+      // Don't override other field errors; just clear our own duplicate error
+      setFormState(prev => ({ ...prev, errors: { ...prev.errors, email: prev.errors.email?.filter(m => !m.toLowerCase().includes('already registered') && !m.toLowerCase().includes('already exists')) || [] } }));
+      return;
+    }
+
+    // Frontend format check to avoid unnecessary network calls
+    if (!emailRegex.test(rawEmail)) {
+      setEmailCheck({ checking: false, exists: false, error: 'Please enter a valid email address' });
+      setFormState(prev => ({ ...prev, errors: { ...prev.errors, email: ['Please enter a valid email address'] } }));
+      return;
+    }
+
+    let cancelled = false;
+    setEmailCheck(prev => ({ ...prev, checking: true, error: null }));
+
+    const handle = setTimeout(async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('validate-lead-email', {
+          body: { email: rawEmail }
+        });
+
+        if (cancelled) return;
+
+        // If the function returns a 409, supabase-js populates 'error'; 'data' may still carry the payload
+        if ((data as any)?.exists === true || error?.message?.includes('409')) {
+          setEmailCheck({ checking: false, exists: true, error: 'This email is already registered. Please use a different email.' });
+          setFormState(prev => ({ ...prev, errors: { ...prev.errors, email: ['This email is already registered. Please use a different email.'] } }));
+          return;
+        }
+
+        if (error) {
+          console.warn('Email validation function error:', error);
+          setEmailCheck({ checking: false, exists: false, error: null }); // Do not block on transient errors
+          return;
+        }
+
+        // Available
+        setEmailCheck({ checking: false, exists: false, error: null });
+        setFormState(prev => ({ ...prev, errors: { ...prev.errors, email: [] } }));
+      } catch (e) {
+        if (cancelled) return;
+        console.warn('Email validation unexpected error:', e);
+        setEmailCheck({ checking: false, exists: false, error: null }); // Non-blocking
+      }
+    }, 500); // debounce
+
+    return () => {
+      cancelled = true;
+      clearTimeout(handle);
+    };
+  }, [formState.data?.['email']]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Prevent submit if email invalid or duplicate (added)
+    if (emailCheck.error || emailCheck.exists) {
+      toast({
+        title: "Invalid Email",
+        description: emailCheck.error || "This email is already registered. Please use a different email.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!validateCurrentStep()) {
       return;
     }
@@ -368,14 +445,40 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
           const field = schema.fields.find(f => f.id === fieldId);
           if (!field) return null;
 
+          // Prefer our email error if present; otherwise use existing error
+          const displayedError =
+            field.id === 'email'
+              ? (emailCheck.error || formState.errors[field.id]?.[0])
+              : formState.errors[field.id]?.[0];
+
           return (
             <FormFieldRenderer
               key={field.id}
               field={field}
               value={formState.data[field.id]}
-              error={formState.errors[field.id]?.[0]}
-              onChange={(value) => handleFieldChange(field.id, value)}
-              onFocus={() => trackFieldInteraction(field.id)}
+              error={displayedError}
+              onChange={(value) => {
+                setFormState(prev => ({
+                  ...prev,
+                  data: { ...prev.data, [field.id]: value },
+                  touched: { ...prev.touched, [field.id]: true },
+                  isDraft: true,
+                  errors: { ...prev.errors, [field.id]: [] }
+                }));
+              }}
+              onFocus={() => {
+                if (!config.features.enableAnalytics) return;
+                setFormState(prev => ({
+                  ...prev,
+                  analyticsData: {
+                    ...prev.analyticsData,
+                    fieldInteractions: {
+                      ...prev.analyticsData.fieldInteractions,
+                      [field.id]: (prev.analyticsData.fieldInteractions[field.id] || 0) + 1
+                    }
+                  }
+                }));
+              }}
               config={config}
             />
           );

@@ -19,3 +19,6 @@ enable_confirmations = false
 
 [functions.submit-lead]
 verify_jwt = false
+
+[functions.validate-lead-email]
+verify_jwt = false
