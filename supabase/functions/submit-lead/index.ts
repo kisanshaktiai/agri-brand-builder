@@ -101,12 +101,49 @@ serve(async (req) => {
     const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
     console.log('📍 Request from IP:', clientIP);
 
+    // Check for existing email before attempting insertion
+    const emailLower = requestData.email.trim().toLowerCase();
+    console.log('🔍 Checking for existing lead with email:', emailLower);
+    
+    const { count, error: checkError } = await supabase
+      .from('leads')
+      .select('id', { head: true, count: 'exact' })
+      .eq('email', emailLower);
+
+    if (checkError) {
+      console.error('💥 Error checking existing email:', checkError);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Failed to validate submission',
+          details: 'Database validation error' 
+        }),
+        { 
+          status: 500, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
+    if ((count ?? 0) > 0) {
+      console.log('⚠️ Email already exists in system:', emailLower);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Email already registered',
+          message: 'This email address has already been used to submit an inquiry. Please use a different email or contact us directly.'
+        }),
+        { 
+          status: 409, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
     // Sanitize and prepare data for insertion
     const leadData = {
       organization_name: requestData.organization_name.trim(),
       organization_type: requestData.organization_type,
       contact_name: requestData.contact_name.trim(),
-      email: requestData.email.trim().toLowerCase(),
+      email: emailLower,
       phone: requestData.phone.trim(),
       company_size: requestData.company_size?.trim() || null,
       expected_farmers: requestData.expected_farmers ? Number(requestData.expected_farmers) : null,
@@ -138,6 +175,22 @@ serve(async (req) => {
 
     if (error) {
       console.error('💥 Database insertion failed:', error);
+      
+      // Handle specific constraint violations
+      if (error.code === '23505' && error.message.includes('leads_email_unique_ci')) {
+        console.log('⚠️ Duplicate email detected during insertion:', emailLower);
+        return new Response(
+          JSON.stringify({ 
+            error: 'Email already registered',
+            message: 'This email address has already been used to submit an inquiry. Please use a different email or contact us directly.'
+          }),
+          { 
+            status: 409, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+          }
+        );
+      }
+      
       return new Response(
         JSON.stringify({ 
           error: 'Failed to submit lead',
