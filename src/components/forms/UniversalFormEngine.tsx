@@ -9,7 +9,7 @@ import type { FormConfiguration, FormSubmissionData } from '@/types/UniversalFor
 import { AdvancedLeadsService } from '@/services/AdvancedLeadsService';
 import { FormFieldRenderer } from './FormFieldRenderer';
 import { FormProgress } from './FormProgress';
-import { supabase } from '@/integrations/supabase/client'; // Added for email existence check
+import { supabase } from '@/integrations/supabase/client';
 
 interface UniversalFormEngineProps {
   config: FormConfiguration;
@@ -65,11 +65,15 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
     }
   });
 
-  // Local email-only validation state (added)
-  const [emailCheck, setEmailCheck] = useState<{ checking: boolean; exists: boolean; error: string | null }>({
-    checking: false,
-    exists: false,
-    error: null
+  // Email validation state
+  const [emailValidation, setEmailValidation] = useState<{
+    isChecking: boolean;
+    isValid: boolean | null;
+    message: string;
+  }>({
+    isChecking: false,
+    isValid: null,
+    message: ''
   });
 
   const { schema } = config;
@@ -149,6 +153,79 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
     }
   };
 
+  // Email validation function using Edge Function
+  const validateEmailWithEdgeFunction = async (email: string) => {
+    if (!email || !email.trim()) {
+      setEmailValidation({ isChecking: false, isValid: null, message: '' });
+      return;
+    }
+
+    // Basic format validation first
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      setEmailValidation({ 
+        isChecking: false, 
+        isValid: false, 
+        message: 'Please enter a valid email address' 
+      });
+      return;
+    }
+
+    setEmailValidation({ isChecking: true, isValid: null, message: 'Checking email...' });
+
+    try {
+      const { data, error } = await supabase.functions.invoke('validate-lead-email', {
+        body: { email: email.trim() }
+      });
+
+      if (error) {
+        console.warn('Email validation error:', error);
+        // Check if it's a 409 conflict (email exists)
+        if (error.message?.includes('409') || (data as any)?.exists === true) {
+          setEmailValidation({ 
+            isChecking: false, 
+            isValid: false, 
+            message: 'Email already exists' 
+          });
+        } else {
+          // For other errors, don't block the user
+          setEmailValidation({ 
+            isChecking: false, 
+            isValid: null, 
+            message: '' 
+          });
+        }
+        return;
+      }
+
+      if ((data as any)?.exists === true) {
+        setEmailValidation({ 
+          isChecking: false, 
+          isValid: false, 
+          message: 'Email already exists' 
+        });
+      } else {
+        setEmailValidation({ 
+          isChecking: false, 
+          isValid: true, 
+          message: 'Email verified' 
+        });
+      }
+    } catch (error) {
+      console.warn('Email validation unexpected error:', error);
+      setEmailValidation({ 
+        isChecking: false, 
+        isValid: null, 
+        message: '' 
+      });
+    }
+  };
+
+  // Handle email field blur
+  const handleEmailBlur = (email: string) => {
+    validateEmailWithEdgeFunction(email);
+  };
+
   const validateCurrentStep = (): boolean => {
     const currentFields = currentStepConfig.fields;
     const stepFields = schema.fields.filter(field => currentFields.includes(field.id));
@@ -161,6 +238,13 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
       // Check required fields
       if (field.required && (!value || value === '')) {
         fieldErrors.push(`${field.label} is required`);
+      }
+
+      // For email field, check our validation state
+      if (field.id === 'email' && value) {
+        if (emailValidation.isValid === false) {
+          fieldErrors.push(emailValidation.message);
+        }
       }
 
       // Check field-specific validation
@@ -201,8 +285,13 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
       data: { ...prev.data, [fieldId]: value },
       touched: { ...prev.touched, [fieldId]: true },
       isDraft: true,
-      errors: { ...prev.errors, [fieldId]: [] } // Clear field errors on change
+      errors: { ...prev.errors, [fieldId]: [] }
     }));
+    
+    // Reset email validation when email changes
+    if (fieldId === 'email') {
+      setEmailValidation({ isChecking: false, isValid: null, message: '' });
+    }
     
     trackFieldInteraction(fieldId);
   };
@@ -225,78 +314,18 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
     setFormState(prev => ({
       ...prev,
       currentStep: Math.max(0, prev.currentStep - 1),
-      errors: {} // Clear errors when going back
+      errors: {}
     }));
   };
-
-  // Debounced email validation: format + uniqueness via Edge Function (added)
-  useEffect(() => {
-    const rawEmail = (formState.data?.['email'] || '').toString().trim();
-    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-
-    // Reset when empty
-    if (!rawEmail) {
-      setEmailCheck({ checking: false, exists: false, error: null });
-      // Don't override other field errors; just clear our own duplicate error
-      setFormState(prev => ({ ...prev, errors: { ...prev.errors, email: prev.errors.email?.filter(m => !m.toLowerCase().includes('already registered') && !m.toLowerCase().includes('already exists')) || [] } }));
-      return;
-    }
-
-    // Frontend format check to avoid unnecessary network calls
-    if (!emailRegex.test(rawEmail)) {
-      setEmailCheck({ checking: false, exists: false, error: 'Please enter a valid email address' });
-      setFormState(prev => ({ ...prev, errors: { ...prev.errors, email: ['Please enter a valid email address'] } }));
-      return;
-    }
-
-    let cancelled = false;
-    setEmailCheck(prev => ({ ...prev, checking: true, error: null }));
-
-    const handle = setTimeout(async () => {
-      try {
-        const { data, error } = await supabase.functions.invoke('validate-lead-email', {
-          body: { email: rawEmail }
-        });
-
-        if (cancelled) return;
-
-        // If the function returns a 409, supabase-js populates 'error'; 'data' may still carry the payload
-        if ((data as any)?.exists === true || error?.message?.includes('409')) {
-          setEmailCheck({ checking: false, exists: true, error: 'This email is already registered. Please use a different email.' });
-          setFormState(prev => ({ ...prev, errors: { ...prev.errors, email: ['This email is already registered. Please use a different email.'] } }));
-          return;
-        }
-
-        if (error) {
-          console.warn('Email validation function error:', error);
-          setEmailCheck({ checking: false, exists: false, error: null }); // Do not block on transient errors
-          return;
-        }
-
-        // Available
-        setEmailCheck({ checking: false, exists: false, error: null });
-        setFormState(prev => ({ ...prev, errors: { ...prev.errors, email: [] } }));
-      } catch (e) {
-        if (cancelled) return;
-        console.warn('Email validation unexpected error:', e);
-        setEmailCheck({ checking: false, exists: false, error: null }); // Non-blocking
-      }
-    }, 500); // debounce
-
-    return () => {
-      cancelled = true;
-      clearTimeout(handle);
-    };
-  }, [formState.data?.['email']]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Prevent submit if email invalid or duplicate (added)
-    if (emailCheck.error || emailCheck.exists) {
+    // Prevent submit if email is invalid
+    if (emailValidation.isValid === false) {
       toast({
         title: "Invalid Email",
-        description: emailCheck.error || "This email is already registered. Please use a different email.",
+        description: emailValidation.message,
         variant: "destructive",
       });
       return;
@@ -387,6 +416,9 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
       }
     }));
     
+    // Reset email validation
+    setEmailValidation({ isChecking: false, isValid: null, message: '' });
+    
     onClose?.();
   };
 
@@ -445,42 +477,63 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
           const field = schema.fields.find(f => f.id === fieldId);
           if (!field) return null;
 
-          // Prefer our email error if present; otherwise use existing error
-          const displayedError =
-            field.id === 'email'
-              ? (emailCheck.error || formState.errors[field.id]?.[0])
-              : formState.errors[field.id]?.[0];
+          // For email field, show our custom validation message
+          let displayError = formState.errors[field.id]?.[0];
+          let validationMessage = '';
+          
+          if (field.id === 'email') {
+            if (emailValidation.isChecking) {
+              validationMessage = emailValidation.message;
+            } else if (emailValidation.isValid === true) {
+              validationMessage = emailValidation.message;
+            } else if (emailValidation.isValid === false) {
+              displayError = emailValidation.message;
+            }
+          }
 
           return (
-            <FormFieldRenderer
-              key={field.id}
-              field={field}
-              value={formState.data[field.id]}
-              error={displayedError}
-              onChange={(value) => {
-                setFormState(prev => ({
-                  ...prev,
-                  data: { ...prev.data, [field.id]: value },
-                  touched: { ...prev.touched, [field.id]: true },
-                  isDraft: true,
-                  errors: { ...prev.errors, [field.id]: [] }
-                }));
-              }}
-              onFocus={() => {
-                if (!config.features.enableAnalytics) return;
-                setFormState(prev => ({
-                  ...prev,
-                  analyticsData: {
-                    ...prev.analyticsData,
-                    fieldInteractions: {
-                      ...prev.analyticsData.fieldInteractions,
-                      [field.id]: (prev.analyticsData.fieldInteractions[field.id] || 0) + 1
+            <div key={field.id}>
+              <FormFieldRenderer
+                field={field}
+                value={formState.data[field.id]}
+                error={displayError}
+                onChange={(value) => handleFieldChange(field.id, value)}
+                onFocus={() => {
+                  if (!config.features.enableAnalytics) return;
+                  setFormState(prev => ({
+                    ...prev,
+                    analyticsData: {
+                      ...prev.analyticsData,
+                      fieldInteractions: {
+                        ...prev.analyticsData.fieldInteractions,
+                        [field.id]: (prev.analyticsData.fieldInteractions[field.id] || 0) + 1
+                      }
                     }
-                  }
-                }));
-              }}
-              config={config}
-            />
+                  }));
+                }}
+                config={config}
+              />
+              
+              {/* Show email validation status */}
+              {field.id === 'email' && validationMessage && (
+                <div className={`mt-1 text-sm flex items-center ${
+                  emailValidation.isChecking ? 'text-blue-600' : 
+                  emailValidation.isValid === true ? 'text-green-600' : 'text-gray-500'
+                }`}>
+                  {emailValidation.isChecking && <Loader2 className="w-3 h-3 animate-spin mr-1" />}
+                  {emailValidation.isValid === true && <CheckCircle className="w-3 h-3 mr-1" />}
+                  {validationMessage}
+                </div>
+              )}
+              
+              {/* Custom onBlur for email field */}
+              {field.id === 'email' && (
+                <input
+                  type="hidden"
+                  onBlur={() => handleEmailBlur(formState.data[field.id] || '')}
+                />
+              )}
+            </div>
           );
         })}
       </div>
