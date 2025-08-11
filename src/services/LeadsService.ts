@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 
 export interface LeadData {
@@ -33,6 +34,10 @@ export interface Lead extends LeadData {
   created_at: string;
   updated_at: string;
 }
+
+// Constants from the client configuration
+const SUPABASE_URL = "https://qfklkkzxemsbeniyugiz.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFma2xra3p4ZW1zYmVuaXl1Z2l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MjcxNjUsImV4cCI6MjA2ODAwMzE2NX0.dUnGp7wbwYom1FPbn_4EGf3PWjgmr8mXwL2w2SdYOh4";
 
 export class LeadsService {
   async submitInquiry(leadData: LeadData): Promise<{ success: boolean; error?: string; lead?: Lead }> {
@@ -83,12 +88,12 @@ export class LeadsService {
         // if it's a structured error response from our Edge Function
         try {
           // Try to make a raw fetch to get the actual response body
-          const response = await fetch(`${supabase.supabaseUrl}/functions/v1/submit-lead`, {
+          const response = await fetch(`${SUPABASE_URL}/functions/v1/submit-lead`, {
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${supabase.supabaseKey}`,
+              'Authorization': `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
               'Content-Type': 'application/json',
-              'apikey': supabase.supabaseKey
+              'apikey': SUPABASE_PUBLISHABLE_KEY
             },
             body: JSON.stringify(leadData)
           });
