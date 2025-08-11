@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { ArrowLeft, ArrowRight, CheckCircle, Building2, Users, DollarSign, Calendar, MessageSquare, Eye, Globe, Building, UserCheck, Briefcase, Factory, Sparkles } from 'lucide-react';
 import { SelectionButtonGroup } from './SelectionButtonGroup';
+import { EmailFieldWithValidation } from './EmailFieldWithValidation';
 import { useToast } from '@/hooks/use-toast';
 import { LeadsService } from '@/services/LeadsService';
 
@@ -81,6 +82,10 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
   const [isSuccess, setIsSuccess] = useState(false);
   const [detectedSource, setDetectedSource] = useState<string>('');
   const [sourceDetails, setSourceDetails] = useState<Record<string, string>>({});
+  const [emailValidation, setEmailValidation] = useState<{ isValid: boolean | null; message: string }>({
+    isValid: null,
+    message: ''
+  });
   const { toast } = useToast();
   const leadsService = new LeadsService();
 
@@ -180,6 +185,8 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
         if (!formData.email.trim()) newErrors.email = 'Email is required';
         else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
           newErrors.email = 'Please enter a valid email';
+        } else if (emailValidation.isValid === false) {
+          newErrors.email = emailValidation.message;
         }
         if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
         break;
@@ -278,6 +285,10 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
+  };
+
+  const handleEmailValidationChange = (isValid: boolean | null, message: string) => {
+    setEmailValidation({ isValid, message });
   };
 
   const progress = (currentStep / TOTAL_STEPS) * 100;
@@ -466,20 +477,18 @@ export const StepByStepLeadForm: React.FC<StepByStepLeadFormProps> = ({ onSucces
                 )}
               </div>
 
-              <div>
-                <Label htmlFor="email">Email Address *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => updateFormData('email', e.target.value)}
-                  placeholder="your.email@company.com"
-                  className={errors.email ? 'border-red-500' : ''}
-                />
-                {errors.email && (
-                  <p className="text-sm text-red-600 mt-1">{errors.email}</p>
-                )}
-              </div>
+              <EmailFieldWithValidation
+                field={{
+                  id: 'email',
+                  label: 'Email Address',
+                  placeholder: 'your.email@company.com',
+                  required: true
+                }}
+                value={formData.email}
+                error={errors.email}
+                onChange={(value) => updateFormData('email', value)}
+                onValidationChange={handleEmailValidationChange}
+              />
 
               <div>
                 <Label htmlFor="phone">Phone Number *</Label>
