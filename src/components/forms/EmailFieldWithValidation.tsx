@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -61,47 +60,60 @@ export const EmailFieldWithValidation: React.FC<EmailFieldWithValidationProps> =
     onValidationChange?.(null, checkingState.message);
 
     try {
-      const { data, error } = await supabase.functions.invoke('validate-lead-email', {
-        body: { email: email.trim() }
+      // Make a direct fetch call to handle the 409 status properly
+      const response = await fetch(`https://qfklkkzxemsbeniyugiz.supabase.co/functions/v1/validate-lead-email`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFma2xra3p4ZW1zYmVuaXl1Z2l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MjcxNjUsImV4cCI6MjA2ODAwMzE2NX0.dUnGp7wbwYom1FPbn_4EGf3PWjgmr8mXwL2w2SdYOh4`,
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFma2xra3p4ZW1zYmVuaXl1Z2l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MjcxNjUsImV4cCI6MjA2ODAwMzE2NX0.dUnGp7wbwYom1FPbn_4EGf3PWjgmr8mXwL2w2SdYOh4',
+          'x-client-info': 'supabase-js-web',
+        },
+        body: JSON.stringify({ email: email.trim() })
       });
 
-      if (error) {
-        console.warn('Email validation error:', error);
-        if (error.message?.includes('409') || (data as any)?.exists === true) {
-          const errorState = { 
+      const data = await response.json();
+
+      if (response.status === 409) {
+        // Email already exists
+        if (data.exists === true) {
+          const existsState = { 
             isChecking: false, 
             isValid: false, 
             message: 'Email already exists' 
           };
-          setValidationState(errorState);
-          onValidationChange?.(false, errorState.message);
-        } else {
-          const neutralState = { isChecking: false, isValid: null, message: '' };
-          setValidationState(neutralState);
-          onValidationChange?.(null, '');
+          setValidationState(existsState);
+          onValidationChange?.(false, existsState.message);
         }
-        return;
-      }
-
-      if ((data as any)?.exists === true) {
-        const existsState = { 
+      } else if (response.status === 200) {
+        // Email is available
+        if (data.valid === true && data.exists === false) {
+          const validState = { 
+            isChecking: false, 
+            isValid: true, 
+            message: 'Email verified' 
+          };
+          setValidationState(validState);
+          onValidationChange?.(true, validState.message);
+        }
+      } else if (response.status === 400) {
+        // Invalid email format or other validation error
+        const errorState = { 
           isChecking: false, 
           isValid: false, 
-          message: 'Email already exists' 
+          message: data.error || 'Invalid email' 
         };
-        setValidationState(existsState);
-        onValidationChange?.(false, existsState.message);
+        setValidationState(errorState);
+        onValidationChange?.(false, errorState.message);
       } else {
-        const validState = { 
-          isChecking: false, 
-          isValid: true, 
-          message: 'Email verified' 
-        };
-        setValidationState(validState);
-        onValidationChange?.(true, validState.message);
+        // Other errors - fall back to neutral state
+        console.warn('Email validation unexpected response:', response.status, data);
+        const neutralState = { isChecking: false, isValid: null, message: '' };
+        setValidationState(neutralState);
+        onValidationChange?.(null, '');
       }
     } catch (error) {
-      console.warn('Email validation unexpected error:', error);
+      console.warn('Email validation network error:', error);
       const neutralState = { isChecking: false, isValid: null, message: '' };
       setValidationState(neutralState);
       onValidationChange?.(null, '');
