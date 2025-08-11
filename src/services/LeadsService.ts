@@ -77,10 +77,43 @@ export class LeadsService {
 
       if (error) {
         console.error('💥 LeadsService: Edge Function error:', error);
-        return { 
-          success: false, 
-          error: `Submission failed: ${error.message}` 
-        };
+        
+        // Handle the case where the Edge Function returns a structured error response
+        // The Supabase client throws an error for non-2xx responses, but we need to check
+        // if it's a structured error response from our Edge Function
+        try {
+          // Try to make a raw fetch to get the actual response body
+          const response = await fetch(`${supabase.supabaseUrl}/functions/v1/submit-lead`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${supabase.supabaseKey}`,
+              'Content-Type': 'application/json',
+              'apikey': supabase.supabaseKey
+            },
+            body: JSON.stringify(leadData)
+          });
+
+          const responseData = await response.json();
+          
+          if (response.status === 409 && responseData.error === 'Email already registered') {
+            console.log('⚠️ LeadsService: Email already registered');
+            return { 
+              success: false, 
+              error: responseData.message || 'This email address has already been used to submit an inquiry. Please use a different email or contact us directly.'
+            };
+          }
+          
+          return { 
+            success: false, 
+            error: responseData.error || 'Submission failed' 
+          };
+        } catch (fetchError) {
+          console.error('💥 LeadsService: Failed to parse error response:', fetchError);
+          return { 
+            success: false, 
+            error: `Submission failed: ${error.message}` 
+          };
+        }
       }
 
       if (!data?.success) {
