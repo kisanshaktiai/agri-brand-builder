@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => ({
       }
     },
     chunkSizeWarningLimit: 1000,
-    minify: 'terser',
+    minify: 'esbuild', // Use esbuild (built into Vite, faster than terser)
   },
   
   server: {
