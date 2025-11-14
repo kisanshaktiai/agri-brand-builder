@@ -1,4 +1,4 @@
-name: Deploy via SFTP (mirror)
+name: Deploy via SFTP (mirror) - debug + safe
 
 on:
   push:
@@ -8,7 +8,8 @@ env:
   HOST: 178.16.136.31
   PORT: 65002
   USER: u447731851
-  TARGET_DIR: /home/u447731851/www   # <-- change if your remote path differs
+  TARGET_DIR: /home/u447731851/www
+  ARTIFACT_DIR: dist    # <-- change this if your build output is different
 
 jobs:
   deploy:
@@ -17,6 +18,42 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # --- Optional: Node build step - uncomment if you build with Node ---
+      #- name: Setup Node
+      #  uses: actions/setup-node@v4
+      #  with:
+      #    node-version: '18'
+      #
+      #- name: Install & Build
+      #  run: |
+      #    npm ci
+      #    npm run build
+
+      - name: Debug - list workspace root (see what exists)
+        run: |
+          echo "Working directory: $(pwd)"
+          echo "Listing repo root:"
+          ls -la
+          echo "Recursive listing (top 3 levels):"
+          find . -maxdepth 3 -type f -print | sed -n '1,200p'
+
+      - name: Debug - list artifact dir
+        run: |
+          echo "Checking artifact dir: $ARTIFACT_DIR"
+          if [ -d "$ARTIFACT_DIR" ]; then
+            echo "Contents of $ARTIFACT_DIR:"
+            ls -la $ARTIFACT_DIR || true
+            echo "Recursive:"
+            find $ARTIFACT_DIR -type f -print | sed -n '1,200p'
+          else
+            echo "$ARTIFACT_DIR not found"
+          fi
+          # Fail if directory not present or empty
+          if [ ! -d "$ARTIFACT_DIR" ] || [ -z "$(ls -A $ARTIFACT_DIR 2>/dev/null)" ]; then
+            echo "ERROR: '$ARTIFACT_DIR' is missing or empty. Aborting deployment."
+            exit 1
+          fi
+
       - name: Decode private key (from base64 secret)
         run: |
           echo "$SFTP_KEY_B64" | base64 -d > /tmp/sftp_key
@@ -24,16 +61,14 @@ jobs:
         env:
           SFTP_KEY_B64: ${{ secrets.SFTP_KEY_B64 }}
 
-      - name: Add host to known_hosts (prevents interactive prompt)
+      - name: Add host to known_hosts
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -p $PORT $HOST >> ~/.ssh/known_hosts || true
           chmod 644 ~/.ssh/known_hosts
 
-      - name: SSH debug test (verbose) - runner -> server
-        # Prints the -vvv output to workflow logs so you can confirm the runner offers the key
+      - name: SSH debug test (verbose)
         run: |
-          set -o pipefail
           ssh -i /tmp/sftp_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes -vvv $USER@$HOST "echo SSH_OK" || true
         env:
           HOST: ${{ env.HOST }}
@@ -47,6 +82,6 @@ jobs:
           username: ${{ env.USER }}
           port: ${{ env.PORT }}
           key_path: /tmp/sftp_key
-          source: "dist/"        # change if your artifact folder is different
+          source: "${{ env.ARTIFACT_DIR }}/"   # must match the folder checked above
           target: ${{ env.TARGET_DIR }}
           overwrite: true
