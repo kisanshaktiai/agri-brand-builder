@@ -1,0 +1,52 @@
+name: Deploy via SFTP (mirror)
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  HOST: 178.16.136.31
+  PORT: 65002
+  USER: u447731851
+  TARGET_DIR: /home/u447731851/www   # <-- change if your remote path differs
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Decode private key (from base64 secret)
+        run: |
+          echo "$SFTP_KEY_B64" | base64 -d > /tmp/sftp_key
+          chmod 600 /tmp/sftp_key
+        env:
+          SFTP_KEY_B64: ${{ secrets.SFTP_KEY_B64 }}
+
+      - name: Add host to known_hosts (prevents interactive prompt)
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p $PORT $HOST >> ~/.ssh/known_hosts || true
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: SSH debug test (verbose) - runner -> server
+        # Prints the -vvv output to workflow logs so you can confirm the runner offers the key
+        run: |
+          set -o pipefail
+          ssh -i /tmp/sftp_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes -vvv $USER@$HOST "echo SSH_OK" || true
+        env:
+          HOST: ${{ env.HOST }}
+          PORT: ${{ env.PORT }}
+          USER: ${{ env.USER }}
+
+      - name: Deploy via SFTP (appleboy/scp-action)
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ env.HOST }}
+          username: ${{ env.USER }}
+          port: ${{ env.PORT }}
+          key_path: /tmp/sftp_key
+          source: "dist/"        # change if your artifact folder is different
+          target: ${{ env.TARGET_DIR }}
+          overwrite: true
