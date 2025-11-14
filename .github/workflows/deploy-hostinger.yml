@@ -66,6 +66,37 @@ jobs:
           echo "dist contents (top 50 files):"
           find dist -type f | head -50
 
+        # 🔍 Add this debug step HERE
+      - name: Debug:inspect deployed key (TEMP)
+        run: |
+          set -e
+          mkdir -p $HOME/.ssh
+          if [ -n "${{ secrets.SFTP_KEY_B64 }}" ]; then
+            echo "${{ secrets.SFTP_KEY_B64 }}" | base64 --decode > $HOME/.ssh/deploy_key || true
+          else
+            echo "${{ secrets.HOST_SFTP_PRIVATE_KEY }}" > $HOME/.ssh/deploy_key || true
+          fi
+          chmod 600 $HOME/.ssh/deploy_key || true
+
+          echo "---- first line of key file ----"
+          sed -n '1p' $HOME/.ssh/deploy_key || true
+          echo "---- last line of key file ----"
+          sed -n '$p' $HOME/.ssh/deploy_key || true
+
+          echo "---- detect CRLF bytes (hex head) ----"
+          head -c 80 $HOME/.ssh/deploy_key | xxd -g 1 | sed -n '1,4p' || true
+
+          echo "---- derived public key fingerprint from the private key ----"
+          if ssh-keygen -y -f $HOME/.ssh/deploy_key > /tmp/derived.pub 2>/dev/null; then
+            ssh-keygen -lf /tmp/derived.pub || true
+          else
+            echo "ERROR: ssh-keygen -y failed (private key invalid or malformed)"
+          fi
+
+          echo "---- show which secret used ----"
+          if [ -n "${{ secrets.SFTP_KEY_B64 }}" ]; then echo "Used secret: SFTP_KEY_B64"; else echo "Used secret: HOST_SFTP_PRIVATE_KEY (raw)"; fi
+
+
       # ===== Decode private key (base64 safe) =====
       - name: Decode and write SSH key
         run: |
