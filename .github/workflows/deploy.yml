@@ -28,19 +28,29 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-
-      - name: Install dependencies
+          
+      - name: Install dependencies (robust)
         run: |
           echo "NODE: $(node -v)  NPM: $(npm -v)"
-          npm ci
+          # Prefer clean install via npm ci if lockfile exists, otherwise npm install
+          if [ -f package-lock.json ]; then
+            echo "Running npm ci (using package-lock.json)..."
+            npm ci --prefer-offline --no-audit || { echo "npm ci failed — trying npm install"; npm install --no-audit; }
+          else
+            echo "No package-lock.json found — running npm install..."
+            npm install --no-audit || { echo "npm install failed"; exit 1; }
+          fi
+          echo "Installed node_modules size:"
+          du -sh node_modules || true
+          ls -la node_modules | sed -n '1,200p' || true
 
-      - name: Build production
+      - name: Build production (use npm run build)
         run: |
           echo "Starting build..."
           npm run build
           echo "Build finished. Listing dist:"
           ls -la dist || true
-
+ 
       - name: Copy .htaccess into dist (if present)
         run: |
           if [ -f ./public/.htaccess ]; then cp ./public/.htaccess ./dist/.htaccess; fi
