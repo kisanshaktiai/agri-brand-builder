@@ -29,10 +29,11 @@ jobs:
           node-version: '18'
           cache: 'npm'
           
-      - name: Install dependencies (robust)
+      - name: Install dependencies (robust, ensure devDeps)
         run: |
-          echo "NODE: $(node -v)  NPM: $(npm -v)"
-          # Prefer clean install via npm ci if lockfile exists, otherwise npm install
+          echo "Temporarily setting NODE_ENV=development for install to include devDependencies"
+          export NODE_ENV=development
+          echo "NODE: $(node -v)  NPM: $(npm -v)  NODE_ENV: $NODE_ENV"
           if [ -f package-lock.json ]; then
             echo "Running npm ci (using package-lock.json)..."
             npm ci --prefer-offline --no-audit || { echo "npm ci failed — trying npm install"; npm install --no-audit; }
@@ -44,31 +45,22 @@ jobs:
           du -sh node_modules || true
           ls -la node_modules | sed -n '1,200p' || true
 
-      - name: Build production (robust + debug)
+      - name: Build production (use development env so devDeps available)
         run: |
-          echo "NODE: $(node -v)  NPM: $(npm -v)"
-          echo "Checking node_modules/.bin"
-          ls -la node_modules/.bin || true
-
-          # Prefer npm exec (runs local bin). If not available, try npx. If still not found, install vite temporarily.
-          echo "Checking for vite binary via npm exec..."
+          echo "Setting NODE_ENV=development to ensure devDependencies (vite) are available for build"
+          export NODE_ENV=development
+          echo "Starting build (NODE_ENV=$NODE_ENV)..."
           if npm exec -- vite --version >/dev/null 2>&1; then
-            echo "Local vite found. Running build via npm exec..."
+            echo "Local vite present; running build with npm exec"
             npm exec -- vite build
           else
-            echo "Local vite not found via npm exec. Checking npx..."
-            if npx --no-install vite --version >/dev/null 2>&1; then
-              echo "npx reports local vite is available. Running npx vite build..."
-              npx vite build
-            else
-              echo "vite not present locally. Installing vite temporarily (no-save) and running build..."
-              npm install vite --no-save
-              npm exec -- vite build
-            fi
+            echo "vite not detected — installing vite temporarily (no-save) and building"
+            npm install vite --no-save
+            npm exec -- vite build
           fi
-
-          echo "Build complete. Dist listing:"
+          echo "Build finished. Listing dist:"
           ls -la dist || true
+
 
  
       - name: Copy .htaccess into dist (if present)
