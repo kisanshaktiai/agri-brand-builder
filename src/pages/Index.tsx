@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { logger } from '@/utils/logger';
 import Header from '../components/Header';
 import HeroSection from '../components/HeroSection';
 import AboutSection from '../components/AboutSection';
@@ -9,6 +10,13 @@ import StatsSection from '../components/StatsSection';
 import Footer from '../components/Footer';
 
 const Index = () => {
+  useEffect(() => {
+    logger.info('Index page mounted');
+    return () => {
+      logger.debug('Index page unmounting');
+    };
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Header />
