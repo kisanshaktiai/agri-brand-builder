@@ -1,4 +1,4 @@
-name: Deploy via SFTP (mirror) - debug + safe
+name: Build & Deploy via SFTP (Vite)
 
 on:
   push:
@@ -8,49 +8,35 @@ env:
   HOST: 178.16.136.31
   PORT: 65002
   USER: u447731851
-  TARGET_DIR: /home/u447731851/www
-  ARTIFACT_DIR: dist    # <-- change this if your build output is different
+  TARGET_DIR: /home/u447731851/www   # <-- change if your remote path differs
+  ARTIFACT: dist
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # --- Optional: Node build step - uncomment if you build with Node ---
-      #- name: Setup Node
-      #  uses: actions/setup-node@v4
-      #  with:
-      #    node-version: '18'
-      #
-      #- name: Install & Build
-      #  run: |
-      #    npm ci
-      #    npm run build
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
-      - name: Debug - list workspace root (see what exists)
+      - name: Install dependencies & build (Vite)
         run: |
-          echo "Working directory: $(pwd)"
-          echo "Listing repo root:"
-          ls -la
-          echo "Recursive listing (top 3 levels):"
-          find . -maxdepth 3 -type f -print | sed -n '1,200p'
+          npm ci
+          npm run build
 
-      - name: Debug - list artifact dir
+      - name: Show built artifact (debug)
         run: |
-          echo "Checking artifact dir: $ARTIFACT_DIR"
-          if [ -d "$ARTIFACT_DIR" ]; then
-            echo "Contents of $ARTIFACT_DIR:"
-            ls -la $ARTIFACT_DIR || true
-            echo "Recursive:"
-            find $ARTIFACT_DIR -type f -print | sed -n '1,200p'
+          echo "Artifact dir: $ARTIFACT"
+          if [ -d "$ARTIFACT" ]; then
+            echo "$ARTIFACT exists; listing:"
+            ls -la $ARTIFACT || true
+            find $ARTIFACT -type f -print | sed -n '1,200p'
           else
-            echo "$ARTIFACT_DIR not found"
-          fi
-          # Fail if directory not present or empty
-          if [ ! -d "$ARTIFACT_DIR" ] || [ -z "$(ls -A $ARTIFACT_DIR 2>/dev/null)" ]; then
-            echo "ERROR: '$ARTIFACT_DIR' is missing or empty. Aborting deployment."
+            echo "ERROR: $ARTIFACT not found" >&2
             exit 1
           fi
 
@@ -61,7 +47,7 @@ jobs:
         env:
           SFTP_KEY_B64: ${{ secrets.SFTP_KEY_B64 }}
 
-      - name: Add host to known_hosts
+      - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -p $PORT $HOST >> ~/.ssh/known_hosts || true
@@ -82,6 +68,6 @@ jobs:
           username: ${{ env.USER }}
           port: ${{ env.PORT }}
           key_path: /tmp/sftp_key
-          source: "${{ env.ARTIFACT_DIR }}/"   # must match the folder checked above
+          source: "${{ env.ARTIFACT }}/"
           target: ${{ env.TARGET_DIR }}
           overwrite: true
