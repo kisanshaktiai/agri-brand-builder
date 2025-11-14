@@ -44,12 +44,32 @@ jobs:
           du -sh node_modules || true
           ls -la node_modules | sed -n '1,200p' || true
 
-      - name: Build production (use npm run build)
+      - name: Build production (robust + debug)
         run: |
-          echo "Starting build..."
-          npm run build
-          echo "Build finished. Listing dist:"
+          echo "NODE: $(node -v)  NPM: $(npm -v)"
+          echo "Checking node_modules/.bin"
+          ls -la node_modules/.bin || true
+
+          # Prefer npm exec (runs local bin). If not available, try npx. If still not found, install vite temporarily.
+          echo "Checking for vite binary via npm exec..."
+          if npm exec -- vite --version >/dev/null 2>&1; then
+            echo "Local vite found. Running build via npm exec..."
+            npm exec -- vite build
+          else
+            echo "Local vite not found via npm exec. Checking npx..."
+            if npx --no-install vite --version >/dev/null 2>&1; then
+              echo "npx reports local vite is available. Running npx vite build..."
+              npx vite build
+            else
+              echo "vite not present locally. Installing vite temporarily (no-save) and running build..."
+              npm install vite --no-save
+              npm exec -- vite build
+            fi
+          fi
+
+          echo "Build complete. Dist listing:"
           ls -la dist || true
+
  
       - name: Copy .htaccess into dist (if present)
         run: |
