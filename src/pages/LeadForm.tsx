@@ -1,8 +1,16 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { logger } from '@/utils/logger';
 import { UniversalLeadForm } from '@/components/forms/UniversalLeadForm';
 
 const LeadFormPage: React.FC = () => {
+  useEffect(() => {
+    logger.info('LeadForm page mounted');
+    return () => {
+      logger.debug('LeadForm page unmounting');
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
