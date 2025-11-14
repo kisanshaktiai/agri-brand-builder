@@ -40,19 +40,25 @@ jobs:
             exit 1
           fi
 
-      - name: Decode private key into workspace (accessible to docker)
+      # --- Preferred: write raw private key into a file (safer than base64 handling) ---
+      - name: Write private key (from raw secret)
         run: |
           mkdir -p $GITHUB_WORKSPACE/.ssh
-          echo "$SFTP_KEY_B64" | base64 -d > $GITHUB_WORKSPACE/.ssh/sftp_key
+          # write secret exactly, preserving newlines
+          printf '%s\n' "${{ secrets.HOST_SFTP_PRIVATE_KEY }}" > $GITHUB_WORKSPACE/.ssh/sftp_key
           chmod 600 $GITHUB_WORKSPACE/.ssh/sftp_key
-        env:
-          SFTP_KEY_B64: ${{ secrets.SFTP_KEY_B64 }}
+
+      # If you only have base64 secret, use this instead of the step above (comment out above step):
+      # - name: Decode private key into workspace (accessible to docker)
+      #   run: |
+      #     mkdir -p $GITHUB_WORKSPACE/.ssh
+      #     echo "${{ secrets.SFTP_KEY_B64 }}" | base64 -d > $GITHUB_WORKSPACE/.ssh/sftp_key
+      #     chmod 600 $GITHUB_WORKSPACE/.ssh/sftp_key
 
       - name: Connectivity test: can runner reach host:port?
         id: conn
         run: |
           echo "Testing TCP connectivity to $HOST:$PORT (timeout 10s)..."
-          # bash /dev/tcp works on ubuntu runners
           timeout 10 bash -c 'cat < /dev/tcp/'"$HOST/$PORT" > /dev/null 2>&1 && echo "OPEN" || echo "CLOSED"' > /tmp/tcp_status || true
           cat /tmp/tcp_status
           if grep -q "OPEN" /tmp/tcp_status; then
@@ -76,6 +82,7 @@ jobs:
 
       - name: SSH debug test (verbose) - runner -> server
         run: |
+          echo "Running ssh -i to verify key usage (verbose)..."
           ssh -i $GITHUB_WORKSPACE/.ssh/sftp_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes -vvv $USER@$HOST "echo SSH_OK" || true
         env:
           HOST: ${{ env.HOST }}
@@ -89,6 +96,7 @@ jobs:
           username: ${{ env.USER }}
           port: ${{ env.PORT }}
           key_path: ${{ github.workspace }}/.ssh/sftp_key
-          source: "${{ env.ARTIFACT }}/"
+          source: "dist/*"
           target: ${{ env.TARGET_DIR }}
+          rm: true
           overwrite: true
