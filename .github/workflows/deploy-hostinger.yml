@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      NODE_ENV: production
       HOST_SFTP_HOST: ${{ secrets.HOST_SFTP_HOST }}
       HOST_SFTP_PORT: ${{ secrets.HOST_SFTP_PORT }}
       HOST_SFTP_USER: ${{ secrets.HOST_SFTP_USER }}
@@ -33,14 +32,20 @@ jobs:
         run: |
           echo "NODE: $(node -v) NPM: $(npm -v)"
           if [ -f package-lock.json ]; then
+            echo "Installing dependencies with npm ci..."
             npm ci --prefer-offline --no-audit
           else
+            echo "Installing dependencies with npm install..."
             npm install --no-audit
           fi
+          echo "Verifying Vite installation..."
+          npx vite --version
       
       - name: Build production
+        env:
+          NODE_ENV: production
         run: |
-          echo "Building project..."
+          echo "Building project (NODE_ENV=$NODE_ENV)..."
           npm run build
           echo "Build complete. Verifying dist folder..."
           ls -la dist
