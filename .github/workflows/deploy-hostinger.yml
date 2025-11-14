@@ -2,8 +2,7 @@ name: Deploy to Hostinger
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -30,75 +29,25 @@ jobs:
 
       - name: Install dependencies
         run: |
-          echo "NODE: $(node -v) NPM: $(npm -v)"
-          if [ -f package-lock.json ]; then
-            echo "Installing dependencies with npm ci..."
-            npm ci --prefer-offline --no-audit
-          else
-            echo "Installing dependencies with npm install..."
-            npm install --no-audit
-          fi
-          echo "Verifying Vite installation..."
+          if [ -f package-lock.json ]; then npm ci --prefer-offline --no-audit; else npm install --no-audit; fi
           npx vite --version || true
 
       - name: Build production
-        env:
-          NODE_ENV: production
+        env: NODE_ENV: production
         run: |
-          echo "Building project (NODE_ENV=$NODE_ENV)..."
           npm run build
-          echo "Build complete. Verifying dist folder..."
           ls -la dist || true
 
       - name: Copy .htaccess (if exists)
         run: |
-          if [ -f ./public/.htaccess ]; then
-            cp ./public/.htaccess ./dist/.htaccess || true
-            echo ".htaccess copied to dist"
-          fi
+          if [ -f ./public/.htaccess ]; then cp ./public/.htaccess ./dist/.htaccess || true; fi
 
       - name: Verify build output
         run: |
-          if [ ! -d ./dist ]; then
-            echo "ERROR: dist folder not found!"
-            exit 1
-          fi
-          echo "dist contents (top 50 files):"
+          if [ ! -d ./dist ]; then echo "ERROR: dist folder not found!"; exit 1; fi
           find dist -type f | head -50
 
-        # 🔍 Add this debug step HERE
-      - name: Debug:inspect deployed key (TEMP)
-        run: |
-          set -e
-          mkdir -p $HOME/.ssh
-          if [ -n "${{ secrets.SFTP_KEY_B64 }}" ]; then
-            echo "${{ secrets.SFTP_KEY_B64 }}" | base64 --decode > $HOME/.ssh/deploy_key || true
-          else
-            echo "${{ secrets.HOST_SFTP_PRIVATE_KEY }}" > $HOME/.ssh/deploy_key || true
-          fi
-          chmod 600 $HOME/.ssh/deploy_key || true
-
-          echo "---- first line of key file ----"
-          sed -n '1p' $HOME/.ssh/deploy_key || true
-          echo "---- last line of key file ----"
-          sed -n '$p' $HOME/.ssh/deploy_key || true
-
-          echo "---- detect CRLF bytes (hex head) ----"
-          head -c 80 $HOME/.ssh/deploy_key | xxd -g 1 | sed -n '1,4p' || true
-
-          echo "---- derived public key fingerprint from the private key ----"
-          if ssh-keygen -y -f $HOME/.ssh/deploy_key > /tmp/derived.pub 2>/dev/null; then
-            ssh-keygen -lf /tmp/derived.pub || true
-          else
-            echo "ERROR: ssh-keygen -y failed (private key invalid or malformed)"
-          fi
-
-          echo "---- show which secret used ----"
-          if [ -n "${{ secrets.SFTP_KEY_B64 }}" ]; then echo "Used secret: SFTP_KEY_B64"; else echo "Used secret: HOST_SFTP_PRIVATE_KEY (raw)"; fi
-
-
-      # ===== Decode private key (base64 safe) =====
-      - name: Decode and write SSH key
+      - name: Setup deploy key
         run: |
           mkdir -p $HOME/.ssh
           echo "${{ secrets.SFTP_KEY_B64 }}" | base64 --decode > $HOME/.ssh/deploy_key
@@ -127,15 +76,7 @@ jobs:
       - name: Purge Cloudflare cache
         if: env.CF_API_TOKEN != '' && env.CF_ZONE_ID != ''
         run: |
-          echo "Purging Cloudflare cache for zone: $CF_ZONE_ID"
-          response=$(curl -s -X POST \
-            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" \
-            -H "Authorization: Bearer $CF_API_TOKEN" \
-            -H "Content-Type: application/json" \
+          response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" \
+            -H "Authorization: Bearer $CF_API_TOKEN" -H "Content-Type: application/json" \
             --data '{"purge_everything":true}')
           echo "$response"
-          if echo "$response" | grep -q '"success":[[:space:]]*true'; then
-            echo "✓ Cloudflare cache purged successfully"
-          else
-            echo "⚠ Cloudflare purge may have failed (non-blocking)"
-          fi
