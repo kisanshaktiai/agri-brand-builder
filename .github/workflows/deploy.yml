@@ -4,44 +4,60 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Vite project
+      - name: Build production
         run: npm run build
 
-      - name: Deploy to Hostinger via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: ${{ secrets.HOST_SFTP_USER }}
-          server: ${{ secrets.HOST_SFTP_HOST }}
-          port: ${{ secrets.HOST_SFTP_PORT }}
-          ssh_private_key: ${{ secrets.HOST_SFTP_PRIVATE_KEY }}
-          local_path: "./dist/*"
-          remote_path: ${{ secrets.HOST_REMOTE_DIR }}
-          args: "-o StrictHostKeyChecking=no"
+      - name: Copy .htaccess into dist (if present)
+        run: |
+          if [ -f ./public/.htaccess ]; then cp ./public/.htaccess ./dist/.htaccess; fi
 
-      - name: Purge Cloudflare Cache
-        if: ${{ secrets.CF_API_TOKEN != '' }}
-        uses: fjogeleit/http-request-action@v1
+      - name: Verify dist exists
+        run: |
+          if [ ! -d ./dist ]; then echo "ERROR: dist missing"; ls -la; exit 1; fi
+          ls -la dist | sed -n '1,200p'
+
+      - name: Deploy via SFTP (mirror)
+        uses: appleboy/scp-action@v0.1.4
         with:
-          url: "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache"
-          method: "POST"
-          data: '{"purge_everything":true}'
-          customHeaders: |
-            Authorization: Bearer ${{ secrets.CF_API_TOKEN }}
-            Content-Type: application/json
+          host: ${{ secrets.HOST_SFTP_HOST }}
+          username: ${{ secrets.HOST_SFTP_USER }}
+          key: ${{ secrets.HOST_SFTP_PRIVATE_KEY }}
+          port: ${{ secrets.HOST_SFTP_PORT }}
+          source: "dist/*"
+          target: ${{ secrets.HOST_REMOTE_DIR }}
+          rm: true
+
+      - name: Purge Cloudflare cache
+        if: ${{ secrets.CF_API_TOKEN }}
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+        run: |
+          # Only runs when CF_API_TOKEN secret is configured
+          echo "Purging Cloudflare cache for zone $CF_ZONE_ID"
+          response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}')
+          echo "$response"
