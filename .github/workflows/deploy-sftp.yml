@@ -1,4 +1,4 @@
-name: Build & Deploy via SFTP (Vite)
+name: Build & Deploy via SFTP (Vite) - fixed key path + connectivity test
 
 on:
   push:
@@ -8,7 +8,7 @@ env:
   HOST: 178.16.136.31
   PORT: 65002
   USER: u447731851
-  TARGET_DIR: /home/u447731851/www   # <-- change if your remote path differs
+  TARGET_DIR: /home/u447731851/www
   ARTIFACT: dist
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies & build (Vite)
+      - name: Install dependencies & build
         run: |
           npm ci
           npm run build
@@ -40,22 +40,43 @@ jobs:
             exit 1
           fi
 
-      - name: Decode private key (from base64 secret)
+      - name: Decode private key into workspace (accessible to docker)
         run: |
-          echo "$SFTP_KEY_B64" | base64 -d > /tmp/sftp_key
-          chmod 600 /tmp/sftp_key
+          mkdir -p $GITHUB_WORKSPACE/.ssh
+          echo "$SFTP_KEY_B64" | base64 -d > $GITHUB_WORKSPACE/.ssh/sftp_key
+          chmod 600 $GITHUB_WORKSPACE/.ssh/sftp_key
         env:
           SFTP_KEY_B64: ${{ secrets.SFTP_KEY_B64 }}
 
-      - name: Add server to known_hosts
+      - name: Connectivity test: can runner reach host:port?
+        id: conn
+        run: |
+          echo "Testing TCP connectivity to $HOST:$PORT (timeout 10s)..."
+          # bash /dev/tcp works on ubuntu runners
+          timeout 10 bash -c 'cat < /dev/tcp/'"$HOST/$PORT" > /dev/null 2>&1 && echo "OPEN" || echo "CLOSED"' > /tmp/tcp_status || true
+          cat /tmp/tcp_status
+          if grep -q "OPEN" /tmp/tcp_status; then
+            echo "host_reachable=true" >> $GITHUB_OUTPUT
+          else
+            echo "host_reachable=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Abort early if host unreachable
+        if: steps.conn.outputs.host_reachable == 'false'
+        run: |
+          echo "ERROR: Runner cannot reach $HOST:$PORT. This is a network/connectivity issue (firewall, host down, or port blocked)."
+          echo "Check Hostinger firewall or try a self-hosted runner in your network."
+          exit 1
+
+      - name: Add server to known_hosts (so dockerized action won't prompt)
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -p $PORT $HOST >> ~/.ssh/known_hosts || true
           chmod 644 ~/.ssh/known_hosts
 
-      - name: SSH debug test (verbose)
+      - name: SSH debug test (verbose) - runner -> server
         run: |
-          ssh -i /tmp/sftp_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes -vvv $USER@$HOST "echo SSH_OK" || true
+          ssh -i $GITHUB_WORKSPACE/.ssh/sftp_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes -vvv $USER@$HOST "echo SSH_OK" || true
         env:
           HOST: ${{ env.HOST }}
           PORT: ${{ env.PORT }}
@@ -67,7 +88,7 @@ jobs:
           host: ${{ env.HOST }}
           username: ${{ env.USER }}
           port: ${{ env.PORT }}
-          key_path: /tmp/sftp_key
+          key_path: ${{ github.workspace }}/.ssh/sftp_key
           source: "${{ env.ARTIFACT }}/"
           target: ${{ env.TARGET_DIR }}
           overwrite: true
