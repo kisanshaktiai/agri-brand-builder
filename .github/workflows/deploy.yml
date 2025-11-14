@@ -9,108 +9,126 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    
     env:
-      NODE_ENV: production
       HOST_SFTP_HOST: ${{ secrets.HOST_SFTP_HOST }}
       HOST_SFTP_PORT: ${{ secrets.HOST_SFTP_PORT }}
       HOST_SFTP_USER: ${{ secrets.HOST_SFTP_USER }}
-      HOST_SFTP_PRIVATE_KEY: ${{ secrets.HOST_SFTP_PRIVATE_KEY }}
       HOST_REMOTE_DIR: ${{ secrets.HOST_REMOTE_DIR }}
       CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
       CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
-          
-      - name: Install dependencies (robust, ensure devDeps)
+      
+      - name: Install dependencies
         run: |
-          echo "Temporarily setting NODE_ENV=development for install to include devDependencies"
-          export NODE_ENV=development
-          echo "NODE: $(node -v)  NPM: $(npm -v)  NODE_ENV: $NODE_ENV"
+          echo "NODE: $(node -v) NPM: $(npm -v)"
           if [ -f package-lock.json ]; then
-            echo "Running npm ci (using package-lock.json)..."
-            npm ci --prefer-offline --no-audit || { echo "npm ci failed — trying npm install"; npm install --no-audit; }
+            echo "Installing dependencies with npm ci..."
+            npm ci --prefer-offline --no-audit
           else
-            echo "No package-lock.json found — running npm install..."
-            npm install --no-audit || { echo "npm install failed"; exit 1; }
+            echo "Installing dependencies with npm install..."
+            npm install --no-audit
           fi
-          echo "Installed node_modules size:"
-          du -sh node_modules || true
-          ls -la node_modules | sed -n '1,200p' || true
-
-      - name: Build production (use development env so devDeps available)
-        run: |
-          echo "Setting NODE_ENV=development to ensure devDependencies (vite) are available for build"
-          export NODE_ENV=development
-          echo "Starting build (NODE_ENV=$NODE_ENV)..."
-          if npm exec -- vite --version >/dev/null 2>&1; then
-            echo "Local vite present; running build with npm exec"
-            npm exec -- vite build
-          else
-            echo "vite not detected — installing vite temporarily (no-save) and building"
-            npm install vite --no-save
-            npm exec -- vite build
-          fi
-          echo "Build finished. Listing dist:"
-          ls -la dist || true
-
-
- 
-      - name: Copy .htaccess into dist (if present)
-        run: |
-          if [ -f ./public/.htaccess ]; then cp ./public/.htaccess ./dist/.htaccess; fi
-          ls -la dist | sed -n '1,200p'
-
-      - name: Verify dist exists
-        run: |
-          if [ ! -d ./dist ]; then echo "ERROR: dist missing"; ls -la; exit 1; fi
-          echo "dist contents:"
-          ls -la dist | sed -n '1,200p'
-
-      - name: Deploy via SFTP (mirror)
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ env.HOST_SFTP_HOST }}
-          username: ${{ env.HOST_SFTP_USER }}
-          key: ${{ env.HOST_SFTP_PRIVATE_KEY }}
-          port: ${{ env.HOST_SFTP_PORT }}
-          source: "dist/*"
-          target: ${{ env.HOST_REMOTE_DIR }}
-          rm: true
-
-      - name: Purge Cloudflare cache (skips if token/zone not provided)
+          echo "Verifying Vite installation..."
+          npx vite --version || true
+      
+      - name: Build production
         env:
-          CF_API_TOKEN: ${{ env.CF_API_TOKEN }}
-          CF_ZONE_ID: ${{ env.CF_ZONE_ID }}
+          NODE_ENV: production
         run: |
-          if [ -z "$CF_API_TOKEN" ] || [ -z "$CF_ZONE_ID" ]; then
-            echo "CF_API_TOKEN or CF_ZONE_ID not provided — skipping Cloudflare purge."
-            exit 0
+          echo "Building project (NODE_ENV=$NODE_ENV)..."
+          npm run build
+          echo "Build complete. Verifying dist folder..."
+          ls -la dist || true
+      
+      - name: Copy .htaccess (if exists)
+        run: |
+          if [ -f ./public/.htaccess ]; then
+            cp ./public/.htaccess ./dist/.htaccess
+            echo ".htaccess copied to dist"
           fi
+      
+      - name: Verify build output
+        run: |
+          if [ ! -d ./dist ]; then
+            echo "ERROR: dist folder not found!"
+            exit 1
+          fi
+          echo "dist contents (top 50 files):"
+          find dist -type f | head -50
 
-          echo "Calling Cloudflare purge for zone $CF_ZONE_ID"
-          response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" \
+      # === Write private key to runner (use heredoc to preserve newlines) ===
+      - name: Write SSH key to file
+        run: |
+          mkdir -p $HOME/.ssh
+          chmod 700 $HOME/.ssh
+          
+          # write secret exactly (preserves newlines)
+          cat > $HOME/.ssh/deploy_key <<'EOF'
+${{ secrets.HOST_SFTP_PRIVATE_KEY }}
+EOF
+          chmod 600 $HOME/.ssh/deploy_key
+          # populate known_hosts to avoid prompts (non-fatal)
+          ssh-keyscan -p ${{ secrets.HOST_SFTP_PORT }} ${{ secrets.HOST_SFTP_HOST }} >> $HOME/.ssh/known_hosts 2>/dev/null || true
+
+      # === Test SSH connection using the key file ===
+      - name: Test SSH connection
+        run: |
+          echo "Testing SSH connection..."
+          ssh -i $HOME/.ssh/deploy_key \
+              -p ${{ secrets.HOST_SFTP_PORT }} \
+              -o StrictHostKeyChecking=no \
+              -o BatchMode=yes \
+              -o ConnectTimeout=10 \
+              ${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }} \
+              "echo 'SSH connection successful'; pwd" || {
+            echo "ERROR: SSH connection failed!"
+            echo "Please verify:"
+            echo "  - HOST_SFTP_PRIVATE_KEY secret contains the correct private key (with BEGIN/END lines)"
+            echo "  - The public key (hostinger_deploy_key_new.pub) is added to Hostinger for the user"
+            echo "  - HOST_SFTP_HOST / HOST_SFTP_PORT / HOST_SFTP_USER values are correct"
+            exit 1
+          }
+
+      # === Deploy with appleboy/scp-action using the key_path ===
+      - name: Deploy via SCP (appleboy)
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST_SFTP_HOST }}
+          username: ${{ secrets.HOST_SFTP_USER }}
+          # use the key file we wrote above
+          key_path: $HOME/.ssh/deploy_key
+          port: ${{ secrets.HOST_SFTP_PORT }}
+          source: "dist/*"
+          target: ${{ secrets.HOST_REMOTE_DIR }}
+          strip_components: 1
+          rm: true
+          overwrite: true
+
+      - name: Purge Cloudflare cache
+        if: env.CF_API_TOKEN != '' && env.CF_ZONE_ID != ''
+        run: |
+          echo "Purging Cloudflare cache for zone: $CF_ZONE_ID"
+          response=$(curl -s -X POST \
+            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}')
-
-          echo "Cloudflare response:"
-          echo "$response"
-
-          # crude success check without jq: look for "success":true
+          
+          echo "Response: $response"
+          
           if echo "$response" | grep -q '"success":[[:space:]]*true'; then
-            echo "Cloudflare purge succeeded."
-            exit 0
+            echo "✓ Cloudflare cache purged successfully"
           else
-            echo "Cloudflare purge reported failure (see response above)."
-            # print HTTP-like failure, but do NOT fail the job (you can change to exit 1 if you prefer)
-            # exit 1
-            exit 0
+            echo "⚠ Cloudflare purge may have failed (non-blocking)"
           fi
+
