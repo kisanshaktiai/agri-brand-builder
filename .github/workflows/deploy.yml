@@ -11,9 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_ENV: production
+      HOST_SFTP_HOST: ${{ secrets.HOST_SFTP_HOST }}
+      HOST_SFTP_PORT: ${{ secrets.HOST_SFTP_PORT }}
+      HOST_SFTP_USER: ${{ secrets.HOST_SFTP_USER }}
+      HOST_SFTP_PRIVATE_KEY: ${{ secrets.HOST_SFTP_PRIVATE_KEY }}
+      HOST_REMOTE_DIR: ${{ secrets.HOST_REMOTE_DIR }}
+      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -40,24 +47,35 @@ jobs:
       - name: Deploy via SFTP (mirror)
         uses: appleboy/scp-action@v0.1.4
         with:
-          host: ${{ secrets.HOST_SFTP_HOST }}
-          username: ${{ secrets.HOST_SFTP_USER }}
-          key: ${{ secrets.HOST_SFTP_PRIVATE_KEY }}
-          port: ${{ secrets.HOST_SFTP_PORT }}
+          host: ${{ env.HOST_SFTP_HOST }}
+          username: ${{ env.HOST_SFTP_USER }}
+          key: ${{ env.HOST_SFTP_PRIVATE_KEY }}
+          port: ${{ env.HOST_SFTP_PORT }}
           source: "dist/*"
-          target: ${{ secrets.HOST_REMOTE_DIR }}
+          target: ${{ env.HOST_REMOTE_DIR }}
           rm: true
 
-      - name: Purge Cloudflare cache
-        if: ${{ secrets.CF_API_TOKEN }}
+      - name: Purge Cloudflare cache (will be skipped if CF_API_TOKEN not set)
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_API_TOKEN: ${{ env.CF_API_TOKEN }}
+          CF_ZONE_ID: ${{ env.CF_ZONE_ID }}
         run: |
-          # Only runs when CF_API_TOKEN secret is configured
+          if [ -z "$CF_API_TOKEN" ] || [ -z "$CF_ZONE_ID" ]; then
+            echo "CF_API_TOKEN or CF_ZONE_ID not provided — skipping Cloudflare purge."
+            exit 0
+          fi
+
           echo "Purging Cloudflare cache for zone $CF_ZONE_ID"
           response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}')
-          echo "$response"
+          echo "Response: $response"
+          # Fail job if Cloudflare responded with an error
+          ok=$(echo "$response" | jq -r '.success // false')
+          if [ "$ok" != "true" ]; then
+            echo "Cloudflare purge failed."
+            echo "$response"
+            exit 1
+          fi
+          echo "Cloudflare purge succeeded."
