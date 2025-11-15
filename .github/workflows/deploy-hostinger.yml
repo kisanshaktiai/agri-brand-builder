@@ -68,6 +68,20 @@ jobs:
             ssh-keyscan -p "${{ secrets.HOST_SFTP_PORT }}" "${{ secrets.HOST_SFTP_HOST }}" >> "$HOME/.ssh/known_hosts" 2>/dev/null || true
           fi
           chmod 600 "$HOME/.ssh/known_hosts"
+          
+      - name: Debug:show decoded key fingerprint & known_hosts
+        run: |
+            set -euo pipefail
+            # Print fingerprint of the decoded key (safe)
+            printf '%s' "${{ secrets.SFTP_KEY_B64 }}" | tr -d '\r' | base64 --decode > "$HOME/.ssh/deploy_key_debug"
+            chmod 600 "$HOME/.ssh/deploy_key_debug"
+            # show public key and fingerprint (safe)
+            ssh-keygen -y -f "$HOME/.ssh/deploy_key_debug" | ssh-keygen -lf - || true
+            echo "---- known_hosts content ----"
+            cat "$HOME/.ssh/known_hosts" || true
+            # remove debug file
+            shred -u "$HOME/.ssh/deploy_key_debug" 2>/dev/null || rm -f "$HOME/.ssh/deploy_key_debug"
+      
 
       - name: Test SSH connection (strict host key checking)
         run: |
