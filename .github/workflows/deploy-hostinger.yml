@@ -49,34 +49,25 @@ jobs:
           if [ ! -d ./dist ]; then echo "ERROR: dist folder not found!"; exit 1; fi
           find dist -type f | head -50
 
-      - name: Setup deploy key & known_hosts (FIXED)
+      - name: Setup deploy key & known_hosts
         id: ssh_setup
         run: |
           set -e
           mkdir -p "$HOME/.ssh"
           chmod 700 "$HOME/.ssh"
 
-          # Decode private key - handle any whitespace/newline issues
+          # Decode private key
           echo "${{ secrets.SFTP_KEY_B64 }}" | tr -d '\r\n ' | base64 --decode > "$HOME/.ssh/deploy_key"
-          
-          # Ensure proper line endings in the key file
           chmod 600 "$HOME/.ssh/deploy_key"
-          
-          # Validate the key format
-          if ! ssh-keygen -l -f "$HOME/.ssh/deploy_key" &>/dev/null; then
-            echo "ERROR: Invalid SSH key format!"
-            echo "Key appears to be:"
-            head -1 "$HOME/.ssh/deploy_key"
-            exit 1
-          fi
 
           # Setup known_hosts
           if [ -n "${{ secrets.HOST_SFTP_KNOWN_HOSTS }}" ]; then
             echo "${{ secrets.HOST_SFTP_KNOWN_HOSTS }}" > "$HOME/.ssh/known_hosts"
+            chmod 600 "$HOME/.ssh/known_hosts"
           else
-            ssh-keyscan -p "${{ secrets.HOST_SFTP_PORT }}" "${{ secrets.HOST_SFTP_HOST }}" >> "$HOME/.ssh/known_hosts" 2>/dev/null || true
+            ssh-keyscan -p "${{ secrets.HOST_SFTP_PORT }}" "${{ secrets.HOST_SFTP_HOST }}" >> "$HOME/.ssh/known_hosts" 2>/dev/null
+            chmod 600 "$HOME/.ssh/known_hosts"
           fi
-          chmod 600 "$HOME/.ssh/known_hosts"
           
       - name: Debug SSH Key Info
         run: |
