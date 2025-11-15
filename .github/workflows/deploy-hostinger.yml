@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     env:
       HOST_SFTP_HOST: ${{ secrets.HOST_SFTP_HOST }}
@@ -33,7 +34,8 @@ jobs:
           npx vite --version || true
 
       - name: Build production
-        env: NODE_ENV: production
+        env:
+          NODE_ENV: production
         run: |
           npm run build
           ls -la dist || true
@@ -47,20 +49,34 @@ jobs:
           if [ ! -d ./dist ]; then echo "ERROR: dist folder not found!"; exit 1; fi
           find dist -type f | head -50
 
-      - name: Setup deploy key
+      - name: Setup deploy key & known_hosts (from secrets)
+        id: ssh_setup
         run: |
-          mkdir -p $HOME/.ssh
-          echo "${{ secrets.SFTP_KEY_B64 }}" | base64 --decode > $HOME/.ssh/deploy_key
-          chmod 600 $HOME/.ssh/deploy_key
-          ssh-keyscan -p ${{ secrets.HOST_SFTP_PORT }} ${{ secrets.HOST_SFTP_HOST }} >> $HOME/.ssh/known_hosts 2>/dev/null || true
+          set -e
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
 
-      - name: Test SSH connection
+          # Decode private key from base64 secret to a file (no output)
+          printf '%s' "${{ secrets.SFTP_KEY_B64 }}" | base64 --decode > "$HOME/.ssh/deploy_key"
+          chmod 600 "$HOME/.ssh/deploy_key"
+
+          # Use stored known_hosts if available (recommended). Otherwise fetch host key and write it.
+          if [ -n "${{ secrets.HOST_SFTP_KNOWN_HOSTS }}" ]; then
+            printf '%s' "${{ secrets.HOST_SFTP_KNOWN_HOSTS }}" > "$HOME/.ssh/known_hosts"
+          else
+            # fetch host key once and add it; runner's environment is ephemeral
+            ssh-keyscan -p "${{ secrets.HOST_SFTP_PORT }}" "${{ secrets.HOST_SFTP_HOST }}" >> "$HOME/.ssh/known_hosts" 2>/dev/null || true
+          fi
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+      - name: Test SSH connection (strict host key checking)
         run: |
-          ssh -i $HOME/.ssh/deploy_key -p ${{ secrets.HOST_SFTP_PORT }} \
-            -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=10 \
-            ${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }} "echo 'SSH OK'; pwd"
+          # Use StrictHostKeyChecking=yes so unknown host keys fail the job instead of connecting insecurely
+          ssh -i $HOME/.ssh/deploy_key -p "${{ secrets.HOST_SFTP_PORT }}" \
+            -o StrictHostKeyChecking=yes -o BatchMode=yes -o ConnectTimeout=10 \
+            "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}" "echo 'SSH OK' && pwd"
 
-      - name: Deploy via SCP (appleboy)
+      - name: Deploy via SCP (appleboy) - upload dist/*
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST_SFTP_HOST }}
@@ -73,10 +89,35 @@ jobs:
           rm: true
           overwrite: true
 
-      - name: Purge Cloudflare cache
-        if: env.CF_API_TOKEN != '' && env.CF_ZONE_ID != ''
+      - name: Remote permissions fix (optional - run only if SSH succeeded)
+        if: success()
         run: |
-          response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" \
-            -H "Authorization: Bearer $CF_API_TOKEN" -H "Content-Type: application/json" \
-            --data '{"purge_everything":true}')
-          echo "$response"
+          ssh -i $HOME/.ssh/deploy_key -p "${{ secrets.HOST_SFTP_PORT }}" \
+            -o StrictHostKeyChecking=yes -o BatchMode=yes \
+            "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}" <<'EOF'
+            set -e
+            # set secure permissions: folders 755, files 644
+            chmod -R 755 ${HOST_REMOTE_DIR}
+            find ${HOST_REMOTE_DIR} -type f -exec chmod 644 {} \;
+            EOF
+
+      - name: Purge Cloudflare cache (targeted)
+        if: env.CF_API_TOKEN != '' && env.CF_ZONE_ID != ''
+        env:
+          CF_ZONE: ${{ secrets.CF_ZONE_ID }}
+          CF_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          # Purge only the files you updated — safer than purge_everything.
+          # Change/add more file URLs if your deployment updates other files.
+          FILES='["https://kisanshaktiai.in/index.html"]'
+          echo "Purging: $FILES"
+          response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE/purge_cache" \
+            -H "Authorization: Bearer $CF_TOKEN" -H "Content-Type: application/json" \
+            --data "{\"files\":$FILES}")
+          echo "$response" | jq -r '.success, .errors' || true
+
+      - name: Cleanup SSH keys
+        if: always()
+        run: |
+          shred -u $HOME/.ssh/deploy_key 2>/dev/null || rm -f $HOME/.ssh/deploy_key
+          rm -f $HOME/.ssh/known_hosts || true
