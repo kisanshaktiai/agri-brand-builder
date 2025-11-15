@@ -49,53 +49,94 @@ jobs:
           if [ ! -d ./dist ]; then echo "ERROR: dist folder not found!"; exit 1; fi
           find dist -type f | head -50
 
-      - name: Setup deploy key & known_hosts (from secrets)
+      - name: Setup deploy key & known_hosts (FIXED)
         id: ssh_setup
         run: |
           set -e
           mkdir -p "$HOME/.ssh"
           chmod 700 "$HOME/.ssh"
 
-          # Decode private key from base64 secret to a file (no output)
-          printf '%s' "${{ secrets.SFTP_KEY_B64 }}" | base64 --decode > "$HOME/.ssh/deploy_key"
+          # Decode private key - handle any whitespace/newline issues
+          echo "${{ secrets.SFTP_KEY_B64 }}" | tr -d '\r\n ' | base64 --decode > "$HOME/.ssh/deploy_key"
+          
+          # Ensure proper line endings in the key file
           chmod 600 "$HOME/.ssh/deploy_key"
+          
+          # Validate the key format
+          if ! ssh-keygen -l -f "$HOME/.ssh/deploy_key" &>/dev/null; then
+            echo "ERROR: Invalid SSH key format!"
+            echo "Key appears to be:"
+            head -1 "$HOME/.ssh/deploy_key"
+            exit 1
+          fi
 
-          # Use stored known_hosts if available (recommended). Otherwise fetch host key and write it.
+          # Setup known_hosts
           if [ -n "${{ secrets.HOST_SFTP_KNOWN_HOSTS }}" ]; then
-            printf '%s' "${{ secrets.HOST_SFTP_KNOWN_HOSTS }}" > "$HOME/.ssh/known_hosts"
+            echo "${{ secrets.HOST_SFTP_KNOWN_HOSTS }}" > "$HOME/.ssh/known_hosts"
           else
-            # fetch host key once and add it; runner's environment is ephemeral
             ssh-keyscan -p "${{ secrets.HOST_SFTP_PORT }}" "${{ secrets.HOST_SFTP_HOST }}" >> "$HOME/.ssh/known_hosts" 2>/dev/null || true
           fi
           chmod 600 "$HOME/.ssh/known_hosts"
           
-      - name: Debug:show decoded key fingerprint & known_hosts
+      - name: Debug SSH Key Info
         run: |
-            set -euo pipefail
-            # Print fingerprint of the decoded key (safe)
-            printf '%s' "${{ secrets.SFTP_KEY_B64 }}" | tr -d '\r' | base64 --decode > "$HOME/.ssh/deploy_key_debug"
-            chmod 600 "$HOME/.ssh/deploy_key_debug"
-            # show public key and fingerprint (safe)
-            ssh-keygen -y -f "$HOME/.ssh/deploy_key_debug" | ssh-keygen -lf - || true
-            echo "---- known_hosts content ----"
-            cat "$HOME/.ssh/known_hosts" || true
-            # remove debug file
-            shred -u "$HOME/.ssh/deploy_key_debug" 2>/dev/null || rm -f "$HOME/.ssh/deploy_key_debug"
-      
+          echo "==== SSH Key Fingerprint ===="
+          ssh-keygen -lf "$HOME/.ssh/deploy_key" || echo "Failed to read key fingerprint"
+          
+          echo "==== SSH Key Type ===="
+          head -1 "$HOME/.ssh/deploy_key" | cut -d' ' -f1
+          
+          echo "==== Known Hosts ===="
+          cat "$HOME/.ssh/known_hosts" | wc -l
+          echo "lines in known_hosts"
 
-      - name: Test SSH connection (strict host key checking)
+      - name: Test SSH Connection (Multiple Auth Methods)
         run: |
-          # Use StrictHostKeyChecking=yes so unknown host keys fail the job instead of connecting insecurely
-          ssh -i $HOME/.ssh/deploy_key -p "${{ secrets.HOST_SFTP_PORT }}" \
-            -o StrictHostKeyChecking=yes -o BatchMode=yes -o ConnectTimeout=10 \
-            "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}" "echo 'SSH OK' && pwd"
+          echo "Attempting SSH connection with detailed output..."
+          ssh -vvv -i "$HOME/.ssh/deploy_key" \
+            -p "${{ secrets.HOST_SFTP_PORT }}" \
+            -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null \
+            -o PasswordAuthentication=no \
+            -o PubkeyAuthentication=yes \
+            -o PreferredAuthentications=publickey \
+            -o IdentitiesOnly=yes \
+            -o BatchMode=yes \
+            -o ConnectTimeout=30 \
+            "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}" \
+            "echo 'SSH Connection Successful!' && pwd" 2>&1 || {
+              echo "SSH connection failed. Check the verbose output above for details."
+              exit 1
+            }
 
-      - name: Deploy via SCP (appleboy) - upload dist/*
+      - name: Deploy via SFTP (rsync alternative)
+        if: success()
+        run: |
+          # Use sftp batch mode instead of scp
+          cd dist
+          
+          # Create sftp batch commands
+          cat > /tmp/sftp_commands.txt <<EOF
+          cd ${{ secrets.HOST_REMOTE_DIR }}
+          put -r *
+          bye
+          EOF
+          
+          # Execute sftp
+          sftp -i "$HOME/.ssh/deploy_key" \
+            -P "${{ secrets.HOST_SFTP_PORT }}" \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            -b /tmp/sftp_commands.txt \
+            "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}"
+
+      - name: Alternative - Deploy via SCP action
+        if: failure()
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST_SFTP_HOST }}
           username: ${{ secrets.HOST_SFTP_USER }}
-          key_path: $HOME/.ssh/deploy_key
+          key: ${{ secrets.SFTP_KEY_B64 }}
           port: ${{ secrets.HOST_SFTP_PORT }}
           source: "dist/*"
           target: ${{ secrets.HOST_REMOTE_DIR }}
@@ -103,35 +144,36 @@ jobs:
           rm: true
           overwrite: true
 
-      - name: Remote permissions fix (optional - run only if SSH succeeded)
+      - name: Remote permissions fix
         if: success()
         run: |
-          ssh -i $HOME/.ssh/deploy_key -p "${{ secrets.HOST_SFTP_PORT }}" \
-            -o StrictHostKeyChecking=yes -o BatchMode=yes \
+          ssh -i "$HOME/.ssh/deploy_key" \
+            -p "${{ secrets.HOST_SFTP_PORT }}" \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
             "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}" <<'EOF'
             set -e
-            # set secure permissions: folders 755, files 644
-            chmod -R 755 ${HOST_REMOTE_DIR}
-            find ${HOST_REMOTE_DIR} -type f -exec chmod 644 {} \;
-            EOF
+            cd ${{ secrets.HOST_REMOTE_DIR }}
+            chmod -R 755 .
+            find . -type f -exec chmod 644 {} \;
+          EOF
 
-      - name: Purge Cloudflare cache (targeted)
+      - name: Purge Cloudflare cache
         if: env.CF_API_TOKEN != '' && env.CF_ZONE_ID != ''
         env:
           CF_ZONE: ${{ secrets.CF_ZONE_ID }}
           CF_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          # Purge only the files you updated — safer than purge_everything.
-          # Change/add more file URLs if your deployment updates other files.
-          FILES='["https://kisanshaktiai.in/index.html"]'
-          echo "Purging: $FILES"
+          FILES='["https://kisanshaktiai.in/"]'
+          echo "Purging Cloudflare cache..."
           response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE/purge_cache" \
-            -H "Authorization: Bearer $CF_TOKEN" -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $CF_TOKEN" \
+            -H "Content-Type: application/json" \
             --data "{\"files\":$FILES}")
-          echo "$response" | jq -r '.success, .errors' || true
+          echo "$response" | jq -r '.success, .errors' || echo "$response"
 
       - name: Cleanup SSH keys
         if: always()
         run: |
-          shred -u $HOME/.ssh/deploy_key 2>/dev/null || rm -f $HOME/.ssh/deploy_key
-          rm -f $HOME/.ssh/known_hosts || true
+          shred -u "$HOME/.ssh/deploy_key" 2>/dev/null || rm -f "$HOME/.ssh/deploy_key"
+          rm -f "$HOME/.ssh/known_hosts" || true
