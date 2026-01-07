@@ -281,26 +281,27 @@ export class AdvancedLeadsService {
         const leadData = this.transformSubmissionData(submissionData, leadScore);
         console.log('Transformed lead data:', leadData);
         
-        // Use anonymous access for lead submission - allowed by RLS policy
-        const { data, error } = await supabase
-          .from('leads')
-          .insert(leadData)
-          .select()
-          .single();
+        // Use edge function for secure lead submission
+        const { data, error } = await supabase.functions.invoke('submit-lead', {
+          body: {
+            action: 'submit',
+            ...leadData
+          }
+        });
 
         if (error) {
-          console.error('Supabase insertion error:', error);
-          throw new Error(`Database error: ${error.message}${error.hint ? ` (${error.hint})` : ''}`);
+          console.error('Edge function error:', error);
+          throw new Error(`Submission error: ${error.message}`);
         }
 
-        if (!data) {
-          throw new Error('No data returned from submission');
+        if (!data?.success) {
+          throw new Error(data?.error || 'Submission failed');
         }
 
-        console.log('Lead successfully submitted:', data.id);
+        console.log('Lead successfully submitted:', data.lead_id);
         return {
           success: true,
-          leadId: data.id
+          leadId: data.lead_id
         };
 
       } catch (error) {
