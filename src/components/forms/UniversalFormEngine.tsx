@@ -153,7 +153,7 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
     }
   };
 
-  // Email validation function using Edge Function
+  // Email validation function using unified submit-lead Edge Function
   const validateEmailWithEdgeFunction = async (email: string) => {
     if (!email || !email.trim()) {
       setEmailValidation({ isChecking: false, isValid: null, message: '' });
@@ -174,13 +174,13 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
     setEmailValidation({ isChecking: true, isValid: null, message: 'Checking email...' });
 
     try {
-      const { data, error } = await supabase.functions.invoke('validate-lead-email', {
-        body: { email: email.trim() }
+      // Use unified submit-lead function with action: 'validate'
+      const { data, error } = await supabase.functions.invoke('submit-lead', {
+        body: { action: 'validate', email: email.trim() }
       });
 
       if (error) {
         console.warn('Email validation error:', error);
-        // Check if it's a 409 conflict (email exists)
         if (error.message?.includes('409') || (data as any)?.exists === true) {
           setEmailValidation({ 
             isChecking: false, 
@@ -188,7 +188,6 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
             message: 'Email already exists' 
           });
         } else {
-          // For other errors, don't block the user
           setEmailValidation({ 
             isChecking: false, 
             isValid: null, 
@@ -204,11 +203,17 @@ export const UniversalFormEngine: React.FC<UniversalFormEngineProps> = ({
           isValid: false, 
           message: 'Email already exists' 
         });
-      } else {
+      } else if ((data as any)?.valid === true) {
         setEmailValidation({ 
           isChecking: false, 
           isValid: true, 
           message: 'Email verified' 
+        });
+      } else {
+        setEmailValidation({ 
+          isChecking: false, 
+          isValid: null, 
+          message: '' 
         });
       }
     } catch (error) {
