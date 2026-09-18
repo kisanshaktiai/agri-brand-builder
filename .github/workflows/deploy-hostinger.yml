@@ -112,6 +112,7 @@ jobs:
           cd ${{ secrets.HOST_REMOTE_DIR }}
           put -r *
           put .htaccess
+          put founder/.htaccess
           bye
           EOF
           
@@ -156,13 +157,13 @@ jobs:
           CF_ZONE: ${{ secrets.CF_ZONE_ID }}
           CF_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          FILES='["https://kisanshaktiai.in/"]'
-          echo "Purging Cloudflare cache..."
-          response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE/purge_cache" \
+          echo "Purging entire Cloudflare cache after deployment..."
+          response=$(curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE/purge_cache" \
             -H "Authorization: Bearer $CF_TOKEN" \
             -H "Content-Type: application/json" \
-            --data "{\"files\":$FILES}")
-          echo "$response" | jq -r '.success, .errors' || echo "$response"
+            --data '{"purge_everything":true}')
+          echo "$response" | jq .
+          echo "$response" | jq -e '.success == true' >/dev/null
 
       - name: Cleanup SSH keys
         if: always()
