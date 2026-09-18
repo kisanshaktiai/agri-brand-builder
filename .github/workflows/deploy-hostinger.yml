@@ -111,9 +111,7 @@ jobs:
           cat > /tmp/sftp_commands.txt <<EOF
           cd ${{ secrets.HOST_REMOTE_DIR }}
           put -r *
-          if [ -f .htaccess ]; then
-            put .htaccess
-          fi
+          put .htaccess
           bye
           EOF
           
