@@ -45,19 +45,20 @@
     --agri-earth: 40 20% 50%;
     --agri-gold: 45 90% 65%;
 
-    /* ── Founder page palette ──────────────────────────────────────
-       Scoped to /founder. Deliberately dark and independent of the
-       marketing site's light theme, so the card reads as its own
-       surface while staying inside the KisanShakti green family. */
-    --founder-ground: 156 52% 8%;
-    --founder-surface: 156 32% 13%;
-    --founder-line: 156 18% 24%;
-    --founder-ink: 60 22% 96%;
-    --founder-muted: 150 10% 66%;
-    --founder-gold: 42 88% 62%;
-    --founder-leaf: 142 62% 52%;
-    --founder-aptech: 24 88% 62%;
-    --founder-learnixa: 266 72% 72%;
+    /* ── Founder page palette (/founder) ───────────────────────────
+       A light paper page with one deep green field block at the top.
+       Separation comes from space and weight, not outlines — there
+       is deliberately no "card border" token here. */
+    --founder-paper: 45 28% 98%;
+    --founder-ink: 158 40% 9%;
+    --founder-muted: 155 9% 40%;
+    --founder-faint: 150 14% 90%;
+    --founder-field: 158 58% 12%;
+    --founder-field-soft: 152 30% 74%;
+    --founder-accent: 142 72% 26%;
+    --founder-leaf: 142 68% 28%;
+    --founder-aptech: 22 84% 42%;
+    --founder-learnixa: 264 56% 48%;
   }
 
   .dark {
@@ -134,53 +135,34 @@
 }
 
 /* ── Founder page (/founder) ──────────────────────────────────────
-   One orchestrated page-load sequence, plus press feedback on
-   anything tappable. No scroll-triggered animation anywhere. */
+   One page-load sequence inside the field block. Nothing animates
+   on scroll. Press feedback settles rather than fading linearly. */
 @layer utilities {
   .founder-page {
     --founder-settle: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* Faint field texture behind the whole card. Static, no animation. */
-  .founder-page::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
+  .founder-field {
     background:
-      radial-gradient(90% 55% at 50% 0%, hsl(var(--founder-leaf) / 0.14), transparent 68%),
-      radial-gradient(60% 40% at 88% 22%, hsl(var(--founder-gold) / 0.07), transparent 62%);
+      radial-gradient(125% 95% at 16% 0%, hsl(142 44% 21%) 0%, transparent 60%),
+      linear-gradient(168deg, hsl(158 54% 13%) 0%, hsl(160 62% 8%) 100%);
   }
 
-  .founder-page > * {
-    position: relative;
-    z-index: 1;
+  .founder-rise {
+    animation: founder-rise 760ms var(--founder-settle) both;
   }
 
-  .founder-enter-1,
-  .founder-enter-2,
-  .founder-enter-3,
-  .founder-enter-4 {
-    animation: founder-rise 700ms var(--founder-settle) both;
-  }
+  .founder-d1 { animation-delay: 60ms; }
+  .founder-d2 { animation-delay: 170ms; }
+  .founder-d3 { animation-delay: 280ms; }
+  .founder-d4 { animation-delay: 390ms; }
 
-  .founder-enter-1 { animation-delay: 40ms; }
-  .founder-enter-2 { animation-delay: 140ms; }
-  .founder-enter-3 { animation-delay: 240ms; }
-  .founder-enter-4 { animation-delay: 340ms; }
-
-  .founder-cue {
-    animation: founder-cue-drift 2.4s ease-in-out 1.2s 3 both;
-  }
-
-  /* Tap and hover feedback that settles rather than fades linearly. */
   .founder-press {
     transition:
       transform 220ms var(--founder-settle),
       background-color 220ms var(--founder-settle),
-      border-color 220ms var(--founder-settle),
-      color 220ms var(--founder-settle);
+      color 220ms var(--founder-settle),
+      opacity 220ms var(--founder-settle);
   }
 
   .founder-press:active {
@@ -188,23 +170,10 @@
     transition-duration: 90ms;
   }
 
-  @media (hover: hover) {
-    .founder-press:hover {
-      border-color: hsl(var(--founder-muted) / 0.5);
-    }
-  }
-
-  /* Contact rows: full-width tap target, quiet until touched. */
-  .founder-row {
-    padding-block: 0.875rem;
-    padding-inline: 0.25rem;
-    transition: color 200ms ease, padding-inline 260ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  @media (hover: hover) {
-    .founder-row:hover {
-      padding-inline-start: 0.625rem;
-    }
+  .founder-lift {
+    box-shadow:
+      0 1px 2px hsl(158 40% 9% / 0.05),
+      0 14px 34px -14px hsl(158 40% 9% / 0.16);
   }
 }
 
@@ -212,7 +181,7 @@
   @keyframes founder-rise {
     from {
       opacity: 0;
-      transform: translateY(14px);
+      transform: translateY(16px);
     }
     to {
       opacity: 1;
@@ -220,24 +189,14 @@
     }
   }
 
-  @keyframes founder-cue-drift {
-    0%, 100% { opacity: 0.55; transform: translateY(0); }
-    50% { opacity: 1; transform: translateY(5px); }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .founder-enter-1,
-    .founder-enter-2,
-    .founder-enter-3,
-    .founder-enter-4,
-    .founder-cue {
+    .founder-rise {
       animation: none !important;
       opacity: 1 !important;
       transform: none !important;
     }
 
-    .founder-press,
-    .founder-row {
+    .founder-press {
       transition: none !important;
     }
 

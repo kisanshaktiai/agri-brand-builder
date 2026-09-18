@@ -1,10 +1,6 @@
 /**
  * Single source of truth for the /founder page.
  * Content only — presentation components read from this module and never hold copy.
- *
- * Brand logos: drop the three image files into `public/brands/` using the
- * filenames below. If a file is missing the UI falls back to a typographic
- * monogram, so the page never shows a broken image.
  */
 
 export type BrandKey = "kisanshakti" | "aptech" | "learnixa";
@@ -16,7 +12,7 @@ export interface Brand {
   description: string;
   url: string;
   urlLabel: string;
-  /** Path under /public. Optional — falls back to a monogram tile. */
+  /** Path under /public. Optional — nothing is rendered if the file is missing. */
   logo?: string;
 }
 
@@ -59,7 +55,7 @@ export interface FounderProfile {
   title: string;
   slug: string;
   summary: string;
-  /** Path under /public, e.g. "/founder/amarsinh.jpg". Falls back to a monogram. */
+  /** Path under /public. Optional — the hero renders without it. */
   portrait?: string;
   brands: Brand[];
   phones: PhoneNumber[];
@@ -79,7 +75,7 @@ export const founderProfile: FounderProfile = {
   slug: "/founder",
   summary:
     "Founder building agri-tech and technology ventures across AI for farmers, skilling and learning.",
-  portrait: undefined,
+  portrait: "/founder/amar-patil.jpg",
   brands: [
     {
       key: "kisanshakti",
@@ -97,7 +93,7 @@ export const founderProfile: FounderProfile = {
       description: "Technology and skilling initiative.",
       url: "https://www.aptechskill.in",
       urlLabel: "aptechskill.in",
-      logo: "/brands/aptech.jpg",
+      logo: "/brands/aptech.png",
     },
     {
       key: "learnixa",
@@ -168,6 +164,9 @@ export const founderProfile: FounderProfile = {
 
 /** Canonical public address of this page. Used for QR, share and meta tags. */
 export const FOUNDER_URL = "https://kisanshaktiai.in/founder";
+
+/** Absolute URL of the link-preview image used by WhatsApp and LinkedIn. */
+export const FOUNDER_OG_IMAGE = "https://kisanshaktiai.in/founder/og-founder.jpg";
 
 /** RFC 6350 vCard, generated entirely client-side from the data above. */
 export function buildVCard(p: FounderProfile = founderProfile): string {

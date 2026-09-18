@@ -6,34 +6,32 @@ interface TechStripProps {
 }
 
 /**
- * Five technology modules as a single strip of monogram tiles with one shared
- * detail panel underneath. Implemented as a tab list so it stays one small
- * block instead of five stacked accordions.
+ * Five technology modules as one row of acronyms with a shared detail panel.
+ * The selected item is marked by weight, colour and a rule underneath — no
+ * boxes, so the strip reads as type rather than as five buttons.
  */
 export function TechStrip({ modules }: TechStripProps) {
   const [active, setActive] = useState(0);
   const baseId = useId();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  const focusTab = (index: number) => {
+  const move = (index: number) => {
     const next = (index + modules.length) % modules.length;
     setActive(next);
     tabRefs.current[next]?.focus();
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
-    if (event.key === "ArrowRight") {
+    const keys: Record<string, () => void> = {
+      ArrowRight: () => move(index + 1),
+      ArrowLeft: () => move(index - 1),
+      Home: () => move(0),
+      End: () => move(modules.length - 1),
+    };
+    const handler = keys[event.key];
+    if (handler) {
       event.preventDefault();
-      focusTab(index + 1);
-    } else if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      focusTab(index - 1);
-    } else if (event.key === "Home") {
-      event.preventDefault();
-      focusTab(0);
-    } else if (event.key === "End") {
-      event.preventDefault();
-      focusTab(modules.length - 1);
+      handler();
     }
   };
 
@@ -44,7 +42,7 @@ export function TechStrip({ modules }: TechStripProps) {
       <div
         role="tablist"
         aria-label="KisanShakti AI technology family"
-        className="grid grid-cols-5 gap-1.5 sm:gap-2"
+        className="flex flex-wrap gap-x-5 gap-y-1"
       >
         {modules.map((module, index) => {
           const selected = index === active;
@@ -63,14 +61,20 @@ export function TechStrip({ modules }: TechStripProps) {
               onClick={() => setActive(index)}
               onKeyDown={(event) => onKeyDown(event, index)}
               className={[
-                "founder-press flex min-h-[56px] flex-col items-center justify-center rounded-lg border px-1 py-2",
-                "text-[0.62rem] font-semibold tracking-[0.14em] sm:text-xs",
+                "founder-press relative flex min-h-[48px] items-center text-[1.05rem] tracking-tight",
                 selected
-                  ? "border-founder-gold/60 bg-founder-gold/10 text-founder-gold"
-                  : "border-founder-line bg-founder-surface/60 text-founder-muted hover:text-founder-ink",
+                  ? "font-semibold text-founder-accent"
+                  : "font-medium text-founder-muted hover:text-founder-ink",
               ].join(" ")}
             >
               {module.acronym}
+              <span
+                aria-hidden="true"
+                className={[
+                  "absolute inset-x-0 bottom-2 h-[2px] rounded-full bg-founder-accent transition-opacity duration-200",
+                  selected ? "opacity-100" : "opacity-0",
+                ].join(" ")}
+              />
             </button>
           );
         })}
@@ -80,12 +84,12 @@ export function TechStrip({ modules }: TechStripProps) {
         id={`${baseId}-panel`}
         role="tabpanel"
         aria-labelledby={`${baseId}-tab-${active}`}
-        className="mt-3 rounded-lg border border-founder-line bg-founder-surface/60 px-4 py-4"
+        className="mt-4 max-w-md"
       >
-        <p className="text-[0.95rem] font-medium leading-relaxed text-founder-ink">
+        <p className="text-[1.15rem] font-medium leading-snug text-founder-ink">
           {current.expansion}
         </p>
-        <p className="mt-1.5 text-sm text-founder-muted">{current.category}</p>
+        <p className="mt-2 text-[0.95rem] text-founder-muted">{current.category}</p>
       </div>
     </div>
   );

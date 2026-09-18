@@ -67,12 +67,13 @@ export default {
 				},
 				/* Founder page palette — see :root in src/index.css */
 				founder: {
-					ground: 'hsl(var(--founder-ground))',
-					surface: 'hsl(var(--founder-surface))',
-					line: 'hsl(var(--founder-line))',
+					paper: 'hsl(var(--founder-paper))',
 					ink: 'hsl(var(--founder-ink))',
 					muted: 'hsl(var(--founder-muted))',
-					gold: 'hsl(var(--founder-gold))',
+					faint: 'hsl(var(--founder-faint))',
+					field: 'hsl(var(--founder-field))',
+					'field-soft': 'hsl(var(--founder-field-soft))',
+					accent: 'hsl(var(--founder-accent))',
 					leaf: 'hsl(var(--founder-leaf))',
 					aptech: 'hsl(var(--founder-aptech))',
 					learnixa: 'hsl(var(--founder-learnixa))'

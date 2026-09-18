@@ -5,27 +5,29 @@ import { copyText, shareProfile } from "@/components/founder/actions";
 
 /**
  * The profile URL never changes, so the QR is a pre-generated static asset in
- * /public rather than a runtime encode. No QR library is shipped to the browser.
- * Regenerate public/founder-qr.svg if FOUNDER_URL ever changes.
+ * /public rather than a runtime encode — no QR library is shipped to the
+ * browser. Regenerate public/founder-qr.svg if FOUNDER_URL ever changes.
  */
 export function QrPanel() {
   const [status, setStatus] = useState("");
 
   return (
-    <div className="rounded-xl border border-founder-line bg-founder-surface/60 p-5 text-center sm:p-6">
-      <div className="mx-auto w-full max-w-[200px] rounded-lg bg-white p-3">
+    <div className="founder-lift rounded-2xl bg-white p-7 sm:p-8">
+      <div className="mx-auto w-full max-w-[220px]">
         <img
           src="/founder-qr.svg"
           alt="QR code that opens this profile at kisanshaktiai.in/founder"
-          width={200}
-          height={200}
+          width={220}
+          height={220}
           className="h-auto w-full"
         />
       </div>
 
-      <p className="mt-4 break-all text-sm text-founder-muted">kisanshaktiai.in/founder</p>
+      <p className="mt-5 text-center text-[0.95rem] text-founder-muted">
+        kisanshaktiai.in/founder
+      </p>
 
-      <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">
+      <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
         <button
           type="button"
           onClick={async () => {
@@ -38,7 +40,7 @@ export function QrPanel() {
                   : "Could not share the link",
             );
           }}
-          className="founder-press inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-lg bg-founder-gold px-5 text-[0.95rem] font-semibold text-founder-ground"
+          className="founder-press inline-flex min-h-[50px] flex-1 items-center justify-center gap-2 rounded-full bg-founder-ink px-6 text-[0.98rem] font-medium text-founder-paper"
         >
           <Share2 className="h-[18px] w-[18px]" aria-hidden="true" />
           Share profile
@@ -49,7 +51,7 @@ export function QrPanel() {
             const ok = await copyText(FOUNDER_URL);
             setStatus(ok ? "Link copied" : "Could not copy the link");
           }}
-          className="founder-press inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-lg border border-founder-line px-5 text-[0.95rem] font-semibold text-founder-ink"
+          className="founder-press inline-flex min-h-[50px] flex-1 items-center justify-center gap-2 rounded-full bg-founder-faint px-6 text-[0.98rem] font-medium text-founder-ink"
         >
           {status === "Link copied" ? (
             <Check className="h-[18px] w-[18px]" aria-hidden="true" />
@@ -60,7 +62,7 @@ export function QrPanel() {
         </button>
       </div>
 
-      <p aria-live="polite" className="mt-2 min-h-[20px] text-xs text-founder-muted">
+      <p aria-live="polite" className="mt-3 min-h-[20px] text-center text-sm text-founder-muted">
         {status}
       </p>
     </div>
