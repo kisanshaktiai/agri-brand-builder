@@ -124,7 +124,7 @@ function BrandLogo({ logo, name }: { logo?: string; name: string }) {
   const [failed, setFailed] = useState(false);
   if (!logo || failed) return null;
   return (
-    <span className="founder-lift flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white p-2.5">
+    <span className="founder-sheen founder-lift flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white p-2.5">
       <img
         src={logo}
         alt={`${name} logo`}
@@ -141,7 +141,7 @@ export default function Founder() {
   const [status, setStatus] = useState("");
 
   return (
-    <div className="founder-page min-h-screen bg-founder-paper text-founder-ink antialiased">
+    <div className="founder-page min-h-screen bg-founder-paper font-founder text-founder-ink antialiased">
       <a
         href="#founder-contact"
         className="founder-press fixed left-4 top-4 z-50 -translate-y-24 rounded-full bg-founder-ink px-5 py-3 text-sm font-medium text-founder-paper focus:translate-y-0"
@@ -153,14 +153,14 @@ export default function Founder() {
           Full-bleed deep green. The colour change where it ends is
           itself the signal that the page continues. */}
       <header className="founder-field relative flex min-h-[74svh] flex-col justify-end overflow-hidden px-6 pb-14 pt-20 sm:px-10 sm:pb-16">
-        <div className="mx-auto w-full max-w-2xl">
+        <div className="founder-parallax mx-auto w-full max-w-2xl">
           {founderProfile.portrait ? (
             <img
               src={founderProfile.portrait}
               alt={`${founderProfile.name}, ${founderProfile.title}`}
               width={900}
               height={1125}
-              className="founder-rise founder-d1 mb-9 aspect-[4/5] w-36 rounded-2xl object-cover object-top ring-1 ring-white/20 sm:w-44"
+              className="founder-portrait-in mb-9 aspect-[4/5] w-36 rounded-2xl object-cover object-top ring-1 ring-white/20 sm:w-44"
             />
           ) : null}
 
@@ -220,7 +220,7 @@ export default function Founder() {
       <main className="mx-auto w-full max-w-2xl px-6 pb-24 sm:px-10">
         {/* ── Contact ───────────────────────────────────────────────
             No rules, no boxes. Spacing and type weight do the work. */}
-        <section aria-labelledby="founder-contact" className="pt-16 sm:pt-20">
+        <section aria-labelledby="founder-contact" className="founder-reveal pt-16 sm:pt-20">
           <SectionHeading id="founder-contact">Contact</SectionHeading>
 
           <div className="mt-8 space-y-7">
@@ -291,7 +291,7 @@ export default function Founder() {
         </section>
 
         {/* ── Ventures ─────────────────────────────────────────────── */}
-        <section aria-labelledby="founder-ventures" className="pt-20">
+        <section aria-labelledby="founder-ventures" className="founder-reveal pt-20">
           <SectionHeading id="founder-ventures">Ventures</SectionHeading>
 
           <div className="mt-8 space-y-10">
@@ -325,7 +325,7 @@ export default function Founder() {
         </section>
 
         {/* ── Technology family ────────────────────────────────────── */}
-        <section aria-labelledby="founder-technology" className="pt-20">
+        <section aria-labelledby="founder-technology" className="founder-reveal pt-20">
           <SectionHeading id="founder-technology">{founderProfile.techFamily.heading}</SectionHeading>
           <div className="mt-6">
             <TechStrip modules={founderProfile.techFamily.modules} />
@@ -334,7 +334,7 @@ export default function Founder() {
 
         {/* ── Connect (renders only when socials exist) ────────────── */}
         {founderProfile.socials.length > 0 ? (
-          <section aria-labelledby="founder-connect" className="pt-20">
+          <section aria-labelledby="founder-connect" className="founder-reveal pt-20">
             <SectionHeading id="founder-connect">Connect</SectionHeading>
             <div className="mt-6 flex flex-wrap gap-2.5">
               {founderProfile.socials.map((social) => {
@@ -357,9 +357,9 @@ export default function Founder() {
         ) : null}
 
         {/* ── QR ───────────────────────────────────────────────────── */}
-        <section aria-labelledby="founder-qr" className="pt-20">
+        <section aria-labelledby="founder-qr" className="founder-reveal pt-20">
           <SectionHeading id="founder-qr">Scan or share this card</SectionHeading>
-          <div className="mt-6">
+          <div className="founder-tilt-scene mt-6">
             <QrPanel />
           </div>
         </section>

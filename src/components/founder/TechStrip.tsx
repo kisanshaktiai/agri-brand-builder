@@ -15,9 +15,26 @@ export function TechStrip({ modules }: TechStripProps) {
   const baseId = useId();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
+  /** Swap the panel inside a View Transition where the browser has one. */
+  const select = (index: number) => {
+    const startViewTransition = (
+      document as Document & {
+        startViewTransition?: (cb: () => void) => { finished: Promise<void> };
+      }
+    ).startViewTransition;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (startViewTransition && !reduced) {
+      startViewTransition.call(document, () => setActive(index));
+    } else {
+      setActive(index);
+    }
+  };
+
   const move = (index: number) => {
     const next = (index + modules.length) % modules.length;
-    setActive(next);
+    select(next);
     tabRefs.current[next]?.focus();
   };
 
@@ -58,7 +75,7 @@ export function TechStrip({ modules }: TechStripProps) {
               aria-selected={selected}
               aria-controls={`${baseId}-panel`}
               tabIndex={selected ? 0 : -1}
-              onClick={() => setActive(index)}
+              onClick={() => select(index)}
               onKeyDown={(event) => onKeyDown(event, index)}
               className={[
                 "founder-press relative flex min-h-[48px] items-center text-[1.05rem] tracking-tight",
@@ -85,6 +102,7 @@ export function TechStrip({ modules }: TechStripProps) {
         role="tabpanel"
         aria-labelledby={`${baseId}-tab-${active}`}
         className="mt-4 max-w-md"
+        style={{ viewTransitionName: "founder-tech" } as React.CSSProperties}
       >
         <p className="text-[1.15rem] font-medium leading-snug text-founder-ink">
           {current.expansion}

@@ -1,7 +1,46 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Copy, Share2 } from "lucide-react";
 import { FOUNDER_URL } from "@/data/founderProfile";
 import { copyText, shareProfile } from "@/components/founder/actions";
+
+
+/**
+ * Pointer-driven 3D tilt written straight into CSS custom properties.
+ * Fine pointers only, and it never runs when the visitor has asked for
+ * reduced motion — on a phone this is inert.
+ */
+function useTilt(max = 6) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const onMove = (event: PointerEvent) => {
+      const rect = node.getBoundingClientRect();
+      const px = (event.clientX - rect.left) / rect.width - 0.5;
+      const py = (event.clientY - rect.top) / rect.height - 0.5;
+      node.style.setProperty("--founder-ry", `${px * max * 2}deg`);
+      node.style.setProperty("--founder-rx", `${-py * max * 2}deg`);
+    };
+
+    const reset = () => {
+      node.style.setProperty("--founder-ry", "0deg");
+      node.style.setProperty("--founder-rx", "0deg");
+    };
+
+    node.addEventListener("pointermove", onMove);
+    node.addEventListener("pointerleave", reset);
+    return () => {
+      node.removeEventListener("pointermove", onMove);
+      node.removeEventListener("pointerleave", reset);
+    };
+  }, [max]);
+
+  return ref;
+}
 
 /**
  * The profile URL never changes, so the QR is a pre-generated static asset in
@@ -10,9 +49,10 @@ import { copyText, shareProfile } from "@/components/founder/actions";
  */
 export function QrPanel() {
   const [status, setStatus] = useState("");
+  const tiltRef = useTilt();
 
   return (
-    <div className="founder-lift rounded-2xl bg-white p-7 sm:p-8">
+    <div ref={tiltRef} className="founder-tilt founder-lift rounded-2xl bg-white p-7 sm:p-8">
       <div className="mx-auto w-full max-w-[220px]">
         <img
           src="/founder-qr.svg"

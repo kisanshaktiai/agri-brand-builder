@@ -61,6 +61,25 @@
     --founder-learnixa: 264 56% 48%;
   }
 
+  /* Art-directed dark theme. Follows the phone's own setting — most
+     farmers and field staff run their phones in dark mode. The QR card
+     and the logo tiles stay white on purpose: a QR needs a light
+     backing to scan, and two of the three logos ship on white. */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --founder-paper: 158 26% 6%;
+      --founder-ink: 45 24% 96%;
+      --founder-muted: 150 8% 60%;
+      --founder-faint: 158 20% 15%;
+      --founder-field: 160 60% 7%;
+      --founder-field-soft: 150 22% 78%;
+      --founder-accent: 142 58% 62%;
+      --founder-leaf: 142 58% 60%;
+      --founder-aptech: 24 88% 64%;
+      --founder-learnixa: 264 74% 76%;
+    }
+  }
+
   .dark {
     --background: 20 14% 4%;
     --foreground: 60 9% 98%;
@@ -148,6 +167,14 @@
       linear-gradient(168deg, hsl(158 54% 13%) 0%, hsl(160 62% 8%) 100%);
   }
 
+  @media (prefers-color-scheme: dark) {
+    .founder-field {
+      background:
+        radial-gradient(125% 95% at 16% 0%, hsl(142 46% 14%) 0%, transparent 62%),
+        linear-gradient(168deg, hsl(158 56% 9%) 0%, hsl(162 64% 5%) 100%);
+    }
+  }
+
   .founder-rise {
     animation: founder-rise 760ms var(--founder-settle) both;
   }
@@ -202,6 +229,180 @@
 
     .founder-press:active {
       transform: none !important;
+    }
+  }
+}
+
+/* ── Founder page: motion layer ───────────────────────────────────
+   Everything here is CSS. No animation library, no scroll listener.
+   Two rules govern the whole layer:
+     1. Scroll-driven effects are opted INTO behind @supports, so a
+        browser without scroll timelines shows finished, visible
+        content rather than something stuck at opacity 0.
+     2. Every effect is off under prefers-reduced-motion. */
+
+@property --founder-rx {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --founder-ry {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --founder-sheen {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+
+@layer utilities {
+  /* Portrait opens with a vertical wipe rather than a plain fade. */
+  .founder-portrait-in {
+    animation: founder-wipe 900ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+  }
+
+  /* Hero content drifts up and dims as the field block scrolls away. */
+  .founder-parallax {
+    will-change: transform, opacity;
+  }
+
+  /* Cards and tiles that respond to a fine pointer with a slight 3D lift. */
+  .founder-tilt-scene {
+    perspective: 900px;
+  }
+
+  .founder-tilt {
+    transform: rotateX(var(--founder-rx)) rotateY(var(--founder-ry));
+    transform-style: preserve-3d;
+    transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Specular sweep that follows the pointer across a tile. */
+  .founder-sheen {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .founder-sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      100deg,
+      transparent calc(var(--founder-sheen) - 22%),
+      hsl(0 0% 100% / 0.55) var(--founder-sheen),
+      transparent calc(var(--founder-sheen) + 22%)
+    );
+    transition: opacity 260ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .founder-sheen:hover::after {
+      opacity: 1;
+      animation: founder-sweep 760ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+}
+
+@layer base {
+  @keyframes founder-wipe {
+    from {
+      opacity: 0;
+      clip-path: inset(0 0 100% 0);
+      transform: scale(1.04);
+    }
+    to {
+      opacity: 1;
+      clip-path: inset(0 0 0 0);
+      transform: scale(1);
+    }
+  }
+
+  /* Registered custom property, so the sweep position really animates. */
+  @keyframes founder-sweep {
+    from { --founder-sheen: -25%; }
+    to { --founder-sheen: 125%; }
+  }
+
+  @keyframes founder-reveal-in {
+    from {
+      opacity: 0;
+      transform: translateY(26px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes founder-drift-out {
+    to {
+      transform: translateY(15%);
+      opacity: 0.25;
+    }
+  }
+
+  /* Scroll-driven work, opted into only where the browser supports it. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .founder-reveal {
+        animation: founder-reveal-in linear both;
+        animation-timeline: view();
+        animation-range: entry 6% cover 32%;
+      }
+    }
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .founder-parallax {
+        animation: founder-drift-out linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 78svh;
+      }
+    }
+  }
+
+  /* Cross-fade the technology panel when the browser can do it. */
+  ::view-transition-old(founder-tech),
+  ::view-transition-new(founder-tech) {
+    animation-duration: 260ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .founder-portrait-in {
+      animation: none !important;
+      opacity: 1 !important;
+      clip-path: none !important;
+      transform: none !important;
+    }
+
+    .founder-parallax,
+    .founder-reveal {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .founder-tilt {
+      transform: none !important;
+      transition: none !important;
+    }
+
+    .founder-sheen::after {
+      display: none !important;
+    }
+
+    ::view-transition-old(founder-tech),
+    ::view-transition-new(founder-tech) {
+      animation: none !important;
     }
   }
 }
