@@ -4,12 +4,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { DebugPanel } from "@/components/DebugPanel";
 import { logger } from "@/utils/logger";
 import Index from "./pages/Index";
 import LeadForm from "./pages/LeadForm";
+import Founder from "./pages/Founder";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -54,6 +55,9 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/lead-form" element={<LeadForm />} />
+              <Route path="/founder" element={<Founder />} />
+              {/* Legacy personal-name URL kept alive for cards already shared */}
+              <Route path="/amarsinh" element={<Navigate to="/founder" replace />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

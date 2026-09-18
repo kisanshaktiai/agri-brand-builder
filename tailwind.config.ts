@@ -18,6 +18,9 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				display: ['"Bricolage Grotesque"', 'ui-sans-serif', 'system-ui', 'sans-serif']
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -61,6 +64,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				/* Founder page palette — see :root in src/index.css */
+				founder: {
+					ground: 'hsl(var(--founder-ground))',
+					surface: 'hsl(var(--founder-surface))',
+					line: 'hsl(var(--founder-line))',
+					ink: 'hsl(var(--founder-ink))',
+					muted: 'hsl(var(--founder-muted))',
+					gold: 'hsl(var(--founder-gold))',
+					leaf: 'hsl(var(--founder-leaf))',
+					aptech: 'hsl(var(--founder-aptech))',
+					learnixa: 'hsl(var(--founder-learnixa))'
 				}
 			},
 			borderRadius: {
