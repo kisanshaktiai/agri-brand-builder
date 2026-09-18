@@ -73,7 +73,14 @@ export const founderProfile: FounderProfile = {
   name: "Amarsinh Patil",
   title: "Founder",
   slug: "/founder",
-  summary: "Founder building agri-tech and technology ventures across AI for farmers, skilling and learning.",
+  summary: "25+ Years in Technology, Computer Education & Digital Innovation
+
+• Founded Aptech Computers — building a computer education journey since 2001
+• Founder ApTech LearniXa — a digital learning & online test platform
+• Founder, Innovator KisanShakti AI — an AI platform focused on farmers & agriculture
+• 25+ years of hands-on experience in technology, education & entrepreneurship
+
+25 Years of Teaching Technology. Now Building AI for Agriculture.",
   portrait: "/founder-assets/amar-patil.jpg",
   brands: [
     {
