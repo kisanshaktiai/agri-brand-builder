@@ -6,6 +6,10 @@
   RewriteBase /
   RewriteRule ^index\.html$ - [L]
 
+  # Explicit SPA entry for the /founder route.
+  # Keep this route-specific rule independent of the generic !-d fallback.
+  RewriteRule ^founder/?$ /index.html [L]
+
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
