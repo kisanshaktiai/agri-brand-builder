@@ -100,8 +100,9 @@ jobs:
               exit 1
             }
 
-      - name: Deploy via SFTP (rsync alternative)
-        if: success()
+      - name: Deploy via SFTP (primary)
+        id: sftp_deploy
+        continue-on-error: true
         run: |
           # Use sftp batch mode instead of scp
           cd dist
@@ -121,22 +122,19 @@ jobs:
             -b /tmp/sftp_commands.txt \
             "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}"
 
-      - name: Alternative - Deploy via SCP action
-        if: failure()
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST_SFTP_HOST }}
-          username: ${{ secrets.HOST_SFTP_USER }}
-          key: ${{ secrets.SFTP_KEY_B64 }}
-          port: ${{ secrets.HOST_SFTP_PORT }}
-          source: "dist/*"
-          target: ${{ secrets.HOST_REMOTE_DIR }}
-          strip_components: 1
-          rm: true
-          overwrite: true
+      - name: Alternative - Deploy via SCP
+        if: steps.sftp_deploy.outcome == 'failure'
+        run: |
+          set -e
+          cd dist
+          scp -r -i "$HOME/.ssh/deploy_key" \
+            -P "${{ secrets.HOST_SFTP_PORT }}" \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            * "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}:${{ secrets.HOST_REMOTE_DIR }}/"
 
       - name: Remote permissions fix
-        if: success()
+        if: steps.sftp_deploy.outcome == 'success' || success()
         run: |
           ssh -i "$HOME/.ssh/deploy_key" \
             -p "${{ secrets.HOST_SFTP_PORT }}" \
@@ -148,7 +146,6 @@ jobs:
             chmod -R 755 .
             find . -type f -exec chmod 644 {} \;
           EOF
-
       - name: Purge Cloudflare cache
         if: env.CF_API_TOKEN != '' && env.CF_ZONE_ID != ''
         env:
