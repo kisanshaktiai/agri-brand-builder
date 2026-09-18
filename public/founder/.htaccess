@@ -1,7 +1,0 @@
-# The /founder URL is also a physical asset directory.
-# When Apache/LiteSpeed enters this directory, serve the React SPA
-# for the directory root while leaving JPG assets as real files.
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteRule ^$ /index.html [L]
-</IfModule>
