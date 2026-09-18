@@ -73,8 +73,7 @@ export const founderProfile: FounderProfile = {
   name: "Amarsinh Patil",
   title: "Founder",
   slug: "/founder",
-  summary:
-    "Founder building agri-tech and technology ventures across AI for farmers, skilling and learning.",
+  summary: "Founder building agri-tech and technology ventures across AI for farmers, skilling and learning.",
   portrait: "/founder-assets/amar-patil.jpg",
   brands: [
     {
@@ -89,7 +88,7 @@ export const founderProfile: FounderProfile = {
     {
       key: "aptech",
       name: "AP-TECH",
-      tagline: "रहा अग्रसर सदैव..!",
+      tagline: "रहा अग्रेसर सदैव..!",
       description: "Technology and skilling initiative.",
       url: "https://www.aptechskill.in",
       urlLabel: "aptechskill.in",
@@ -116,14 +115,9 @@ export const founderProfile: FounderProfile = {
   addresses: [
     {
       label: "Office",
-      lines: [
-        "Ap-Tech, Main Road, Bambawade",
-        "Tal - Shahuwadi, Dist- Kolhapur",
-        "Maharashtra, India - 416213",
-      ],
+      lines: ["Ap-Tech, Main Road, Bambawade", "Tal - Shahuwadi, Dist- Kolhapur", "Maharashtra, India - 416213"],
       full: "Ap-Tech, Main Road, Bambawade, Tal - Shahuwadi, Dist- Kolhapur, Maharashtra, India - 416213",
-      mapQuery:
-        "Ap-Tech, Main Road, Bambawade, Tal - Shahuwadi, Dist- Kolhapur, Maharashtra, India - 416213",
+      mapQuery: "Ap-Tech, Main Road, Bambawade, Tal - Shahuwadi, Dist- Kolhapur, Maharashtra, India - 416213",
     },
   ],
   // Add real profile URLs here. While this list is empty the Connect block is
@@ -181,15 +175,9 @@ export function buildVCard(p: FounderProfile = founderProfile): string {
     `FN:${p.name}`,
     `ORG:${p.brands.map((b) => b.name).join(" | ")}`,
     `TITLE:${p.title}`,
-    ...p.phones.map(
-      (ph) =>
-        `TEL;TYPE=${ph.label.toLowerCase() === "office" ? "WORK,VOICE" : "CELL,VOICE"}:${ph.e164}`,
-    ),
+    ...p.phones.map((ph) => `TEL;TYPE=${ph.label.toLowerCase() === "office" ? "WORK,VOICE" : "CELL,VOICE"}:${ph.e164}`),
     ...p.emails.map((e) => `EMAIL;TYPE=INTERNET:${e.address}`),
-    ...p.addresses.map(
-      (a) =>
-        `ADR;TYPE=${a.label.toLowerCase() === "office" ? "WORK" : "HOME"}:;;${esc(a.full)};;;;`,
-    ),
+    ...p.addresses.map((a) => `ADR;TYPE=${a.label.toLowerCase() === "office" ? "WORK" : "HOME"}:;;${esc(a.full)};;;;`),
     `URL:${FOUNDER_URL}`,
     ...p.brands.map((b) => `URL:${b.url}`),
     ...p.socials.map((s) => `X-SOCIALPROFILE;TYPE=${s.key}:${s.url}`),
