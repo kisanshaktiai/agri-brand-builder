@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Check, Copy, Share2 } from "lucide-react";
 import { FOUNDER_URL } from "@/data/founderProfile";
 import { copyText, shareProfile } from "@/components/founder/actions";
+import { Button } from "@/components/ui/button";
 
 
 /**
@@ -52,7 +53,7 @@ export function QrPanel() {
   const tiltRef = useTilt();
 
   return (
-    <div ref={tiltRef} className="founder-tilt founder-lift rounded-2xl bg-white p-7 sm:p-8">
+    <div ref={tiltRef} className="founder-tilt founder-lift rounded-lg bg-card p-7 sm:p-8">
       <div className="mx-auto w-full max-w-[220px]">
         <img
           src="/founder-qr.svg"
@@ -68,7 +69,7 @@ export function QrPanel() {
       </p>
 
       <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
-        <button
+        <Button
           type="button"
           onClick={async () => {
             const result = await shareProfile();
@@ -80,18 +81,18 @@ export function QrPanel() {
                   : "Could not share the link",
             );
           }}
-          className="founder-press inline-flex min-h-[50px] flex-1 items-center justify-center gap-2 rounded-full bg-founder-ink px-6 text-[0.98rem] font-medium text-founder-paper"
+          className="founder-press min-h-[50px] flex-1 rounded-md bg-founder-ink px-6 text-[0.98rem] text-founder-paper hover:bg-founder-ink/90"
         >
           <Share2 className="h-[18px] w-[18px]" aria-hidden="true" />
           Share profile
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={async () => {
             const ok = await copyText(FOUNDER_URL);
             setStatus(ok ? "Link copied" : "Could not copy the link");
           }}
-          className="founder-press inline-flex min-h-[50px] flex-1 items-center justify-center gap-2 rounded-full bg-founder-faint px-6 text-[0.98rem] font-medium text-founder-ink"
+          className="founder-press min-h-[50px] flex-1 rounded-md bg-founder-faint px-6 text-[0.98rem] text-founder-ink hover:bg-founder-faint/80"
         >
           {status === "Link copied" ? (
             <Check className="h-[18px] w-[18px]" aria-hidden="true" />
@@ -99,7 +100,7 @@ export function QrPanel() {
             <Copy className="h-[18px] w-[18px]" aria-hidden="true" />
           )}
           Copy link
-        </button>
+        </Button>
       </div>
 
       <p aria-live="polite" className="mt-3 min-h-[20px] text-center text-sm text-founder-muted">

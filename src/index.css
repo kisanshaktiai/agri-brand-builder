@@ -49,36 +49,18 @@
        A light paper page with one deep green field block at the top.
        Separation comes from space and weight, not outlines — there
        is deliberately no "card border" token here. */
-    --founder-paper: 45 28% 98%;
-    --founder-ink: 158 40% 9%;
-    --founder-muted: 155 9% 40%;
-    --founder-faint: 150 14% 90%;
-    --founder-field: 158 58% 12%;
-    --founder-field-soft: 152 30% 74%;
-    --founder-accent: 142 72% 26%;
-    --founder-leaf: 142 68% 28%;
-    --founder-aptech: 22 84% 42%;
-    --founder-learnixa: 264 56% 48%;
+    --founder-paper: 50 20% 97%;
+    --founder-ink: 158 45% 10%;
+    --founder-muted: 156 8% 42%;
+    --founder-faint: 145 18% 93%;
+    --founder-field: 158 59% 13%;
+    --founder-field-soft: 146 21% 82%;
+    --founder-accent: 142 70% 29%;
+    --founder-leaf: 142 70% 29%;
+    --founder-aptech: 20 86% 48%;
+    --founder-learnixa: 264 58% 52%;
   }
 
-  /* Art-directed dark theme. Follows the phone's own setting — most
-     farmers and field staff run their phones in dark mode. The QR card
-     and the logo tiles stay white on purpose: a QR needs a light
-     backing to scan, and two of the three logos ship on white. */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --founder-paper: 158 26% 6%;
-      --founder-ink: 45 24% 96%;
-      --founder-muted: 150 8% 60%;
-      --founder-faint: 158 20% 15%;
-      --founder-field: 160 60% 7%;
-      --founder-field-soft: 150 22% 78%;
-      --founder-accent: 142 58% 62%;
-      --founder-leaf: 142 58% 60%;
-      --founder-aptech: 24 88% 64%;
-      --founder-learnixa: 264 74% 76%;
-    }
-  }
 
   .dark {
     --background: 20 14% 4%;
@@ -161,19 +143,7 @@
     --founder-settle: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .founder-field {
-    background:
-      radial-gradient(125% 95% at 16% 0%, hsl(142 44% 21%) 0%, transparent 60%),
-      linear-gradient(168deg, hsl(158 54% 13%) 0%, hsl(160 62% 8%) 100%);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .founder-field {
-      background:
-        radial-gradient(125% 95% at 16% 0%, hsl(142 46% 14%) 0%, transparent 62%),
-        linear-gradient(168deg, hsl(158 56% 9%) 0%, hsl(162 64% 5%) 100%);
-    }
-  }
+  .founder-field { background: hsl(var(--founder-field)); }
 
   .founder-rise {
     animation: founder-rise 760ms var(--founder-settle) both;
@@ -201,6 +171,14 @@
     box-shadow:
       0 1px 2px hsl(158 40% 9% / 0.05),
       0 14px 34px -14px hsl(158 40% 9% / 0.16);
+  }
+
+  .founder-hero-shade {
+    background: linear-gradient(to top, hsl(var(--founder-ink) / 0.92) 0%, hsl(var(--founder-ink) / 0.18) 50%, transparent 76%);
+  }
+
+  .founder-row {
+    box-shadow: inset 0 0 0 1px hsl(var(--founder-ink) / 0.055);
   }
 }
 
