@@ -111,6 +111,9 @@ jobs:
           cat > /tmp/sftp_commands.txt <<EOF
           cd ${{ secrets.HOST_REMOTE_DIR }}
           put -r *
+          if [ -f .htaccess ]; then
+            put .htaccess
+          fi
           bye
           EOF
           
@@ -132,6 +135,9 @@ jobs:
             -o StrictHostKeyChecking=no \
             -o BatchMode=yes \
             * "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}:${{ secrets.HOST_REMOTE_DIR }}/"
+          if [ -f .htaccess ]; then
+            scp -i "$HOME/.ssh/deploy_key" -P "${{ secrets.HOST_SFTP_PORT }}" -o StrictHostKeyChecking=no -o BatchMode=yes .htaccess "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}:${{ secrets.HOST_REMOTE_DIR }}/"
+          fi
 
       - name: Remote permissions fix
         if: steps.sftp_deploy.outcome == 'success' || success()
