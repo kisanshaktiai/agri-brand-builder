@@ -146,43 +146,45 @@ export default function Founder() {
         Skip to contact
       </a>
 
-      <header className="mx-auto w-full max-w-3xl sm:px-6 sm:pt-6">
-        <div className="relative min-h-[78svh] overflow-hidden bg-founder-field sm:min-h-[680px] sm:rounded-lg">
+      <header className="mx-auto w-full max-w-2xl sm:px-6 sm:pt-8">
+        <div className="overflow-hidden bg-card sm:rounded-lg founder-lift">
+          <div className="relative aspect-[5/6] overflow-hidden bg-founder-field sm:aspect-[4/3]">
           {founderProfile.portrait ? (
             <img
               src={founderProfile.portrait}
               alt={`${founderProfile.name}, ${founderProfile.title}`}
               width={900}
               height={1125}
-              className="founder-portrait-in absolute inset-0 h-full w-full object-cover object-[50%_8%]"
+                className="founder-portrait-in absolute inset-0 h-full w-full object-cover object-[50%_12%] sm:object-[50%_18%]"
             />
           ) : null}
-          <div className="founder-hero-shade absolute inset-0" aria-hidden="true" />
-          <div className="absolute inset-x-0 bottom-0 px-6 pb-7 sm:px-10 sm:pb-10">
-            <div className="founder-rise founder-d1 flex items-center gap-3 text-founder-field-soft">
-              <span className="h-px w-8 bg-founder-field-soft/60" aria-hidden="true" />
+          </div>
+
+          <div className="px-6 pb-7 pt-7 sm:px-10 sm:pb-10 sm:pt-9">
+            <div className="founder-rise founder-d1 flex items-center gap-3 text-founder-muted">
+              <span className="h-0.5 w-8 bg-founder-aptech" aria-hidden="true" />
               <p className="text-[0.72rem] font-semibold uppercase">{founderProfile.title} · KisanShakti AI</p>
             </div>
-            <h1 className="founder-rise founder-d2 mt-3 max-w-xl font-founder-display text-[2.75rem] font-semibold leading-[1.02] text-primary-foreground sm:text-6xl">
+            <h1 className="founder-rise founder-d2 mt-3 max-w-xl font-founder-display text-[2.45rem] font-semibold leading-[1.08] text-founder-ink sm:text-5xl">
               {founderProfile.name}
             </h1>
-            <p className="founder-rise founder-d3 mt-4 max-w-lg text-[0.98rem] leading-relaxed text-founder-field-soft sm:text-lg">
+            <p className="founder-rise founder-d3 mt-4 max-w-lg text-[0.98rem] leading-relaxed text-founder-muted sm:text-lg">
               {founderProfile.summary}
             </p>
             <div className="founder-rise founder-d4 mt-6 grid grid-cols-[1fr_auto] gap-3 sm:flex">
               <Button
                 type="button"
                 onClick={() => { downloadVCard(); setSaved(true); }}
-                className="founder-press min-h-[52px] rounded-md bg-card px-6 font-semibold text-founder-ink hover:bg-card/90"
+                className="founder-press min-h-[54px] rounded-md bg-founder-accent px-6 font-semibold text-primary-foreground hover:bg-founder-field"
               >
                 {saved ? <Check aria-hidden="true" /> : <Download aria-hidden="true" />}
                 {saved ? "Contact saved" : "Save contact"}
               </Button>
-              <Button type="button" onClick={share} aria-label="Share profile" variant="secondary" size="icon" className="founder-press h-[52px] w-[52px] rounded-md bg-card/15 text-primary-foreground hover:bg-card/25">
+              <Button type="button" onClick={share} aria-label="Share profile" variant="secondary" size="icon" className="founder-press h-[54px] w-[54px] rounded-md bg-founder-faint text-founder-ink hover:bg-founder-faint/80">
                 <Share2 aria-hidden="true" />
               </Button>
             </div>
-            <p aria-live="polite" className="mt-2 min-h-5 text-sm text-founder-field-soft">{saved ? "Contact card downloaded." : status}</p>
+            <p aria-live="polite" className="mt-2 min-h-5 text-sm text-founder-muted">{saved ? "Contact card downloaded." : status}</p>
           </div>
         </div>
       </header>

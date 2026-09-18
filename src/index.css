@@ -45,20 +45,17 @@
     --agri-earth: 40 20% 50%;
     --agri-gold: 45 90% 65%;
 
-    /* ── Founder page palette (/founder) ───────────────────────────
-       A light paper page with one deep green field block at the top.
-       Separation comes from space and weight, not outlines — there
-       is deliberately no "card border" token here. */
-    --founder-paper: 50 20% 97%;
-    --founder-ink: 158 45% 10%;
-    --founder-muted: 156 8% 42%;
-    --founder-faint: 145 18% 93%;
-    --founder-field: 158 59% 13%;
-    --founder-field-soft: 146 21% 82%;
-    --founder-accent: 142 70% 29%;
-    --founder-leaf: 142 70% 29%;
-    --founder-aptech: 20 86% 48%;
-    --founder-learnixa: 264 58% 52%;
+    /* Founder profile: deep teal, warm ivory and restrained coral. */
+    --founder-paper: 29 100% 97%;
+    --founder-ink: 179 53% 15%;
+    --founder-muted: 177 14% 39%;
+    --founder-faint: 25 48% 92%;
+    --founder-field: 179 53% 15%;
+    --founder-field-soft: 29 100% 97%;
+    --founder-accent: 174 52% 30%;
+    --founder-leaf: 174 52% 30%;
+    --founder-aptech: 13 72% 59%;
+    --founder-learnixa: 13 72% 59%;
   }
 
 
@@ -169,12 +166,8 @@
 
   .founder-lift {
     box-shadow:
-      0 1px 2px hsl(158 40% 9% / 0.05),
-      0 14px 34px -14px hsl(158 40% 9% / 0.16);
-  }
-
-  .founder-hero-shade {
-    background: linear-gradient(to top, hsl(var(--founder-ink) / 0.92) 0%, hsl(var(--founder-ink) / 0.18) 50%, transparent 76%);
+      0 1px 2px hsl(var(--founder-ink) / 0.05),
+      0 20px 50px -24px hsl(var(--founder-ink) / 0.18);
   }
 
   .founder-row {
