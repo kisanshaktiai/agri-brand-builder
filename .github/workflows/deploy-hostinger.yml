@@ -100,6 +100,18 @@ jobs:
               exit 1
             }
 
+      - name: Remove legacy founder asset directory
+        run: |
+          ssh -i "$HOME/.ssh/deploy_key" \
+            -p "${{ secrets.HOST_SFTP_PORT }}" \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}" <<'EOF'
+            set -e
+            cd ${{ secrets.HOST_REMOTE_DIR }}
+            rm -f founder/.htaccess founder/amar-patil.jpg founder/og-founder.jpg
+            rmdir founder 2>/dev/null || true
+          EOF
       - name: Deploy via SFTP (primary)
         id: sftp_deploy
         continue-on-error: true
