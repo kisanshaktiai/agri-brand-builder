@@ -112,7 +112,6 @@ jobs:
           cd ${{ secrets.HOST_REMOTE_DIR }}
           put -r *
           put .htaccess
-          put founder/.htaccess
           bye
           EOF
           
