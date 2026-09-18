@@ -163,10 +163,10 @@ export const founderProfile: FounderProfile = {
 };
 
 /** Canonical public address of this page. Used for QR, share and meta tags. */
-export const FOUNDER_URL = "https://kisanshaktiai.in/founder";
+export const FOUNDER_URL = "https://www.kisanshaktiai.in/founder";
 
 /** Absolute URL of the link-preview image used by WhatsApp and LinkedIn. */
-export const FOUNDER_OG_IMAGE = "https://kisanshaktiai.in/founder-assets/og-founder.jpg";
+export const FOUNDER_OG_IMAGE = "https://www.kisanshaktiai.in/founder-assets/og-founder.jpg";
 
 /** RFC 6350 vCard, generated entirely client-side from the data above. */
 export function buildVCard(p: FounderProfile = founderProfile): string {
