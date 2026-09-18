@@ -46,8 +46,17 @@ jobs:
 
       - name: Verify build output
         run: |
+          set -e
           if [ ! -d ./dist ]; then echo "ERROR: dist folder not found!"; exit 1; fi
-          find dist -type f | head -50
+          echo "==== Top-level production build ===="
+          find dist -maxdepth 2 -print | sort | head -100
+          if [ -e ./dist/founder ]; then
+            echo "ERROR: dist/founder exists. The /founder route must not be emitted as a physical directory."
+            exit 1
+          fi
+          test -f ./dist/index.html
+          test -f ./dist/founder-assets/amar-patil.jpg
+          test -f ./dist/founder-assets/og-founder.jpg
 
       - name: Setup deploy key & known_hosts
         id: ssh_setup
@@ -100,7 +109,7 @@ jobs:
               exit 1
             }
 
-      - name: Remove legacy founder asset directory
+      - name: Remove legacy founder route directory
         run: |
           ssh -i "$HOME/.ssh/deploy_key" \
             -p "${{ secrets.HOST_SFTP_PORT }}" \
@@ -109,8 +118,10 @@ jobs:
             "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}" <<'EOF'
             set -e
             cd ${{ secrets.HOST_REMOTE_DIR }}
-            rm -f founder/.htaccess founder/amar-patil.jpg founder/og-founder.jpg
-            rmdir founder 2>/dev/null || true
+            # /founder is a React Router route, not a physical directory.
+            # Remove the entire legacy directory, including any stale files.
+            rm -rf -- founder
+            test ! -e founder
           EOF
       - name: Deploy via SFTP (primary)
         id: sftp_deploy
@@ -149,6 +160,30 @@ jobs:
             scp -i "$HOME/.ssh/deploy_key" -P "${{ secrets.HOST_SFTP_PORT }}" -o StrictHostKeyChecking=no -o BatchMode=yes .htaccess "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}:${{ secrets.HOST_REMOTE_DIR }}/"
           fi
 
+      - name: Verify remote deployment
+        run: |
+          ssh -i "$HOME/.ssh/deploy_key" \
+            -p "${{ secrets.HOST_SFTP_PORT }}" \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            "${{ secrets.HOST_SFTP_USER }}@${{ secrets.HOST_SFTP_HOST }}" <<'EOF'
+            set -e
+            cd ${{ secrets.HOST_REMOTE_DIR }}
+            echo "==== Remote deployment root ===="
+            pwd
+            echo "==== Required files ===="
+            test -f index.html
+            test -f .htaccess
+            test -f founder-assets/amar-patil.jpg
+            test -f founder-assets/og-founder.jpg
+            echo "==== Legacy /founder directory check ===="
+            if [ -e founder ]; then
+              echo "ERROR: legacy physical /founder directory still exists on Hostinger"
+              ls -la founder || true
+              exit 1
+            fi
+            echo "Remote deployment verified: /founder is route-only and founder media is under /founder-assets/."
+          EOF
       - name: Remote permissions fix
         if: steps.sftp_deploy.outcome == 'success' || success()
         run: |
