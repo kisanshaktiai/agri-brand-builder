@@ -147,14 +147,14 @@ export default function Founder() {
       </a>
 
       <header className="mx-auto w-full max-w-3xl sm:px-6 sm:pt-6">
-        <div className="relative min-h-[620px] overflow-hidden bg-founder-field sm:rounded-lg">
+        <div className="relative min-h-[78svh] overflow-hidden bg-founder-field sm:min-h-[680px] sm:rounded-lg">
           {founderProfile.portrait ? (
             <img
               src={founderProfile.portrait}
               alt={`${founderProfile.name}, ${founderProfile.title}`}
               width={900}
               height={1125}
-              className="founder-portrait-in absolute inset-0 h-full w-full object-cover object-top"
+              className="founder-portrait-in absolute inset-0 h-full w-full object-cover object-[50%_8%]"
             />
           ) : null}
           <div className="founder-hero-shade absolute inset-0" aria-hidden="true" />
