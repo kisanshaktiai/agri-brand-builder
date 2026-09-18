@@ -22,12 +22,13 @@ export default {
 				/* Scoped to the /founder page — the marketing site keeps its own font-sans. */
 				display: ['"Bricolage Grotesque"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
 				founder: [
-					'"Instrument Sans"',
+					'"Manrope"',
 					'"Noto Sans Devanagari"',
 					'ui-sans-serif',
 					'system-ui',
 					'sans-serif'
-				]
+				],
+				'founder-display': ['"Sora"', 'ui-sans-serif', 'system-ui', 'sans-serif']
 			},
 			colors: {
 				border: 'hsl(var(--border))',

@@ -1,5 +1,6 @@
 import { useId, useRef, useState } from "react";
 import type { TechModule } from "@/data/founderProfile";
+import { Button } from "@/components/ui/button";
 
 interface TechStripProps {
   modules: TechModule[];
@@ -64,7 +65,7 @@ export function TechStrip({ modules }: TechStripProps) {
         {modules.map((module, index) => {
           const selected = index === active;
           return (
-            <button
+            <Button
               key={module.acronym}
               ref={(node) => {
                 tabRefs.current[index] = node;
@@ -77,8 +78,9 @@ export function TechStrip({ modules }: TechStripProps) {
               tabIndex={selected ? 0 : -1}
               onClick={() => select(index)}
               onKeyDown={(event) => onKeyDown(event, index)}
+              variant="ghost"
               className={[
-                "founder-press relative flex min-h-[48px] items-center text-[1.05rem] tracking-tight",
+                "founder-press relative min-h-[48px] rounded-none px-0 text-[0.95rem]",
                 selected
                   ? "font-semibold text-founder-accent"
                   : "font-medium text-founder-muted hover:text-founder-ink",
@@ -92,7 +94,7 @@ export function TechStrip({ modules }: TechStripProps) {
                   selected ? "opacity-100" : "opacity-0",
                 ].join(" ")}
               />
-            </button>
+            </Button>
           );
         })}
       </div>

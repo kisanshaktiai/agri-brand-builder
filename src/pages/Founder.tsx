@@ -24,6 +24,7 @@ import {
 import { downloadVCard, mapsUrl, shareProfile, whatsappUrl } from "@/components/founder/actions";
 import { TechStrip } from "@/components/founder/TechStrip";
 import { QrPanel } from "@/components/founder/QrPanel";
+import { Button } from "@/components/ui/button";
 
 const PAGE_TITLE = `${founderProfile.name} — Founder, KisanShakti AI`;
 const PAGE_DESCRIPTION =
@@ -110,27 +111,21 @@ function useFounderHead() {
   }, []);
 }
 
-/** Quiet section heading. Small and muted so the content below carries the weight. */
+/** Compact editorial heading used throughout the profile. */
 function SectionHeading({ id, children }: { id: string; children: React.ReactNode }) {
   return (
-    <h2 id={id} className="text-[0.95rem] font-medium text-founder-muted">
+    <h2 id={id} className="font-founder-display text-[0.72rem] font-semibold uppercase text-founder-muted">
       {children}
     </h2>
   );
 }
 
-/** Brand logo on a white tile. Renders nothing if the file is missing. */
 function BrandLogo({ logo, name }: { logo?: string; name: string }) {
   const [failed, setFailed] = useState(false);
   if (!logo || failed) return null;
   return (
-    <span className="founder-sheen founder-lift flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white p-2.5">
-      <img
-        src={logo}
-        alt={`${name} logo`}
-        onError={() => setFailed(true)}
-        className="h-full w-full object-contain"
-      />
+    <span className="founder-sheen flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-card p-2 founder-row">
+      <img src={logo} alt={`${name} logo`} onError={() => setFailed(true)} className="h-full w-full object-contain" />
     </span>
   );
 }
@@ -140,238 +135,128 @@ export default function Founder() {
   const [saved, setSaved] = useState(false);
   const [status, setStatus] = useState("");
 
+  const share = async () => {
+    const result = await shareProfile();
+    setStatus(result === "shared" ? "Share sheet opened" : result === "copied" ? "Link copied" : "Could not share the link");
+  };
+
   return (
     <div className="founder-page min-h-screen bg-founder-paper font-founder text-founder-ink antialiased">
-      <a
-        href="#founder-contact"
-        className="founder-press fixed left-4 top-4 z-50 -translate-y-24 rounded-full bg-founder-ink px-5 py-3 text-sm font-medium text-founder-paper focus:translate-y-0"
-      >
+      <a href="#founder-contact" className="founder-press fixed left-4 top-4 z-50 -translate-y-24 rounded-md bg-founder-ink px-5 py-3 text-sm font-medium text-founder-paper focus:translate-y-0">
         Skip to contact
       </a>
 
-      {/* ── Field block ─────────────────────────────────────────────
-          Full-bleed deep green. The colour change where it ends is
-          itself the signal that the page continues. */}
-      <header className="founder-field relative flex min-h-[74svh] flex-col justify-end overflow-hidden px-6 pb-14 pt-20 sm:px-10 sm:pb-16">
-        <div className="founder-parallax mx-auto w-full max-w-2xl">
+      <header className="mx-auto w-full max-w-3xl sm:px-6 sm:pt-6">
+        <div className="relative min-h-[620px] overflow-hidden bg-founder-field sm:rounded-lg">
           {founderProfile.portrait ? (
             <img
               src={founderProfile.portrait}
               alt={`${founderProfile.name}, ${founderProfile.title}`}
               width={900}
               height={1125}
-              className="founder-portrait-in mb-9 aspect-[4/5] w-36 rounded-2xl object-cover object-top ring-1 ring-white/20 sm:w-44"
+              className="founder-portrait-in absolute inset-0 h-full w-full object-cover object-top"
             />
           ) : null}
-
-          <p className="founder-rise founder-d1 text-[0.95rem] font-medium text-founder-field-soft">
-            {founderProfile.title}
-          </p>
-
-          <h1 className="founder-rise founder-d2 mt-3 font-display text-[clamp(2.9rem,14vw,5rem)] font-semibold leading-[0.92] tracking-tight text-white">
-            {founderProfile.name}
-          </h1>
-
-          <p className="founder-rise founder-d3 mt-6 max-w-md text-[1.15rem] leading-relaxed text-founder-field-soft">
-            {founderProfile.summary}
-          </p>
-
-          <div className="founder-rise founder-d4 mt-10 flex flex-col gap-3 sm:flex-row">
-            <button
-              type="button"
-              onClick={() => {
-                downloadVCard();
-                setSaved(true);
-              }}
-              className="founder-press inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-full bg-white px-8 text-[1.02rem] font-semibold text-founder-ink"
-            >
-              {saved ? (
-                <Check className="h-5 w-5" aria-hidden="true" />
-              ) : (
-                <Download className="h-5 w-5" aria-hidden="true" />
-              )}
-              {saved ? "Contact saved" : "Save contact"}
-            </button>
-            <button
-              type="button"
-              onClick={async () => {
-                const result = await shareProfile();
-                setStatus(
-                  result === "shared"
-                    ? "Share sheet opened"
-                    : result === "copied"
-                      ? "Link copied"
-                      : "Could not share the link",
-                );
-              }}
-              className="founder-press inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-full bg-white/[0.12] px-8 text-[1.02rem] font-medium text-white"
-            >
-              <Share2 className="h-5 w-5" aria-hidden="true" />
-              Share
-            </button>
+          <div className="founder-hero-shade absolute inset-0" aria-hidden="true" />
+          <div className="absolute inset-x-0 bottom-0 px-6 pb-7 sm:px-10 sm:pb-10">
+            <div className="founder-rise founder-d1 flex items-center gap-3 text-founder-field-soft">
+              <span className="h-px w-8 bg-founder-field-soft/60" aria-hidden="true" />
+              <p className="text-[0.72rem] font-semibold uppercase">{founderProfile.title} · KisanShakti AI</p>
+            </div>
+            <h1 className="founder-rise founder-d2 mt-3 max-w-xl font-founder-display text-[2.75rem] font-semibold leading-[1.02] text-primary-foreground sm:text-6xl">
+              {founderProfile.name}
+            </h1>
+            <p className="founder-rise founder-d3 mt-4 max-w-lg text-[0.98rem] leading-relaxed text-founder-field-soft sm:text-lg">
+              {founderProfile.summary}
+            </p>
+            <div className="founder-rise founder-d4 mt-6 grid grid-cols-[1fr_auto] gap-3 sm:flex">
+              <Button
+                type="button"
+                onClick={() => { downloadVCard(); setSaved(true); }}
+                className="founder-press min-h-[52px] rounded-md bg-card px-6 font-semibold text-founder-ink hover:bg-card/90"
+              >
+                {saved ? <Check aria-hidden="true" /> : <Download aria-hidden="true" />}
+                {saved ? "Contact saved" : "Save contact"}
+              </Button>
+              <Button type="button" onClick={share} aria-label="Share profile" variant="secondary" size="icon" className="founder-press h-[52px] w-[52px] rounded-md bg-card/15 text-primary-foreground hover:bg-card/25">
+                <Share2 aria-hidden="true" />
+              </Button>
+            </div>
+            <p aria-live="polite" className="mt-2 min-h-5 text-sm text-founder-field-soft">{saved ? "Contact card downloaded." : status}</p>
           </div>
-
-          <p aria-live="polite" className="mt-3 min-h-[20px] text-sm text-founder-field-soft">
-            {saved ? "Contact card downloaded." : status}
-          </p>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-2xl px-6 pb-24 sm:px-10">
-        {/* ── Contact ───────────────────────────────────────────────
-            No rules, no boxes. Spacing and type weight do the work. */}
-        <section aria-labelledby="founder-contact" className="founder-reveal pt-16 sm:pt-20">
+      <main className="mx-auto w-full max-w-2xl px-5 pb-20 sm:px-8">
+        <section aria-labelledby="founder-contact" className="founder-reveal pt-14 sm:pt-20">
           <SectionHeading id="founder-contact">Contact</SectionHeading>
-
-          <div className="mt-8 space-y-7">
+          <div className="mt-5 space-y-2.5">
             {founderProfile.phones.map((phone) => (
-              <div key={phone.e164} className="flex items-center gap-4">
-                <a href={`tel:${phone.e164}`} className="founder-press flex min-h-[48px] flex-1 items-center gap-4">
-                  <Phone className="h-[18px] w-[18px] shrink-0 text-founder-accent" aria-hidden="true" />
-                  <span className="min-w-0">
-                    <span className="block text-[1.3rem] font-medium tracking-tight text-founder-ink">
-                      {phone.display}
-                    </span>
-                    <span className="mt-0.5 block text-[0.9rem] text-founder-muted">{phone.label}</span>
-                  </span>
+              <div key={phone.e164} className="founder-row flex items-center rounded-lg bg-card p-2.5">
+                <a href={`tel:${phone.e164}`} className="founder-press flex min-h-[54px] min-w-0 flex-1 items-center gap-3 px-2">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-founder-faint text-founder-accent"><Phone className="h-[18px] w-[18px]" aria-hidden="true" /></span>
+                  <span className="min-w-0"><span className="block text-[1rem] font-semibold text-founder-ink">{phone.display}</span><span className="block text-xs text-founder-muted">{phone.label}</span></span>
                 </a>
-                {phone.whatsapp ? (
-                  <a
-                    href={whatsappUrl(phone.e164)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Message ${phone.display} on WhatsApp`}
-                    className="founder-press flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-founder-faint text-founder-accent"
-                  >
-                    <MessageCircle className="h-5 w-5" aria-hidden="true" />
-                  </a>
-                ) : null}
+                {phone.whatsapp ? <a href={whatsappUrl(phone.e164)} target="_blank" rel="noopener noreferrer" aria-label={`Message ${phone.display} on WhatsApp`} className="founder-press flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-founder-accent hover:bg-founder-faint"><MessageCircle className="h-5 w-5" aria-hidden="true" /></a> : null}
               </div>
             ))}
-
             {founderProfile.emails.map((email) => (
-              <a
-                key={email.address}
-                href={`mailto:${email.address}`}
-                className="founder-press flex min-h-[48px] items-center gap-4"
-              >
-                <Mail className="h-[18px] w-[18px] shrink-0 text-founder-accent" aria-hidden="true" />
-                <span className="min-w-0">
-                  <span className="block truncate text-[1.15rem] font-medium tracking-tight text-founder-ink">
-                    {email.address}
-                  </span>
-                  <span className="mt-0.5 block text-[0.9rem] text-founder-muted">{email.label}</span>
-                </span>
-              </a>
-            ))}
-
-            {founderProfile.addresses.map((address) => (
-              <a
-                key={address.label}
-                href={mapsUrl(address.mapQuery)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="founder-press flex items-start gap-4 pt-1"
-              >
-                <MapPin className="mt-1.5 h-[18px] w-[18px] shrink-0 text-founder-accent" aria-hidden="true" />
-                <span className="min-w-0">
-                  {address.lines.map((line) => (
-                    <span key={line} className="block text-[1.08rem] leading-snug text-founder-ink">
-                      {line}
-                    </span>
-                  ))}
-                  <span className="mt-2 inline-flex items-center gap-1 text-[0.95rem] font-medium text-founder-accent">
-                    Open in Maps
-                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                  </span>
-                </span>
+              <a key={email.address} href={`mailto:${email.address}`} className="founder-row founder-press flex min-h-[74px] items-center gap-3 rounded-lg bg-card p-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-founder-faint text-founder-accent"><Mail className="h-[18px] w-[18px]" aria-hidden="true" /></span>
+                <span className="min-w-0"><span className="block break-all text-[0.92rem] font-semibold text-founder-ink sm:text-base">{email.address}</span><span className="block text-xs text-founder-muted">{email.label}</span></span>
+                <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-founder-muted" aria-hidden="true" />
               </a>
             ))}
           </div>
         </section>
 
-        {/* ── Ventures ─────────────────────────────────────────────── */}
-        <section aria-labelledby="founder-ventures" className="founder-reveal pt-20">
+        <section aria-labelledby="founder-ventures" className="founder-reveal pt-16 sm:pt-24">
           <SectionHeading id="founder-ventures">Ventures</SectionHeading>
-
-          <div className="mt-8 space-y-10">
+          <div className="mt-6 divide-y divide-founder-faint">
             {founderProfile.brands.map((brand) => (
-              <a
-                key={brand.key}
-                href={brand.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="founder-press flex gap-5"
-              >
+              <a key={brand.key} href={brand.url} target="_blank" rel="noopener noreferrer" className="founder-press flex gap-4 py-6 first:pt-0">
                 <BrandLogo logo={brand.logo} name={brand.name} />
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[1.5rem] font-semibold tracking-tight text-founder-ink">
-                    {brand.name}
-                  </span>
-                  <span className={`mt-1 block text-[1.02rem] font-medium ${brandText[brand.key]}`}>
-                    {brand.tagline}
-                  </span>
-                  <span className="mt-2 block text-[1rem] leading-relaxed text-founder-muted">
-                    {brand.description}
-                  </span>
-                  <span className="mt-3 inline-flex items-center gap-1 text-[0.95rem] font-medium text-founder-ink">
-                    {brand.urlLabel}
-                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                  </span>
+                  <span className="flex items-center justify-between gap-2"><span className="font-founder-display text-[1.12rem] font-semibold text-founder-ink">{brand.name}</span><ArrowUpRight className="h-4 w-4 shrink-0 text-founder-muted" aria-hidden="true" /></span>
+                  <span className={`mt-1 block text-sm font-semibold ${brandText[brand.key]}`}>{brand.tagline}</span>
+                  <span className="mt-1.5 block text-sm leading-relaxed text-founder-muted">{brand.description}</span>
                 </span>
               </a>
             ))}
           </div>
         </section>
 
-        {/* ── Technology family ────────────────────────────────────── */}
-        <section aria-labelledby="founder-technology" className="founder-reveal pt-20">
+        <section aria-labelledby="founder-technology" className="founder-reveal pt-16 sm:pt-24">
           <SectionHeading id="founder-technology">{founderProfile.techFamily.heading}</SectionHeading>
-          <div className="mt-6">
-            <TechStrip modules={founderProfile.techFamily.modules} />
-          </div>
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-founder-muted">{founderProfile.techFamily.intro}</p>
+          <div className="mt-5"><TechStrip modules={founderProfile.techFamily.modules} /></div>
         </section>
 
-        {/* ── Connect (renders only when socials exist) ────────────── */}
+        <section aria-labelledby="founder-office" className="founder-reveal pt-16 sm:pt-24">
+          <SectionHeading id="founder-office">Office</SectionHeading>
+          {founderProfile.addresses.map((address) => (
+            <a key={address.label} href={mapsUrl(address.mapQuery)} target="_blank" rel="noopener noreferrer" className="founder-row founder-press mt-5 flex items-start gap-3 rounded-lg bg-card p-4">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-founder-faint text-founder-accent"><MapPin className="h-[18px] w-[18px]" aria-hidden="true" /></span>
+              <span className="min-w-0 flex-1">{address.lines.map((line) => <span key={line} className="block text-sm leading-relaxed text-founder-ink">{line}</span>)}<span className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-founder-accent">Open in Maps <ArrowUpRight className="h-4 w-4" aria-hidden="true" /></span></span>
+            </a>
+          ))}
+        </section>
+
         {founderProfile.socials.length > 0 ? (
-          <section aria-labelledby="founder-connect" className="founder-reveal pt-20">
+          <section aria-labelledby="founder-connect" className="founder-reveal pt-16 sm:pt-24">
             <SectionHeading id="founder-connect">Connect</SectionHeading>
-            <div className="mt-6 flex flex-wrap gap-2.5">
-              {founderProfile.socials.map((social) => {
-                const Icon = socialIcons[social.key.toLowerCase()] ?? Link2;
-                return (
-                  <a
-                    key={social.key}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="founder-press inline-flex min-h-[48px] items-center gap-2.5 rounded-full bg-founder-faint px-5 text-[0.98rem] font-medium text-founder-ink"
-                  >
-                    <Icon className="h-[18px] w-[18px] text-founder-accent" aria-hidden="true" />
-                    {social.label}
-                  </a>
-                );
-              })}
-            </div>
+            <div className="mt-5 flex flex-wrap gap-2.5">{founderProfile.socials.map((social) => { const Icon = socialIcons[social.key.toLowerCase()] ?? Link2; return <Button key={social.key} asChild variant="secondary" className="founder-press min-h-[48px] rounded-md bg-founder-faint text-founder-ink"><a href={social.url} target="_blank" rel="noopener noreferrer"><Icon className="text-founder-accent" aria-hidden="true" />{social.label}</a></Button>; })}</div>
           </section>
         ) : null}
 
-        {/* ── QR ───────────────────────────────────────────────────── */}
-        <section aria-labelledby="founder-qr" className="founder-reveal pt-20">
+        <section aria-labelledby="founder-qr" className="founder-reveal pt-16 sm:pt-24">
           <SectionHeading id="founder-qr">Scan or share this card</SectionHeading>
-          <div className="founder-tilt-scene mt-6">
-            <QrPanel />
-          </div>
+          <div className="founder-tilt-scene mt-5"><QrPanel /></div>
         </section>
 
-        <footer className="pt-16">
-          <a
-            href="https://www.kisanshaktiai.in"
-            className="founder-press inline-flex items-center gap-1 text-[0.95rem] text-founder-muted"
-          >
-            kisanshaktiai.in
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-          </a>
+        <footer className="flex items-center justify-between gap-4 pt-14 text-sm text-founder-muted">
+          <span>Founder profile</span>
+          <a href="https://www.kisanshaktiai.in" className="founder-press inline-flex items-center gap-1 font-medium">kisanshaktiai.in <ArrowUpRight className="h-4 w-4" aria-hidden="true" /></a>
         </footer>
       </main>
     </div>
