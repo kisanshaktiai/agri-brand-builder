@@ -75,7 +75,7 @@ export const founderProfile: FounderProfile = {
   slug: "/founder",
   summary:
     "Founder building agri-tech and technology ventures across AI for farmers, skilling and learning.",
-  portrait: "/founder/amar-patil.jpg",
+  portrait: "/founder-assets/amar-patil.jpg",
   brands: [
     {
       key: "kisanshakti",
@@ -166,7 +166,7 @@ export const founderProfile: FounderProfile = {
 export const FOUNDER_URL = "https://kisanshaktiai.in/founder";
 
 /** Absolute URL of the link-preview image used by WhatsApp and LinkedIn. */
-export const FOUNDER_OG_IMAGE = "https://kisanshaktiai.in/founder/og-founder.jpg";
+export const FOUNDER_OG_IMAGE = "https://kisanshaktiai.in/founder-assets/og-founder.jpg";
 
 /** RFC 6350 vCard, generated entirely client-side from the data above. */
 export function buildVCard(p: FounderProfile = founderProfile): string {
