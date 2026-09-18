@@ -5,6 +5,11 @@
   RewriteEngine On
   RewriteBase /
   RewriteRule ^index\.html$ - [L]
+
+  # React Router route /founder conflicts with the physical /founder asset directory.
+  # Rewrite only the route itself; keep /founder/*.jpg available as real files.
+  RewriteRule ^founder/?$ /index.html [L]
+
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
