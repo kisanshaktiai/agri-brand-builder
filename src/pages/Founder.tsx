@@ -163,15 +163,21 @@ export default function Founder() {
           <div className="px-6 pb-7 pt-7 sm:px-10 sm:pb-10 sm:pt-9">
             <div className="founder-rise founder-d1 flex items-center gap-3 text-founder-muted">
               <span className="h-0.5 w-8 bg-founder-aptech" aria-hidden="true" />
-              <p className="text-[0.72rem] font-semibold uppercase">{founderProfile.title} · KisanShakti AI</p>
+              <p className="text-[0.72rem] font-semibold uppercase">{founderProfile.kicker}</p>
             </div>
             <h1 className="founder-rise founder-d2 mt-3 max-w-xl font-founder-display text-[2.45rem] font-semibold leading-[1.08] text-founder-ink sm:text-5xl">
               {founderProfile.name}
             </h1>
-            <p className="founder-rise founder-d3 mt-4 max-w-lg whitespace-pre-line text-[0.98rem] leading-relaxed text-founder-muted sm:text-lg">
-              {founderProfile.summary}
+            <p className="founder-rise founder-d3 mt-4 font-founder-display text-[1.05rem] font-semibold text-founder-accent sm:text-xl">
+              {founderProfile.subtitle}
             </p>
-            <div className="founder-rise founder-d4 mt-6 grid grid-cols-[1fr_auto] gap-3 sm:flex">
+            <p className="founder-rise founder-d4 mt-3 max-w-lg text-[0.95rem] leading-relaxed text-founder-muted sm:text-base">
+              {founderProfile.venturesLine}
+            </p>
+            <p className="founder-rise founder-d5 mt-5 border-l-2 border-founder-aptech pl-4 font-founder-display text-[0.98rem] font-medium italic leading-relaxed text-founder-ink sm:text-lg">
+              {founderProfile.tagline}
+            </p>
+            <div className="founder-rise founder-d6 mt-7 grid grid-cols-[1fr_auto] gap-3 sm:flex">
               <Button
                 type="button"
                 onClick={() => { downloadVCard(); setSaved(true); }}

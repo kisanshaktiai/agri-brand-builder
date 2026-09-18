@@ -150,6 +150,8 @@
   .founder-d2 { animation-delay: 170ms; }
   .founder-d3 { animation-delay: 280ms; }
   .founder-d4 { animation-delay: 390ms; }
+  .founder-d5 { animation-delay: 500ms; }
+  .founder-d6 { animation-delay: 610ms; }
 
   .founder-press {
     transition:

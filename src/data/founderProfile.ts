@@ -54,6 +54,14 @@ export interface FounderProfile {
   name: string;
   title: string;
   slug: string;
+  /** Eyebrow line above the name, e.g. "FOUNDER · INNOVATOR · KISANSHAKTI AI" */
+  kicker: string;
+  /** One-line credential under the name */
+  subtitle: string;
+  /** Venture lineage line */
+  venturesLine: string;
+  /** Closing statement of the hero */
+  tagline: string;
   summary: string;
   /** Path under /public. Optional — the hero renders without it. */
   portrait?: string;
@@ -73,14 +81,17 @@ export const founderProfile: FounderProfile = {
   name: "Amarsinh Patil",
   title: "Founder",
   slug: "/founder",
-  summary: `25+ Years in Technology, Computer Education & Digital Innovation
+  kicker: "Founder · Innovator · KisanShakti AI",
+  subtitle: "25+ Years in Technology & Computer Education",
+  venturesLine: "Founder of Aptech Computers (Since 2001) · ApTech LearniXa · KisanShakti AI",
+  tagline: "25+ Years of Education. 3 Technology Ventures. Innovating for a Smarter Future.",
+  summary: `25+ Years in Technology & Computer Education
 
-• Founded Aptech Computers — building a computer education journey since 2001
-• Founder ApTech LearniXa — a digital learning & online test platform
-• Founder, Innovator KisanShakti AI — an AI platform focused on farmers & agriculture
-• 25+ years of hands-on experience in technology, education & entrepreneurship
+• Founder of Aptech Computers — building a computer education journey since 2001
+• ApTech LearniXa — a digital learning & online test platform
+• KisanShakti AI — an AI platform focused on farmers & agriculture
 
-25 Years of Teaching Technology. Now Building AI for Agriculture.`,
+25+ Years of Education. 3 Technology Ventures. Innovating for a Smarter Future.`,
   portrait: "/founder-assets/amar-patil.jpg",
   brands: [
     {
