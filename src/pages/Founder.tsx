@@ -168,7 +168,7 @@ export default function Founder() {
             <h1 className="founder-rise founder-d2 mt-3 max-w-xl font-founder-display text-[2.45rem] font-semibold leading-[1.08] text-founder-ink sm:text-5xl">
               {founderProfile.name}
             </h1>
-            <p className="founder-rise founder-d3 mt-4 max-w-lg text-[0.98rem] leading-relaxed text-founder-muted sm:text-lg">
+            <p className="founder-rise founder-d3 mt-4 max-w-lg whitespace-pre-line text-[0.98rem] leading-relaxed text-founder-muted sm:text-lg">
               {founderProfile.summary}
             </p>
             <div className="founder-rise founder-d4 mt-6 grid grid-cols-[1fr_auto] gap-3 sm:flex">
