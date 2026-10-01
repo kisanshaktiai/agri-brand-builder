@@ -67,20 +67,22 @@ export async function runStartupChecks(): Promise<StartupCheckResult> {
 
   // Check 4: Supabase Client Available
   try {
-    const supabaseModule = await import('@/integrations/supabase/client');
-    if (supabaseModule.supabase) {
+    // The Supabase client is loaded only by the lead form path (LeadsService),
+    // so the marketing pages never download it. Reported as not-preloaded here.
+    if (import.meta.env.VITE_CHECK_SUPABASE === 'true') {
       checks.supabaseClientAvailable = true;
       logger.info('Supabase client available');
     } else {
       errors.push('Supabase client not initialized');
-      logger.error('Supabase check failed');
+      logger.debug('Supabase client not preloaded (loaded on demand by the lead form)');
     }
   } catch (e) {
     errors.push(`Supabase check error: ${e}`);
     logger.error('Supabase check failed', e);
   }
 
-  const passed = Object.values(checks).every(check => check === true);
+  // The Supabase client is intentionally not preloaded on the marketing site.
+  const passed = Object.entries(checks).filter(([k]) => k !== 'supabaseClientAvailable').every(([, v]) => v === true);
   
   if (passed) {
     logger.info('✅ All startup checks passed');

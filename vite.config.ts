@@ -4,42 +4,44 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  // Universal: Use relative paths for compatibility with all hosting providers
-  base: './',
-  
-  // Build optimization configuration
+export default defineConfig(({ mode, isSsrBuild }) => ({
+  // The site is served from the domain root and every route is prerendered to
+  // its own index.html, so asset URLs must be absolute.
+  base: "/",
+
   build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
+    outDir: isSsrBuild ? "dist-ssr" : "dist",
+    assetsDir: "assets",
     sourcemap: false,
-    rollupOptions: {
-      output: {
-        // Optimize chunking for better caching
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          supabase: ['@supabase/supabase-js'],
+    rollupOptions: isSsrBuild
+      ? undefined
+      : {
+          output: {
+            manualChunks: {
+              vendor: ["react", "react-dom", "react-router-dom"],
+              scroll: ["gsap", "gsap/ScrollTrigger", "lenis"],
+            },
+            assetFileNames: "assets/[name]-[hash][extname]",
+            chunkFileNames: "assets/[name]-[hash].js",
+            entryFileNames: "assets/[name]-[hash].js",
+          },
         },
-        assetFileNames: 'assets/[name]-[hash][extname]',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        entryFileNames: 'assets/[name]-[hash].js',
-      }
-    },
     chunkSizeWarningLimit: 1000,
-    minify: 'esbuild', // Use esbuild (built into Vite, faster than terser)
+    minify: "esbuild",
   },
-  
+
+  ssr: {
+    // Fonts and CSS-only packages must be bundled (not required at runtime by Node).
+    noExternal: [/@fontsource/, "lenis"],
+  },
+
   server: {
     host: "::",
     port: 8080,
   },
-  
-  plugins: [
-    react(),
-    mode === 'development' &&
-    componentTagger(),
-  ].filter(Boolean),
-  
+
+  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

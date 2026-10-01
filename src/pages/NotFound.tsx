@@ -1,26 +1,25 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { Seo } from "@/components/site/Seo";
+import { Container, Heading, Body, ButtonLink } from "@/components/site/primitives";
+import { NOT_FOUND } from "@/content/pages";
 
 const NotFound = () => {
   const location = useLocation();
-
   useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
+    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
+    <Container className="ks-section">
+      <Seo title="Page not found — KisanShakti AI" description={NOT_FOUND.body} path={location.pathname} />
+      <p className="ks-label mb-4">404</p>
+      <Heading as="h1" size="display-2">{NOT_FOUND.title}</Heading>
+      <Body className="mt-6">{NOT_FOUND.body}</Body>
+      <div className="mt-8">
+        <ButtonLink to="/">{NOT_FOUND.cta}</ButtonLink>
       </div>
-    </div>
+    </Container>
   );
 };
 

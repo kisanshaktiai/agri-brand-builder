@@ -1,3 +1,11 @@
+import "@fontsource/sora/500.css";
+import "@fontsource/sora/600.css";
+import "@fontsource/sora/700.css";
+import "@fontsource/manrope/400.css";
+import "@fontsource/manrope/500.css";
+import "@fontsource/manrope/600.css";
+import "@fontsource/noto-sans-devanagari/400.css";
+import "@fontsource/noto-sans-devanagari/500.css";
 import { useEffect, useState } from "react";
 import {
   ArrowUpRight,
