@@ -72,7 +72,7 @@ export default function Platform() {
 
       {/* Two days */}
       <Section>
-        <TwoDays eyebrow={PLATFORM_PAGE.days.eyebrow} title={PLATFORM_PAGE.days.title} farmer={PLATFORM_PAGE.days.farmer} tenant={PLATFORM_PAGE.days.tenant} />
+        <TwoDays eyebrow={PLATFORM_PAGE.days.eyebrow} title={PLATFORM_PAGE.days.title} farmer={PLATFORM_PAGE.days.farmer} partner={PLATFORM_PAGE.days.partner} />
       </Section>
 
       {/* Governance */}
