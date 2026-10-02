@@ -54,7 +54,7 @@ export function HeroSignals({ eyebrow, title, lead }: { eyebrow: string; title: 
               {CTA.partner.label}
             </ButtonLink>
           </div>
-          <ul className="ks-word-block mt-12 flex flex-wrap gap-x-6 gap-y-2 ks-label" style={{ color: "hsl(var(--ks-paper) / 0.7)" }} style={{ animationDelay: "1.1s" }} aria-label="What the companion reads for every land">
+          <ul className="ks-word-block mt-12 flex flex-wrap gap-x-6 gap-y-2 ks-label" style={{ color: "hsl(var(--ks-paper) / 0.7)" }} aria-label="What the companion reads for every land">
             {SIGNALS.map((s) => (
               <li key={s.key}>{s.label}</li>
             ))}
