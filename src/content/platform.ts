@@ -18,15 +18,15 @@ export const SURFACES: SurfaceDef[] = [
   {
     key: "farmer-app",
     name: "Farmer App",
-    role: "The farmer's daily operating layer",
+    role: "The farmer's daily companion",
     maturity: "live",
-    question: "What should I do today?",
+    question: "What should I do on this land today?",
     description:
-      "One intelligent farm companion in 14 languages, voice-first and offline-first, with land mapping, Farm Today, chat, weather, satellite, market, community, videos, schemes, soil health, alerts, growth tracking and analytics.",
+      "A complete digital companion for every farmer and every land, in 14 Indian languages, voice-first and offline-first: land mapping, Farm Today, a conversation for each land, Photo Scan, weather and satellite, a crop plan that adapts, market intelligence, schemes, services, community and farm economics.",
     screen: "farm-today",
     fact: "app.companion",
     capabilities: [
-      { text: "14 languages, voice onboarding and voice land capture.", fact: "app.languages" },
+      { text: "14 Indian languages, voice onboarding and voice land capture.", fact: "app.languages" },
       { text: "Mobile number and PIN login.", fact: "app.login" },
       { text: "Offline-first PWA plus Android and iOS builds that sync when back online.", fact: "app.offline" },
       { text: "Land boundary mapping with automatic area, satellite thumbnail and land health score.", fact: "app.land" },
@@ -34,33 +34,33 @@ export const SURFACES: SurfaceDef[] = [
   },
   {
     key: "tenant-portal",
-    name: "Tenant SaaS Portal",
-    role: "The organisation's operating layer",
+    name: "Partner Portal",
+    role: "The partner organisation's operating layer",
     maturity: "live-limited",
     question: "How do I run my farmer network?",
     description:
-      "For FPOs, dealers, agri-input companies and agricultural enterprises: onboard the organisation, manage farmers and their lands, set the brand, and follow farmer activity, all under the organisation's own context.",
+      "For FPOs, dealers, agri-input companies and agricultural enterprises: onboard your organisation, bring your farmers and their lands, set your brand, and follow farmer activity, all under your own name.",
     screen: "tenant-dashboard",
     fact: "tenant.portal",
     capabilities: [
-      { text: "Tenant onboarding and farmer management.", fact: "tenant.portal" },
+      { text: "Partner onboarding and farmer management.", fact: "tenant.portal" },
       { text: "Land management and farmer activity.", fact: "tenant.portal" },
-      { text: "Tenant branding: the farmer experience runs under your name and colours.", fact: "tenant.portal" },
+      { text: "Partner branding: the farmer experience runs under your name and colours.", fact: "tenant.portal" },
     ],
     limits: ["Not a CRM, ERP, accounting or sales-force system."],
   },
   {
     key: "admin-portal",
-    name: "SaaS Admin Portal",
-    role: "The control plane that governs the platform's intelligence",
+    name: "Admin Portal",
+    role: "The control plane that governs the platform",
     maturity: "live",
     question: "How is the platform governed?",
     description:
-      "Tenant and user management, agronomy masters for crops, varieties, companies and products, governance of the advisory knowledge base, and monitoring across tenants.",
+      "Partner and user management, agronomy masters for crops, varieties, companies and products, governance of the advisory knowledge base, and monitoring across partners.",
     screen: "admin-rules",
     fact: "admin.portal",
     capabilities: [
-      { text: "Tenant and user management.", fact: "admin.portal" },
+      { text: "Partner and user management.", fact: "admin.portal" },
       { text: "Agronomy masters: crops, varieties, companies, products.", fact: "admin.portal" },
       { text: "Governance of the advisory knowledge base: what is approved, what is under review, and where it comes from.", fact: "admin.portal" },
       { text: "Monitoring.", fact: "admin.portal" },
@@ -69,7 +69,6 @@ export const SURFACES: SurfaceDef[] = [
   },
 ];
 
-/** Nodes of the interactive architecture diagram. */
 export interface ArchNode {
   id: string;
   kind: "surface" | "technology" | "foundation";
@@ -83,13 +82,13 @@ export interface ArchNode {
 }
 
 export const ARCHITECTURE: ArchNode[] = [
-  { id: "farmer-app", kind: "surface", label: "Farmer App", purpose: "Farmer's daily operating layer", maturity: "live", description: "Where a farmer asks, records, is reminded and decides.", screen: "farm-today", fact: "app.companion" },
-  { id: "tenant-portal", kind: "surface", label: "Tenant SaaS Portal", purpose: "Organisation's operating layer", maturity: "live-limited", description: "Where an FPO, dealer or agri-input company runs its branded farmer network.", screen: "tenant-dashboard", fact: "tenant.portal" },
-  { id: "admin-portal", kind: "surface", label: "SaaS Admin Portal", purpose: "Governance control plane", maturity: "live", description: "Where tenants, agronomy masters and the advisory knowledge base are governed and monitored.", screen: "admin-rules", fact: "admin.portal" },
-  { id: "tatva", kind: "technology", tech: "tatva", label: "TATVA", purpose: "Land-state intelligence", maturity: "live", description: "Weather, satellite NDVI and water balance for each land.", screen: "ndvi", fact: "tatva.ndvi" },
-  { id: "tarka", kind: "technology", tech: "tarka", label: "TARKA", purpose: "Decision intelligence", maturity: "live-limited", description: "Checks every answer against the field, the crop's stage and expert-approved guidance. AI explains; it never invents a dose.", screen: "chat-marathi", fact: "tarka.chain" },
-  { id: "riitu", kind: "technology", tech: "riitu", label: "RIITU", purpose: "Crop scheduling", maturity: "live-limited", description: "A living crop schedule, updated every night into Farm Today.", screen: "farm-today", fact: "riitu.farm-today" },
-  { id: "pahra", kind: "technology", tech: "pahra", label: "PAHRA", purpose: "Farm-risk intelligence", maturity: "beta", description: "Daily pest, disease and weather risk; scout, confirm, then decide.", screen: "alerts", fact: "pahra.daily-risk" },
-  { id: "rukh", kind: "technology", tech: "rukh", label: "RUKH", purpose: "Market intelligence", maturity: "live-limited", description: "Mandi prices, comparisons and a selling advisor.", screen: "market", fact: "rukh.prices" },
-  { id: "foundation", kind: "foundation", label: "Shared data foundation", purpose: "One governed knowledge base", maturity: "live", description: "Expert-reviewed guidance, land state and crop schedules, shared by every tenant's ecosystem.", fact: "platform.surfaces" },
+  { id: "farmer-app", kind: "surface", label: "Farmer App", purpose: "The farmer's daily companion", maturity: "live", description: "Where a farmer talks to each land, sees what nature is doing, and knows what to do today.", screen: "farm-today", fact: "app.companion" },
+  { id: "tenant-portal", kind: "surface", label: "Partner Portal", purpose: "Partner organisation's operating layer", maturity: "live-limited", description: "Where an FPO, dealer or agri-input company runs its branded farmer network.", screen: "tenant-dashboard", fact: "tenant.portal" },
+  { id: "admin-portal", kind: "surface", label: "Admin Portal", purpose: "Governance control plane", maturity: "live", description: "Where partners, agronomy masters and the advisory knowledge base are governed and monitored.", screen: "admin-rules", fact: "admin.portal" },
+  { id: "tatva", kind: "technology", tech: "tatva", label: "TATVA", purpose: "Understand what nature is doing", maturity: "live", description: "Sky, soil, water, temperature and weather, read for each land.", screen: "ndvi", fact: "tatva.ndvi" },
+  { id: "pahra", kind: "technology", tech: "pahra", label: "PAHRA", purpose: "Know what is changing", maturity: "beta", description: "Land-specific alerts as conditions change; look, confirm, then decide.", screen: "alerts", fact: "pahra.daily-risk" },
+  { id: "tarka", kind: "technology", tech: "tarka", label: "TARKA", purpose: "Talk to your land", maturity: "live-limited", description: "A conversation for each land, in your language, with practical guidance checked against expert-approved knowledge.", screen: "chat-marathi", fact: "tarka.chain" },
+  { id: "riitu", kind: "technology", tech: "riitu", label: "RIITU", purpose: "A crop plan that adapts", maturity: "live-limited", description: "A stage-wise plan for each land that changes when nature does.", screen: "farm-today", fact: "riitu.farm-today" },
+  { id: "rukh", kind: "technology", tech: "rukh", label: "RUKH", purpose: "Know the market around your crop", maturity: "live-limited", description: "Mandi prices, comparisons and a selling advisor.", screen: "market", fact: "rukh.prices" },
+  { id: "foundation", kind: "foundation", label: "Shared foundation", purpose: "One governed knowledge base", maturity: "live", description: "Expert-reviewed guidance, land state and crop plans, shared by every partner's ecosystem.", fact: "platform.surfaces" },
 ];

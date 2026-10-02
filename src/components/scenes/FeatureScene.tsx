@@ -375,7 +375,7 @@ function AdminPortal() {
     <svg className="ks-scene" viewBox="0 0 1440 900" aria-hidden>
       <rect x="0" y="0" width="300" height="900" className="fill-ink" />
       <text x="40" y="72" className="t-sans" style={{ fontSize: 20, fill: "hsl(var(--ks-paper))" }}>Control plane</text>
-      {["Tenants", "Agronomy masters", "Knowledge base", "Monitoring"].map((r, i) => (
+      {["Partners", "Agronomy masters", "Knowledge base", "Monitoring"].map((r, i) => (
         <g key={r} className="sc-rise" style={D(0.2 + i * 0.15)}>
           <rect x="24" y={140 + i * 64} width="252" height="48" rx="12" fill={i === 2 ? "hsl(var(--ks-paper) / 0.14)" : "transparent"} />
           <text x="48" y={170 + i * 64} className="t-sans" style={{ fontSize: 18, fill: "hsl(var(--ks-paper))" }}>{r}</text>
@@ -403,15 +403,101 @@ function AdminPortal() {
   );
 }
 
+function PhotoScan() {
+  return (
+    <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
+      <Header title="See and understand the crop" />
+      <rect x="32" y="130" width="326" height="300" rx="18" className="fill-soft" />
+      <path d="M100 420 C 120 300, 160 240, 195 200 C 230 240, 270 300, 290 420" className="field sc-draw" strokeWidth="3" style={{ "--len": "520", "--dur": "1.6s", "--d": "0.3s" } as React.CSSProperties} />
+      <ellipse cx="236" cy="300" rx="22" ry="14" className="fill-signal-soft sc-in" style={D(1.6)} />
+      <g className="sc-rise" style={D(1.9)}>
+        <rect x="196" y="262" width="80" height="76" rx="10" fill="none" stroke="hsl(var(--ks-signal))" strokeWidth="2" strokeDasharray="6 5" />
+        <circle cx="236" cy="300" r="26" className="sc-pulse" fill="none" stroke="hsl(var(--ks-signal))" strokeWidth="2" />
+      </g>
+      {[[48, 146], [318, 146], [48, 390], [318, 390]].map((c, i) => (
+        <path key={i} d={`M${c[0]} ${c[1] + (i < 2 ? 20 : 0)} v${i < 2 ? -20 : 20} h${i % 2 ? -20 : 20}`} className="ink sc-in" style={D(0.1)} />
+      ))}
+      <Pill x="32" y="470" w="326" text="Observed: lesions on older leaves" tone="fill-signal-soft" d={2.4} />
+      <Pill x="32" y="520" w="326" text="Connected to this land · rice · panicle stage" tone="fill-field-soft" d={2.8} />
+      <text x="32" y="600" className="sc-in" style={D(3.2)}>a photo, read in the context of your field</text>
+    </svg>
+  );
+}
+
+function Schemes() {
+  return (
+    <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
+      <Header title="Support you are eligible for" />
+      {[["PM-Kisan", "Income support · eligible", true], ["Crop insurance", "Enrolment window open", true], ["Soil Health Card", "Free soil test · how to apply", false]].map((r, i) => (
+        <g key={String(r[0])} className="sc-rise" style={D(0.3 + i * 0.4)}>
+          <rect x="32" y={130 + i * 130} width="326" height="110" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
+          <text x="52" y={166 + i * 130} className="t-sans t-ink" style={{ fontSize: 17 }}>{String(r[0])}</text>
+          <text x="52" y={192 + i * 130} className="t-sans" style={{ fontSize: 14 }}>{String(r[1])}</text>
+          <rect x="52" y={206 + i * 130} width={r[2] ? 92 : 120} height="22" rx="11" className={r[2] ? "fill-field-soft" : "fill-soft"} />
+          <text x={r[2] ? 98 : 112} y={221 + i * 130} textAnchor="middle" style={{ fontSize: 11 }}>{r[2] ? "eligible" : "read more"}</text>
+        </g>
+      ))}
+      <text x="32" y="560" className="sc-in" style={D(1.8)}>explained in your language</text>
+      <text x="32" y="582" className="sc-in" style={D(2)}>no government affiliation implied</text>
+    </svg>
+  );
+}
+
+function Services() {
+  return (
+    <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
+      <Header title="Find the help the farm needs" />
+      {[["Labour", "Harvest crew · 6 people", "available this week"], ["Machinery", "Rotavator · 4 km away", "book for Tuesday"], ["Transport", "Pickup to Nashik mandi", "ask for a quote"]].map((r, i) => (
+        <g key={r[0]} className="sc-rise" style={D(0.3 + i * 0.4)}>
+          <rect x="32" y={130 + i * 150} width="326" height="128" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
+          <rect x="48" y={146 + i * 150} width="64" height="64" rx="12" className="fill-soft" />
+          <text x="128" y={176 + i * 150} className="t-sans t-ink" style={{ fontSize: 17 }}>{r[0]}</text>
+          <text x="128" y={200 + i * 150} className="t-sans" style={{ fontSize: 14 }}>{r[1]}</text>
+          <text x="128" y={240 + i * 150} className="t-sans" style={{ fontSize: 13, fill: "hsl(var(--ks-field-deep))" }}>{r[2]} ›</text>
+        </g>
+      ))}
+      <text x="32" y="620" className="sc-in" style={D(1.8)}>services that help the plan get done</text>
+    </svg>
+  );
+}
+
+function Economics() {
+  return (
+    <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
+      <Header title="Income and expenses, per land" />
+      <Pill x="32" y="124" w="150" text="Beta · in testing" tone="fill-signal-soft" d={0.2} />
+      <g className="sc-rise" style={D(0.5)}>
+        <text x="32" y="200">rice · north plot · this season</text>
+        <text x="32" y="240" className="t-sans t-ink" style={{ fontSize: 15 }}>Income</text>
+        <rect x="140" y="226" width="200" height="18" rx="6" className="fill-field sc-bar" style={{ "--d": "0.7s" } as React.CSSProperties} />
+        <text x="32" y="276" className="t-sans t-ink" style={{ fontSize: 15 }}>Expenses</text>
+        <rect x="140" y="262" width="128" height="18" rx="6" className="fill-line sc-bar" style={{ "--d": "0.9s" } as React.CSSProperties} />
+      </g>
+      {[["Seed", "₹ 2,400"], ["Fertiliser", "₹ 5,100"], ["Labour", "₹ 7,800"], ["Sale · 18 quintal", "₹ 41,400"]].map((r, i) => (
+        <g key={r[0]} className="sc-rise" style={D(1.2 + i * 0.2)}>
+          <text x="32" y={340 + i * 40} className="t-sans" style={{ fontSize: 15 }}>{r[0]}</text>
+          <text x="358" y={340 + i * 40} textAnchor="end" className="t-sans t-ink" style={{ fontSize: 15 }}>{r[1]}</text>
+          <line x1="32" y1={352 + i * 40} x2="358" y2={352 + i * 40} className="ln" />
+        </g>
+      ))}
+      <text x="32" y="540" className="sc-in" style={D(2.2)}>illustrative figures · under development</text>
+    </svg>
+  );
+}
+
 const VIGNETTES: Record<string, { C: React.FC; label: string }> = {
-  "tenant-dashboard": { C: TenantPortal, label: "Illustration of the Tenant SaaS Portal: farmer network under the organisation's brand" },
-  "tenant-farmers": { C: TenantPortal, label: "Illustration of farmer management in the Tenant SaaS Portal" },
-  "tenant-branding": { C: TenantPortal, label: "Illustration of tenant branding" },
-  "tenant-login": { C: TenantPortal, label: "Illustration of the Tenant SaaS Portal" },
-  "admin-rules": { C: AdminPortal, label: "Illustration of knowledge-base governance in the SaaS Admin Portal" },
-  "admin-knowledge": { C: AdminPortal, label: "Illustration of knowledge sources in the SaaS Admin Portal" },
-  "admin-tenants": { C: AdminPortal, label: "Illustration of tenant management in the SaaS Admin Portal" },
-  "admin-login": { C: AdminPortal, label: "Illustration of the SaaS Admin Portal" },
+  "photo-scan": { C: PhotoScan, label: "Illustration of Photo Scan: a crop photo observed in the context of the land" },
+  schemes: { C: Schemes, label: "Illustration of government schemes with eligibility" },
+  services: { C: Services, label: "Illustration of agri services: labour, machinery and transport" },
+  economics: { C: Economics, label: "Illustration of farm economics, in beta: income and expenses per land" },
+  "tenant-dashboard": { C: TenantPortal, label: "Illustration of the Partner Portal: farmer network under the organisation's brand" },
+  "tenant-farmers": { C: TenantPortal, label: "Illustration of farmer management in the Partner Portal" },
+  "tenant-branding": { C: TenantPortal, label: "Illustration of partner branding" },
+  "tenant-login": { C: TenantPortal, label: "Illustration of the Partner Portal" },
+  "admin-rules": { C: AdminPortal, label: "Illustration of knowledge-base governance in the Admin Portal" },
+  "admin-knowledge": { C: AdminPortal, label: "Illustration of knowledge sources in the Admin Portal" },
+  "admin-tenants": { C: AdminPortal, label: "Illustration of partner management in the Admin Portal" },
+  "admin-login": { C: AdminPortal, label: "Illustration of the Admin Portal" },
   "farm-today": { C: FarmToday, label: "Illustration of Farm Today: due, watch, blocked and info decisions" },
   "chat-marathi": { C: Chat, label: "Illustration of AI chat in Marathi with a photo and an explained answer" },
   voice: { C: Voice, label: "Illustration of the voice assistant" },

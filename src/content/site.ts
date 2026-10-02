@@ -21,7 +21,7 @@ export const NAV = [
   { to: "/technology", label: "Technology" },
   { to: "/platform", label: "Platform" },
   { to: "/farmer-app", label: "Farmer App" },
-  { to: "/enterprises", label: "For Enterprises" },
+  { to: "/enterprises", label: "For Partners" },
   { to: "/security", label: "Security & Governance" },
   { to: "/company", label: "Company" },
 ] as const;
@@ -29,11 +29,11 @@ export const NAV = [
 export const CTA = {
   openApp: { label: "Open Farmer App", href: FARMER_APP_URL, event: "farmer_app_cta" },
   partner: { label: "Partner with us", to: "/contact", event: "partner_cta" },
-  tenant: { label: "Become a tenant", to: "/enterprises", event: "tenant_cta" },
+  tenant: { label: "Become a partner", to: "/enterprises", event: "tenant_cta" },
 } as const;
 
 export const FOOTER = {
-  statement: "Agricultural intelligence, built for the field.",
+  statement: "A complete digital companion for every farmer and every land.",
   columns: [
     {
       title: "Product",
@@ -41,7 +41,7 @@ export const FOOTER = {
         { to: "/technology", label: "Technology" },
         { to: "/platform", label: "Platform" },
         { to: "/farmer-app", label: "Farmer App" },
-        { to: "/enterprises", label: "For Enterprises" },
+        { to: "/enterprises", label: "For Partners" },
         { to: "/security", label: "Security & Governance" },
       ],
     },

@@ -1,12 +1,11 @@
 /**
- * Illustrative tenant brands for the multi-tenant transformation. These are
+ * Illustrative partner brands for the white-label transformation. These are
  * organisation *types*, not customers. Names are generic by design.
  */
 export interface TenantExample {
   id: string;
   type: string;
   name: string;
-  /** HSL triplets so the device frame can be re-themed with CSS variables. */
   brand: string;
   brandSoft: string;
   initials: string;

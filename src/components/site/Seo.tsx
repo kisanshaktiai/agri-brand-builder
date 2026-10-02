@@ -41,7 +41,7 @@ export const ORGANIZATION_LD = {
   name: BRAND,
   url: SITE_URL,
   logo: `${SITE_URL}/brand/kisanshakti-mark.svg`,
-  description: "A white-label, multi-tenant agricultural intelligence platform built in Maharashtra, India.",
+  description: "A complete digital companion for every farmer and every land, built in Maharashtra, India, and brought to farmers by partner organisations under their own brand.",
   address: { "@type": "PostalAddress", addressRegion: "Maharashtra", addressCountry: "IN" },
   sameAs: ["https://www.youtube.com/@kisanshaktiai"],
 };
@@ -61,6 +61,6 @@ export const SOFTWARE_LD = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web, Android, iOS",
   url: "https://app.kisanshaktiai.in",
-  description: "Voice-first, offline-first farm companion in 14 languages with land mapping, Farm Today, AI chat, weather, satellite, market, community, videos, schemes, soil health, alerts and analytics.",
+  description: "A complete digital companion for every farmer and every land, in 14 Indian languages, voice-first and offline-first: understand what nature is doing, know what is changing, talk to your land, follow a crop plan that adapts, know the market, find schemes and services, and connect with farmers.",
   publisher: { "@type": "Organization", name: BRAND, url: SITE_URL },
 };

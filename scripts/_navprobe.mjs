@@ -9,7 +9,7 @@ for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
   page.on("console", (m) => m.type() === "error" && errs.push("console: " + m.text().slice(0, 200)));
   await page.goto(`http://127.0.0.1:${PORT}/`, { waitUntil: "networkidle" });
   await page.mouse.move(10, 10); await page.waitForTimeout(1500);
-  for (const label of ["Technology", "Platform", "Farmer App", "For Enterprises", "Security & Governance", "Company", "Partner with us"]) {
+  for (const label of ["Technology", "Platform", "Farmer App", "For Partners", "Security & Governance", "Company", "Partner with us"]) {
     if (vp.width < 1024) { await page.getByRole("button", { name: "Open menu" }).click(); await page.waitForTimeout(300); }
     const link = page.getByRole("link", { name: label, exact: true }).first();
     await link.click({ timeout: 5000 }).catch((e) => errs.push("click " + label + ": " + e.message.split("\n")[0]));

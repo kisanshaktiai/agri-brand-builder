@@ -27,7 +27,7 @@ export function TwoDays({ eyebrow, title, farmer, tenant }: { eyebrow: string; t
       <Heading>{title}</Heading>
       <div className="mt-12 grid gap-12 md:grid-cols-2 md:gap-16">
         <Col who="Farmer App" heading="One farmer's day" items={farmer} />
-        <Col who="Tenant SaaS Portal" heading="One tenant's day" items={tenant} />
+        <Col who="Partner Portal" heading="One partner's day" items={tenant} />
       </div>
     </div>
   );

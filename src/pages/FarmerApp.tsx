@@ -33,6 +33,7 @@ export default function FarmerApp() {
               <Reveal delay={0.1} className="lg:col-span-6 lg:col-start-6">
                 <Eyebrow>{String(i + 1).padStart(2, "0")}</Eyebrow>
                 <Heading>{s.title}</Heading>
+                {"maturity" in s && s.maturity && <div className="mt-4"><MaturityBadge maturity={s.maturity as Maturity} /></div>}
                 <Body className="mt-5">{s.body}</Body>
               </Reveal>
             </div>

@@ -3,6 +3,7 @@ import type { Maturity } from "./site";
 /**
  * The Technology Family — locked brand assets.
  * Names, full forms and positioning lines are final and used verbatim.
+ * Everything else is written for a farmer: what it does, in plain words.
  */
 export type TechKey = "tarka" | "tatva" | "riitu" | "pahra" | "rukh";
 
@@ -20,7 +21,7 @@ export interface Technology {
   maturity: Maturity;
   /** Narrative arc stage(s) this technology carries. Conceptual, not runtime order. */
   arc: string[];
-  /** The one question a visitor should leave able to answer. */
+  /** The one question a farmer should leave able to answer. */
   question: string;
   tagline: string;
   summary: string;
@@ -40,61 +41,20 @@ export const TECHNOLOGIES: Technology[] = [
     positioning: "Multimodal AI Land-State Intelligence",
     maturity: "live",
     arc: ["Observe", "Understand"],
-    question: "What is the state of my field right now?",
-    tagline: "Know the state of every field.",
+    question: "What is nature doing on my land right now?",
+    tagline: "Understand what nature is doing.",
     summary:
-      "KisanShakti TATVA watches each of your lands for you: the weather it is actually getting, how it looks from the satellite each day, and how much water it holds. Every recommendation starts from the field as it is.",
+      "Five natural elements shape every season: Sky, Soil, Water, Temperature and Weather. KisanShakti TATVA reads all five for each of your lands, so you know what nature is doing on your field today, not what it is doing somewhere in the district.",
     capabilities: [
-      { text: "Hourly weather for each land, with hourly and 7-day forecasts, rainfall, growing-degree-days, weather alerts and recommendations.", fact: "tatva.weather" },
-      { text: "Daily satellite NDVI with a land health score, trend, map view and early warning.", fact: "tatva.ndvi" },
-      { text: "Evapotranspiration, a rain timeline, an irrigation gauge, a spray window, a daily water balance and risk episodes.", fact: "tatva.water" },
+      { text: "Sky: a satellite view of your field, scored daily into a simple land health picture, with a trend and an early warning when a patch changes.", fact: "tatva.ndvi" },
+      { text: "Weather: hourly weather for each land, a 7-day outlook, rainfall and alerts, with a window for spraying.", fact: "tatva.weather" },
+      { text: "Water: how much your field has received and used, a rain timeline and an irrigation gauge.", fact: "tatva.water" },
+      { text: "Temperature: the heat your crop has accumulated, so its stage is judged by what it has actually experienced.", fact: "tatva.weather" },
+      { text: "Soil: a soil health picture built from your own soil-test results.", fact: "app.soil" },
     ],
-    limits: ["Uses weather and satellite data only. There are no soil sensors, IoT devices or drones."],
+    limits: ["Satellite, weather and your own soil test. No sensors, drones or devices to buy."],
     screens: ["weather", "ndvi"],
     badge: "5",
-  },
-  {
-    key: "tarka",
-    name: "TARKA",
-    fullForm: "Trusted Agricultural Reasoning & Knowledge Architecture",
-    positioning: "Neuro-Symbolic AI Decision Intelligence",
-    maturity: "live-limited",
-    arc: ["Reason", "Decide"],
-    question: "Why did the system recommend this?",
-    tagline: "The Decision Brain.",
-    summary:
-      "KisanShakti TARKA is the reasoning behind every answer. You ask in your own words, with a photo if you like. The answer is checked against your field's state, your crop's stage and expert-approved guidance, then explained back in your language. The AI explains; it never invents a dose, a quantity or a timing.",
-    capabilities: [
-      { text: "Ask in your language, with a photo. The answer is checked against your field, your crop's stage and expert-approved guidance, then explained in your language with the reason why.", fact: "tarka.chain" },
-      { text: "A chemical recommendation cannot reach a farmer without a dose, a pre-harvest interval and expert approval.", fact: "tarka.chemical-gate" },
-      { text: "Safety checks always win over advice. A photo of the plant is the final authority over any estimate.", fact: "tarka.safety" },
-      { text: "Guidance comes from a governed, expert-reviewed knowledge base that includes ICAR and state-university packages of practice.", fact: "tarka.knowledge" },
-    ],
-    limits: [
-      "Not every question needs every check; the checks describe how answers are governed, not a screen you watch.",
-      "Coverage is deepest for rice and growing for sugarcane, soybean, cotton, chickpea, onion and jowar.",
-    ],
-    screens: ["chat-marathi", "evidence"],
-  },
-  {
-    key: "riitu",
-    name: "RIITU",
-    fullForm: "Responsive Intelligence for Integrated Temporal Agriculture",
-    positioning: "Dynamic AI Crop Scheduling & Prescription",
-    maturity: "live-limited",
-    arc: ["Act"],
-    question: "What should I do today?",
-    tagline: "Crop biology as a living schedule.",
-    summary:
-      "KisanShakti RIITU turns your crop's growth into a living schedule. It knows how your crop is grown, counts days and heat since sowing, and listens to what you report from the field, so Farm Today always reflects your field's actual stage.",
-    capabilities: [
-      { text: "A schedule for each crop and the way it is grown, built from days since sowing, heat units, variety maturity and region-specific agronomy, Maharashtra first.", fact: "riitu.stage-graph" },
-      { text: "Updated every night against your field's actual stage.", fact: "riitu.reconcile" },
-      { text: "Farm Today, with Due, Watch, Blocked and Info decisions.", fact: "riitu.farm-today" },
-      { text: "Growth tracking, farmer field readings and crop photos.", fact: "riitu.growth" },
-    ],
-    limits: ["Region-scoped agronomy starts with Maharashtra.", "The schedule adapts to the field's stage. It does not predict yield."],
-    screens: ["farm-today", "schedule", "growth"],
   },
   {
     key: "pahra",
@@ -103,16 +63,57 @@ export const TECHNOLOGIES: Technology[] = [
     positioning: "Proactive AI Farm-Risk Intelligence",
     maturity: "beta",
     arc: ["Anticipate"],
-    question: "What should I watch for this week?",
-    tagline: "See risk before it becomes an emergency.",
+    question: "What is changing on my land while I am away?",
+    tagline: "Know what is changing, even when you are away.",
     summary:
-      "KisanShakti PAHRA looks at pest, disease and weather risk for each of your lands every day and tells you what to go and look at. An alert never prescribes a chemical: scout, confirm, then decide.",
+      "You cannot stand in every field every day. KisanShakti PAHRA watches the conditions on each of your lands as they change and tells you when something deserves your attention: a pest or disease risk building, weather turning, a field that needs a look.",
     capabilities: [
-      { text: "Daily pest, disease and weather risk evaluated for each land, with notification preferences.", fact: "pahra.daily-risk" },
-      { text: "Alerts ask the farmer to scout and confirm. They never prescribe a chemical.", fact: "pahra.no-prescription" },
+      { text: "Land-specific alerts as farm and weather conditions change, every day.", fact: "pahra.daily-risk" },
+      { text: "Each alert says what changed and what to go and look at. You decide what to do next.", fact: "pahra.no-prescription" },
+      { text: "You choose which alerts reach you and how.", fact: "pahra.daily-risk" },
     ],
-    limits: ["Early access. Available to farmers as a preview while coverage and thresholds are reviewed."],
+    limits: ["Early access. Alerts help you notice change; they do not prescribe a treatment."],
     screens: ["alerts"],
+  },
+  {
+    key: "tarka",
+    name: "TARKA",
+    fullForm: "Trusted Agricultural Reasoning & Knowledge Architecture",
+    positioning: "Neuro-Symbolic AI Decision Intelligence",
+    maturity: "live-limited",
+    arc: ["Reason", "Decide"],
+    question: "Can I just ask my land what it needs?",
+    tagline: "Talk to your land.",
+    summary:
+      "KisanShakti TARKA is a multilingual AI assistant developed in India, and it is not a generic chatbot. Every land you own has its own conversation, which already knows your crop, your field and your season. Ask in your language, add a photo, and get practical guidance that fits this field, explained with the reason why.",
+    capabilities: [
+      { text: "A separate conversation for each land, carrying that land's crop, stage and conditions into every answer.", fact: "tarka.land-space" },
+      { text: "Understands questions by voice or text, photos of the crop, and the context of your field.", fact: "tarka.chain" },
+      { text: "Answers in your language. Many Indian languages are supported, and you can ask in one language and share in another.", fact: "app.languages" },
+      { text: "Practical guidance checked against your field and expert-reviewed agricultural knowledge, never invented on the spot.", fact: "tarka.knowledge" },
+    ],
+    limits: ["Guidance is deepest for rice and growing for sugarcane, soybean, cotton, chickpea, onion and jowar.", "Where something needs a specialist's eye, it says so."],
+    screens: ["chat-marathi", "voice"],
+  },
+  {
+    key: "riitu",
+    name: "RIITU",
+    fullForm: "Responsive Intelligence for Integrated Temporal Agriculture",
+    positioning: "Dynamic AI Crop Scheduling & Prescription",
+    maturity: "live-limited",
+    arc: ["Act"],
+    question: "What should I do on this land today?",
+    tagline: "A crop plan that adapts to nature.",
+    summary:
+      "KisanShakti RIITU turns your crop's biology into a practical, stage-wise plan for each land: what to do, when, and in what order. When TATVA sees the field or the weather change, the plan changes with it, so Farm Today always reflects your field's actual stage.",
+    capabilities: [
+      { text: "A stage-wise crop plan for each land and the way the crop is grown, Maharashtra first.", fact: "riitu.stage-graph" },
+      { text: "Farm Today: what is Due, what to Watch, what is Blocked by conditions, and what is simply good to know.", fact: "riitu.farm-today" },
+      { text: "Adapts as the season unfolds: rain, heat and what you report from the field all move the plan.", fact: "riitu.reconcile" },
+      { text: "Growth tracking with your field readings and crop photos.", fact: "riitu.growth" },
+    ],
+    limits: ["The plan adapts to your field's stage. It does not predict your yield."],
+    screens: ["farm-today", "growth"],
   },
   {
     key: "rukh",
@@ -121,25 +122,26 @@ export const TECHNOLOGIES: Technology[] = [
     positioning: "Predictive AI Market Intelligence",
     maturity: "live-limited",
     arc: ["Predict"],
-    question: "Where and when should I sell?",
-    tagline: "Better-informed selling decisions.",
+    question: "What is the market doing around my crop?",
+    tagline: "Know the market around your crop.",
     summary:
-      "KisanShakti RUKH puts today's mandi prices, nearby markets, comparisons across the state and over time, and a selling advisor in your hand, and feeds the same market data into your Farm Analytics. Market insight, not a guaranteed price prediction.",
+      "KisanShakti RUKH brings the market to your crop: today's prices at mandis near you, how they compare across the state and over time, and a selling advisor that puts it in plain words, so selling decisions are made with information, not guesswork.",
     capabilities: [
-      { text: "Current mandi prices, nearby markets, state comparison, historical comparison and a selling advisor.", fact: "rukh.prices" },
-      { text: "Market data feeds Farm Analytics projections.", fact: "rukh.analytics" },
+      { text: "Current mandi prices, nearby markets, comparison across the state and over time.", fact: "rukh.prices" },
+      { text: "A selling advisor that explains what the numbers mean for your crop.", fact: "rukh.prices" },
+      { text: "The same market view feeds your farm economics.", fact: "rukh.analytics" },
     ],
-    limits: ["The marketplace is early access.", "Market insight, never a guaranteed price prediction."],
+    limits: ["Market insight, never a guaranteed price.", "The marketplace is early access."],
     screens: ["market"],
   },
 ];
 
-/** Hierarchy and arc the site communicates. Conceptual stories, not runtime order. */
-export const HIERARCHY = ["KisanShakti AI", "The Technology Family", "Agricultural intelligence", "The platform", "Tenants", "Farmers"];
+/** Hierarchy the site communicates. Conceptual, not runtime order. */
+export const HIERARCHY = ["KisanShakti AI", "The Technology Family", "Agricultural intelligence", "The platform", "Partners", "Farmers"];
 export const ARC = ["Observe", "Understand", "Reason", "Decide", "Act", "Anticipate", "Predict"];
 
-/** Order the family is presented in: Observe → Predict. */
-export const FAMILY_ORDER: TechKey[] = ["tatva", "tarka", "riitu", "pahra", "rukh"];
+/** Order the family is presented in, following the farmer journey. */
+export const FAMILY_ORDER: TechKey[] = ["tatva", "pahra", "tarka", "riitu", "rukh"];
 
 export function techByKey(key: TechKey): Technology {
   const t = TECHNOLOGIES.find((x) => x.key === key);

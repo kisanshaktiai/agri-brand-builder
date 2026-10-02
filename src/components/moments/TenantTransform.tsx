@@ -54,8 +54,8 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
   const Shared = () => (
     <div className="mt-4 rounded-ks-md border border-ks-line bg-ks-white p-4">
       <div className="flex items-center justify-between gap-3">
-        <p className="ks-label">Shared governed intelligence</p>
-        <p className="ks-label text-[0.625rem] text-ks-field">Same for every tenant</p>
+        <p className="ks-label">Shared companion, governed centrally</p>
+        <p className="ks-label text-[0.625rem] text-ks-field">Same for every partner</p>
       </div>
       <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
         {FAMILY_ORDER.map((k) => (
@@ -101,7 +101,7 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
             </div>
           </Plate>
           <Shared />
-          <p className="ks-small mt-3">The phone screen does not change. Tenants configure brand and context; they do not receive or fork source code.</p>
+          <p className="ks-small mt-3">The phone screen does not change. Partners configure brand and context; they do not receive or fork source code.</p>
         </div>
         <div>
           <Eyebrow>{eyebrow}</Eyebrow>
@@ -123,7 +123,7 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
               <li key={l} className="flex items-center gap-3 text-sm">
                 <span className="ks-mono text-xs text-ks-ink-4">{String(i + 1).padStart(2, "0")}</span>
                 <span className={i < 2 ? "text-ks-ink" : "text-ks-ink-2"}>{l}</span>
-                <span className="ml-auto ks-label text-[0.625rem]">{i < 2 ? "per tenant" : "shared"}</span>
+                <span className="ml-auto ks-label text-[0.625rem]">{i < 2 ? "per partner" : "shared"}</span>
               </li>
             ))}
           </ol>
