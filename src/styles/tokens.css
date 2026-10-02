@@ -236,6 +236,13 @@ body {
   color: hsl(var(--ks-ink-3));
 }
 
+/* ── Dark canvas: buttons and marks on the hero ───────────────────── */
+.ks-on-dark [data-variant="primary"] { background: hsl(var(--ks-leaf)); color: hsl(var(--ks-ink)); }
+.ks-on-dark [data-variant="primary"]:hover { background: hsl(var(--ks-lime)); }
+.ks-on-dark [data-variant="secondary"] { border-color: hsl(var(--ks-paper) / 0.3); color: hsl(var(--ks-paper)); }
+.ks-on-dark [data-variant="secondary"]:hover { border-color: hsl(var(--ks-lime)); }
+.ks-on-dark .ks-mark, .ks-on-dark .ks-label { color: hsl(var(--ks-paper) / 0.75); }
+
 /* ── Home hero ───────────────────────────────────────────────────── */
 .ks-hero-glow {
   position: absolute; inset: -20% -10% auto -10%; height: 90%;

@@ -53,7 +53,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
     <div className={cn("relative mx-auto w-full max-w-[880px]", className)}>
       <div className="relative p-4 md:p-6">
         <div aria-hidden className="pz-l3 absolute inset-0 rounded-ks-lg border border-ks-line bg-ks-paper-2" style={vis(3, lvl)} />
-        <p className="pz-l3 relative ks-label mb-3" style={vis(3, lvl)}>Shared platform · governed intelligence</p>
+        <p className="pz-l3 relative ks-label mb-3" style={vis(3, lvl)} aria-hidden={!pinned && lvl < 3}>Shared platform · governed intelligence</p>
         <div className="relative grid grid-cols-3 gap-3">
           {TENANT_EXAMPLES.slice(1).map((t, i) => (
             <div key={t.id} className={cn("relative p-3", i > 0 && "pz-l2")} style={i > 0 ? vis(2, lvl) : undefined}>
@@ -115,7 +115,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
   return (
     <div>
     <div ref={sectionRef} className="relative flex h-screen flex-col justify-center overflow-hidden">
-      <div className="ks-container grid h-full grid-cols-[minmax(0,4fr)_minmax(0,8fr)] items-center gap-12">
+      <div className="ks-container grid h-full grid-cols-[minmax(0,4fr)_minmax(0,8fr)] items-center gap-12"><div className="relative z-10">
         <div>
           <Eyebrow>{eyebrow}</Eyebrow>
           <Heading>{title}</Heading>
@@ -128,9 +128,9 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
               </div>
             ))}
           </div>
-        </div>
-        <div className="overflow-visible">
-          <div ref={stageRef} style={{ transformOrigin: "20% 38%" }}>
+        </div></div>
+        <div className="relative overflow-hidden rounded-ks-lg" style={{ maskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)" }}>
+          <div ref={stageRef} style={{ transformOrigin: "22% 46%" }}>
             <Composite lvl={3} />
           </div>
         </div>

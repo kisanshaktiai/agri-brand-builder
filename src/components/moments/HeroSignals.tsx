@@ -18,7 +18,7 @@ const SIGNALS = [
   { key: "weather", label: "Weather", d: "M0 300 C 220 300, 420 236, 640 210" },
 ];
 
-function Kinetic({ text, className }: { text: string; className?: string }) {
+export function Kinetic({ text, className }: { text: string; className?: string }) {
   return (
     <span className={className}>
       <span className="sr-only">{text}</span>
@@ -35,7 +35,7 @@ function Kinetic({ text, className }: { text: string; className?: string }) {
 
 export function HeroSignals({ eyebrow, title, lead }: { eyebrow: string; title: string; lead: string }) {
   return (
-    <section className="ks-hero relative overflow-hidden bg-ks-night text-ks-paper" aria-labelledby="hero-h">
+    <section className="ks-hero ks-on-dark relative overflow-hidden bg-ks-night text-ks-paper" aria-labelledby="hero-h">
       <div aria-hidden className="ks-hero-glow" />
       <div className="ks-container relative grid items-center gap-12 pb-[calc(var(--ks-section)*0.7)] pt-[calc(var(--ks-section)*0.6)] lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-8">
         <div className="relative z-10">
@@ -43,14 +43,14 @@ export function HeroSignals({ eyebrow, title, lead }: { eyebrow: string; title: 
           <h1 id="hero-h" className="ks-display-2 max-w-4xl text-ks-paper">
             <Kinetic text={title} />
           </h1>
-          <p className="ks-lead ks-word-block mt-6 max-w-prose text-ks-paper/75" style={{ animationDelay: "0.7s" }}>
+          <p className="ks-lead ks-word-block mt-6 max-w-prose" style={{ animationDelay: "0.7s", color: "hsl(var(--ks-paper) / 0.78)" }}>
             {lead}
           </p>
           <div className="ks-word-block mt-9 flex flex-wrap gap-3" style={{ animationDelay: "0.9s" }}>
-            <ButtonLink href={CTA.openApp.href} size="lg" className="!bg-ks-leaf !text-ks-ink hover:!bg-ks-lime" onClick={() => track("farmer_app_cta", { where: "hero" })}>
+            <ButtonLink href={CTA.openApp.href} size="lg" onClick={() => track("farmer_app_cta", { where: "hero" })}>
               {CTA.openApp.label}
             </ButtonLink>
-            <ButtonLink to={CTA.partner.to} variant="secondary" size="lg" className="!border-ks-paper/30 !text-ks-paper hover:!border-ks-lime" onClick={() => track("partner_cta", { where: "hero" })}>
+            <ButtonLink to={CTA.partner.to} variant="secondary" size="lg" onClick={() => track("partner_cta", { where: "hero" })}>
               {CTA.partner.label}
             </ButtonLink>
           </div>

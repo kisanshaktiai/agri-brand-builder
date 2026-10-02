@@ -12,7 +12,7 @@ export default function Investors() {
     <>
       <Seo title={p.seo.title} description={p.seo.description} path="/company/investors" />
       <PageHero eyebrow={p.hero.eyebrow} title={p.hero.title} lead={p.hero.lead} />
-      <Section className="!pt-0">
+      <Section className="!pt-[calc(var(--ks-section)*0.6)]">
         <Container>
           <ol className="divide-y divide-ks-line border-y border-ks-line">
             {p.thesis.map((t) => (

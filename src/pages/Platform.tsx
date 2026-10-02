@@ -19,8 +19,8 @@ export default function Platform() {
       <Seo title={PLATFORM_PAGE.seo.title} description={PLATFORM_PAGE.seo.description} path="/platform" />
       <PageHero eyebrow={PLATFORM_PAGE.hero.eyebrow} title={PLATFORM_PAGE.hero.title} lead={PLATFORM_PAGE.hero.lead} size="display-1" />
 
-      {/* Three surfaces */}
-      <Container className="pb-[var(--ks-section)]">
+      {/* Two surfaces */}
+      <Container className="pb-[var(--ks-section)] pt-[calc(var(--ks-section)*0.6)]">
         <ol className="grid gap-5 lg:grid-cols-2">
           {SURFACES.map((s, i) => (
             <Reveal key={s.key} as="li" delay={i * 0.08} className="flex flex-col rounded-ks-lg border border-ks-line bg-ks-white p-6 shadow-ks-1">

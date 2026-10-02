@@ -110,13 +110,13 @@ export function ButtonLink({ to, href, children, variant = "primary", size = "md
   const cls = cn(btn(variant, size), className);
   if (href) {
     return (
-      <a href={href} className={cls} onClick={onClick} target="_blank" rel="noopener" {...rest}>
+      <a href={href} className={cls} data-variant={variant} onClick={onClick} target="_blank" rel="noopener" {...rest}>
         {children}
       </a>
     );
   }
   return (
-    <Link to={to ?? "/"} className={cls} onClick={onClick} {...rest}>
+    <Link to={to ?? "/"} className={cls} data-variant={variant} onClick={onClick} {...rest}>
       {children}
     </Link>
   );
@@ -124,7 +124,7 @@ export function ButtonLink({ to, href, children, variant = "primary", size = "md
 
 export function Button({ children, variant = "primary", size = "md", className, ...rest }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: BtnVariant; size?: "md" | "lg" }) {
   return (
-    <button className={cn(btn(variant, size), className)} {...rest}>
+    <button className={cn(btn(variant, size), className)} data-variant={variant} {...rest}>
       {children}
     </button>
   );

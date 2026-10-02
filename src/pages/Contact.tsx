@@ -11,7 +11,7 @@ export default function Contact() {
     <>
       <Seo title={CONTACT_PAGE.seo.title} description={CONTACT_PAGE.seo.description} path="/contact" />
       <PageHero eyebrow={CONTACT_PAGE.hero.eyebrow} title={CONTACT_PAGE.hero.title} lead={CONTACT_PAGE.hero.lead} />
-      <Section className="!pt-0">
+      <Section className="!pt-[calc(var(--ks-section)*0.6)]">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12">
             <div className="lg:col-span-7">

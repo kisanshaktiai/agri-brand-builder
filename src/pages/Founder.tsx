@@ -163,6 +163,8 @@ export default function Founder() {
               alt={`${founderProfile.name}, ${founderProfile.title}`}
               width={900}
               height={1125}
+              fetchPriority="high"
+              decoding="async"
                 className="founder-portrait-in absolute inset-0 h-full w-full object-cover object-[50%_12%] sm:object-[50%_18%]"
             />
           ) : null}

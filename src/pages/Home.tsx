@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Seo, ORGANIZATION_LD, WEBSITE_LD, SOFTWARE_LD } from "@/components/site/Seo";
 import { Container, Section, Eyebrow, Heading, Lead, Body, ButtonLink, TechMark, MaturityBadge } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
@@ -6,8 +7,6 @@ import { Phone, ScreenImage } from "@/components/site/Device";
 import { LivingPhone, type LivingStep } from "@/components/moments/LivingPhone";
 import { HeroSignals } from "@/components/moments/HeroSignals";
 import { FamilyEmerge } from "@/components/moments/FamilyEmerge";
-import { WhyTrust } from "@/components/moments/WhyTrust";
-import { PlatformZoom } from "@/components/moments/PlatformZoom";
 import { FinalStatement } from "@/components/moments/FinalStatement";
 import { HOME } from "@/content/pages";
 import { CTA } from "@/content/site";
@@ -92,21 +91,14 @@ export default function Home() {
                   </p>
                 </div>
               </div>
+              <p className="mt-6">
+                <Link to="/technology#tarka" className="text-sm font-medium text-ks-field underline-offset-4 hover:underline">
+                  See how one answer explains itself
+                </Link>
+              </p>
             </Reveal>
           </div>
         </Container>
-      </Section>
-
-      {/* 3. Evidence chain */}
-      <Section band>
-        <WhyTrust eyebrow={HOME.evidence.eyebrow} title={HOME.evidence.title} body={HOME.evidence.body} />
-      </Section>
-
-      {/* 5. Platform zoom-out */}
-      <Section className="!py-0 lg:!py-0">
-        <div className="py-[var(--ks-section)] lg:py-0">
-          <PlatformZoom eyebrow={HOME.zoom.eyebrow} title={HOME.zoom.title} steps={HOME.zoom.steps} />
-        </div>
       </Section>
 
       {/* Enterprise */}

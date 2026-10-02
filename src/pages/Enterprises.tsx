@@ -20,7 +20,7 @@ export default function Enterprises() {
           </ButtonLink>
         </div>
       </PageHero>
-      <Container className="pb-[var(--ks-section)]">
+      <Container className="pb-[var(--ks-section)] pt-[calc(var(--ks-section)*0.6)]">
         <Reveal>
           <Browser url="partner.kisanshaktiai.in">
             <ScreenImage screen="tenant-dashboard" priority />

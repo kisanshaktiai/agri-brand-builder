@@ -99,7 +99,7 @@ export const TECHNOLOGY_PAGE = {
 export const PLATFORM_PAGE = {
   seo: {
     title: "Platform — One companion, your farmer ecosystem",
-    description: "A white-label platform for partners: three connected surfaces on one shared foundation, run under each organisation's own brand.",
+    description: "A white-label platform for partners: two connected surfaces on one shared foundation, run under each organisation's own brand.",
   },
   hero: {
     eyebrow: "Platform",

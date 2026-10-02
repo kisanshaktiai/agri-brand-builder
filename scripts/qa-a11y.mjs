@@ -14,6 +14,7 @@ for (const route of ROUTES) {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await ctx.newPage();
   await page.goto(`http://127.0.0.1:${PORT}${route}`, { waitUntil: "networkidle" });
+  await page.waitForTimeout(2500); // let entrance animations settle so colours are measured at rest
   const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"]).analyze();
   await writeFile(`qa-output/a11y/${slug(route)}.json`, JSON.stringify(results.violations, null, 2));
   summary.push({ route, violations: results.violations.length, ids: results.violations.map((v) => `${v.id}(${v.nodes.length})`) });

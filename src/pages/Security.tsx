@@ -11,7 +11,7 @@ export default function Security() {
     <>
       <Seo title={p.seo.title} description={p.seo.description} path="/security" />
       <PageHero eyebrow={p.hero.eyebrow} title={p.hero.title} lead={p.hero.lead} size="display-1" />
-      <Section className="!pt-0">
+      <Section className="!pt-[calc(var(--ks-section)*0.6)]">
         <Container>
           <ol className="divide-y divide-ks-line border-y border-ks-line">
             {p.principles.map((pr, i) => (
