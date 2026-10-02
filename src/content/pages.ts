@@ -42,7 +42,7 @@ export const HOME = {
   family: {
     eyebrow: "The Technology Family",
     title: "Five technologies behind one companion.",
-    body: "Each carries one part of the farmer's journey, from understanding what nature is doing to knowing the market around the crop. Together they are what every feature in the app runs on.",
+    body: "These five named technologies power the intelligence layer. The Farmer App adds practical features—Photo Scan, government schemes, agri services, community and farm economics—around them.",
   },
   separation: {
     eyebrow: "Why it can be trusted",
@@ -88,7 +88,7 @@ export const TECHNOLOGY_PAGE = {
   hero: {
     eyebrow: "Technology",
     title: "The Technology Family.",
-    lead: "Five named technologies power the companion, in the order a farmer meets them: understand what nature is doing, know what is changing, talk to your land, follow a plan that adapts, and know the market around your crop.",
+    lead: "Five named technologies form the intelligence layer: TATVA observes, PAHRA alerts, TARKA lets you talk with your land, RIITU adapts the crop plan, and RUKH brings market intelligence around your crop.",
   },
   hierarchy: {
     eyebrow: "How it fits together",
@@ -116,8 +116,8 @@ export const PLATFORM_PAGE = {
   },
   architecture: {
     eyebrow: "Architecture",
-    title: "Every surface and technology, with its purpose, maturity and an illustration.",
-    hint: "Hover a node on desktop, or tap it on a phone.",
+    title: "How the companion fits together.",
+    hint: "Explore the Farmer App, Partner Portal, Admin Portal and the five named technologies.",
   },
   days: {
     eyebrow: "Two days, side by side",
