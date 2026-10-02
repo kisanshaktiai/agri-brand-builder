@@ -1,6 +1,6 @@
 # Claims audit
 
-Generated 2026-10-02T07:04:27.634Z. Every product statement below carries the fact it traces to and that fact's maturity label.
+Generated 2026-10-02T12:57:12.350Z. Every product statement below carries the fact it traces to and that fact's maturity label.
 
 | Where | Statement | Fact | Maturity | Check |
 |---|---|---|---|---|
@@ -105,7 +105,13 @@ Generated 2026-10-02T07:04:27.634Z. Every product statement below carries the fa
 
 - ok (negated) dist/farmer-app/index.html: "--d:3s">market insight · not a guaranteed"
 - ok (negated) dist/farmer-app/index.html: "n words. Market insight, not a guaranteed"
+- ok (negated) dist/hi/farmer-app/index.html: "--d:3s">market insight · not a guaranteed"
+- ok (negated) dist/hi/index.html: "--d:3s">market insight · not a guaranteed"
+- ok (negated) dist/hi/technology/index.html: "--d:3s">market insight · not a guaranteed"
 - ok (negated) dist/index.html: "--d:3s">market insight · not a guaranteed"
+- ok (negated) dist/mr/farmer-app/index.html: "--d:3s">market insight · not a guaranteed"
+- ok (negated) dist/mr/index.html: "--d:3s">market insight · not a guaranteed"
+- ok (negated) dist/mr/technology/index.html: "--d:3s">market insight · not a guaranteed"
 - ok (negated) dist/technology/index.html: "t-sm"> Market insight, never a guaranteed"
 - ok (negated) dist/technology/index.html: "--d:3s">market insight · not a guaranteed"
 - No forbidden language found in built HTML.
