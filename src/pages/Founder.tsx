@@ -133,7 +133,7 @@ function BrandLogo({ logo, name }: { logo?: string; name: string }) {
   if (!logo || failed) return null;
   return (
     <span className="founder-sheen flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-card p-2 founder-row">
-      <img src={logo} alt={`${name} logo`} onError={() => setFailed(true)} className="h-full w-full object-contain" />
+      <img src={logo} alt={`${name} logo`} loading="lazy" decoding="async" onError={() => setFailed(true)} className="h-full w-full object-contain" />
     </span>
   );
 }
@@ -161,8 +161,8 @@ export default function Founder() {
             <img
               src={founderProfile.portrait}
               alt={`${founderProfile.name}, ${founderProfile.title}`}
-              width={900}
-              height={1125}
+              width={720}
+              height={900}
               fetchPriority="high"
               decoding="async"
                 className="founder-portrait-in absolute inset-0 h-full w-full object-cover object-[50%_12%] sm:object-[50%_18%]"

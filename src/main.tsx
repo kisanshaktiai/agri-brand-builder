@@ -1,6 +1,6 @@
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import App, { AppProviders } from './App.tsx'
+import App, { AppProviders, preloadRoute } from './App.tsx'
 import './index.css'
 import './styles/tokens.css'
 import './styles/scenes.css'
@@ -49,6 +49,7 @@ window.addEventListener('unhandledrejection', (event) => {
     // Prerendered routes carry server markup; hydrate it. Anything else (an
     // unknown route served by the SPA fallback) renders from scratch.
     if (rootElement.hasChildNodes() && rootElement.dataset.prerendered === 'true') {
+      await preloadRoute(window.location.pathname);
       hydrateRoot(rootElement, tree);
     } else {
       createRoot(rootElement).render(tree);

@@ -24,6 +24,20 @@ const Founder = lazyPage(() => import("./pages/Founder"));
 /** Called by the prerender entry so every route renders synchronously. */
 export const preloadPages = () => Promise.all([Technology, Platform, FarmerApp, Enterprises, Security, Company, Investors, Contact, LeadForm, Founder].map((p) => p.preload()));
 
+/**
+ * Loads the page module for a path before hydration, so prerendered HTML is
+ * hydrated in place instead of being swapped for a Suspense fallback while
+ * the route's chunk downloads.
+ */
+export const preloadRoute = (pathname: string) => {
+  const map: Record<string, { preload: () => Promise<void> }> = {
+    "/technology": Technology, "/platform": Platform, "/farmer-app": FarmerApp, "/enterprises": Enterprises, "/security": Security,
+    "/company": Company, "/company/investors": Investors, "/contact": Contact, "/lead-form": LeadForm, "/founder": Founder,
+  };
+  const page = map[pathname.replace(/\/+$/, "") || "/"];
+  return page ? page.preload() : Promise.resolve();
+};
+
 const RouteTracker = () => {
   const location = useLocation();
   useEffect(() => {
