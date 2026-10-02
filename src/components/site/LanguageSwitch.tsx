@@ -32,7 +32,7 @@ export function LanguageSwitch({ size = "md", className, compact = false }: { si
   };
 
   return (
-    <nav aria-label={content.UI.language} className={cn("relative inline-grid grid-cols-3 rounded-full border border-ks-line bg-ks-white/70 p-0.5 backdrop-blur-sm", size === "lg" ? "w-full text-base" : "text-[0.8125rem]", pulse && "ks-lang-pulse", className)}>
+    <div role="group" aria-label={content.UI.language} className={cn("relative inline-grid grid-cols-3 rounded-full border border-ks-line bg-ks-white/70 p-0.5 backdrop-blur-sm", size === "lg" ? "w-full text-base" : "text-[0.8125rem]", pulse && "ks-lang-pulse", className)}>
       <span aria-hidden className="ks-lang-thumb absolute bottom-0.5 top-0.5 rounded-full bg-ks-ink" style={{ left: `calc(0.125rem + ${idx} * ((100% - 0.25rem) / 3))`, width: "calc((100% - 0.25rem) / 3)" }} />
       {LOCALES.map((l) => (
         <a
@@ -48,6 +48,6 @@ export function LanguageSwitch({ size = "md", className, compact = false }: { si
           {compact ? l.short : l.native}
         </a>
       ))}
-    </nav>
+    </div>
   );
 }
