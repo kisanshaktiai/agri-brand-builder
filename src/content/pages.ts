@@ -37,7 +37,8 @@ export const HOME = {
       { key: "services", arc: "Execute", feature: "Agri Services", screen: "services", title: "Find the help the farm needs.", body: "Connect with practical agricultural services such as labour and machinery, so the work the crop needs can be organised.", fact: "app.services" },
       { key: "connect", arc: "Connect", feature: "Community", screen: "community", title: "Community connects farmers beyond language.", body: "Farmers can share knowledge across languages—for example, a Telugu-speaking farmer can communicate with a Marathi-speaking farmer through the platform.", fact: "app.community" },
       { key: "result", arc: "Understand", feature: "Farm Economics", screen: "economics", title: "Farm Economics helps understand the result.", body: "Record crop-wise income and expenses for every land and understand the season's economics. Beta, under development and in testing.", fact: "app.economics" },
-    ]  },
+    ],
+  },
   family: {
     eyebrow: "The Technology Family",
     title: "Five technologies behind one companion.",
