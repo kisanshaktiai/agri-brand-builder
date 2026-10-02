@@ -7,11 +7,11 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
 const LOCKED = [
-  ["TARKA", "Trusted Agricultural Reasoning & Knowledge Architecture", "Neuro-Symbolic AI Decision Intelligence"],
-  ["TATVA", "Terrain, Atmosphere, Thermal & Vegetation Assessment", "Multimodal AI Land-State Intelligence"],
-  ["RIITU", "Responsive Intelligence for Integrated Temporal Agriculture", "Dynamic AI Crop Scheduling & Prescription"],
-  ["PAHRA", "Proactive Agricultural Hazard & Risk Assessment", "Proactive AI Farm-Risk Intelligence"],
-  ["RUKH", "Regional Understanding, Knowledge & Harvest", "Predictive AI Market Intelligence"],
+  ["TARKA", "A multilingual conversation for each land", "Land-Specific Multilingual AI"],
+  ["TATVA", "Sky · Soil · Water · Temperature · Weather", "Five-Element Land Intelligence"],
+  ["RIITU", "Dynamic stage-wise crop scheduling", "Dynamic Crop Scheduling & Guidance"],
+  ["PAHRA", "Land-specific proactive farm alerts", "Proactive Farm Alerts"],
+  ["RUKH", "Market intelligence around your crop", "Crop & Market Intelligence"],
 ];
 const NEAR_MISS = [/\bTarka\b/, /\bTatva\b/, /\bRiitu\b/, /\bRitu\b/, /\bPahra\b/, /\bRukh\b/, /\bRIITU\s*5/, /Panchatatva/i, /Pancha ?Tatva/i, /KisanShaktiAI\b/, /Kisan Shakti AI/, /KisanShakti Ai\b/, /TATVA5/];
 

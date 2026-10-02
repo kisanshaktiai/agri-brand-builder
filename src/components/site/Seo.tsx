@@ -40,7 +40,7 @@ export const ORGANIZATION_LD = {
   "@type": "Organization",
   name: BRAND,
   url: SITE_URL,
-  logo: `${SITE_URL}/brand/kisanshakti-mark.svg`,
+  logo: `${SITE_URL}/brand/logo.png`,
   description: "A complete digital companion for every farmer and every land, built in Maharashtra, India, and brought to farmers by partner organisations under their own brand.",
   address: { "@type": "PostalAddress", addressRegion: "Maharashtra", addressCountry: "IN" },
   sameAs: ["https://www.youtube.com/@kisanshaktiai"],

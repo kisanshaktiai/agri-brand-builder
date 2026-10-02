@@ -16,19 +16,23 @@
 
 :root {
   /* Colour — warm paper, deep ink, one accent. */
-  --ks-paper: 40 20% 97%;        /* #f7f6f2 page */
-  --ks-paper-2: 40 16% 94%;      /* #f0efe9 alternate band */
+  --ks-paper: 80 25% 98%;        /* #f9faf6 page, a hint of leaf */
+  --ks-paper-2: 90 22% 95%;      /* #f1f4ec alternate band */
   --ks-white: 0 0% 100%;
-  --ks-ink: 150 20% 7%;          /* #0e1512 */
-  --ks-ink-2: 150 8% 30%;        /* #46514b */
+  --ks-ink: 130 28% 7%;          /* #0d1710 deep leaf-black */
+  --ks-ink-2: 130 10% 30%;       /* #455148 */
   --ks-ink-3: 150 6% 40%;        /* #606b65, 5.6:1 on paper */
   --ks-ink-4: 150 6% 39%;        /* #5e6963, 5.2:1 on the darker band */
-  --ks-line: 40 10% 86%;         /* #dedcd5 hairline */
-  --ks-line-strong: 40 8% 76%;
-  --ks-field: 152 55% 24%;       /* #1b5e3b accent */
-  --ks-field-deep: 152 60% 16%;
-  --ks-field-soft: 150 30% 92%;  /* tint for accent surfaces */
-  --ks-field-ink: 150 30% 95%;   /* text on accent */
+  --ks-line: 90 10% 87%;         /* #dde0d8 hairline */
+  --ks-line-strong: 90 8% 77%;
+  --ks-field: 108 62% 28%;       /* #2b7418 logo wordmark green: buttons, links */
+  --ks-field-deep: 112 60% 19%;  /* #1d4e13 */
+  --ks-field-soft: 96 45% 93%;   /* #edf5e6 tint for accent surfaces */
+  --ks-field-ink: 96 40% 96%;    /* text on accent */
+  --ks-leaf: 96 62% 42%;         /* #60b028 logo leaf: marks, highlights */
+  --ks-lime: 78 78% 45%;         /* #a0d018 logo lime: accent lines */
+  --ks-night: 132 30% 7%;        /* #0d1a10 hero canvas */
+  --ks-night-2: 128 24% 11%;
   --ks-signal: 34 72% 30%;       /* amber for early access / beta, 5.3:1 on its tint */
   --ks-signal-soft: 36 60% 93%;
   --ks-danger: 8 60% 45%;
@@ -36,7 +40,7 @@
   /* Technology marks: low-saturation hues, used only in the mark badge. */
   --ks-tatva: 28 45% 36%;
   --ks-tarka: 222 30% 22%;
-  --ks-riitu: 140 35% 30%;
+  --ks-riitu: 108 55% 32%;
   --ks-pahra: 18 55% 38%;
   --ks-rukh: 248 30% 38%;
 
@@ -230,4 +234,26 @@ body {
     repeating-linear-gradient(135deg, hsl(var(--ks-paper-2)) 0 10px, hsl(var(--ks-white)) 10px 20px);
   border: 1px dashed hsl(var(--ks-line-strong));
   color: hsl(var(--ks-ink-3));
+}
+
+/* ── Home hero ───────────────────────────────────────────────────── */
+.ks-hero-glow {
+  position: absolute; inset: -20% -10% auto -10%; height: 90%;
+  background:
+    radial-gradient(60% 50% at 78% 55%, hsl(var(--ks-leaf) / 0.22), transparent 70%),
+    radial-gradient(40% 40% at 10% 10%, hsl(var(--ks-lime) / 0.08), transparent 70%);
+  pointer-events: none;
+}
+.ks-hero .ks-phone { box-shadow: 0 0 0 1px hsl(var(--ks-lime) / 0.25), 0 60px 120px -40px hsl(var(--ks-lime) / 0.35), 0 40px 80px -32px rgb(0 0 0 / 0.6); }
+.ks-phone-halo { position: absolute; inset: -12%; border-radius: 50%; background: radial-gradient(closest-side, hsl(var(--ks-leaf) / 0.18), transparent); filter: blur(12px); }
+@keyframes ks-word-in { from { opacity: 0; transform: translateY(0.35em); filter: blur(4px); } to { opacity: 1; transform: none; filter: blur(0); } }
+.ks-word { display: inline-block; animation: ks-word-in 0.9s var(--ks-ease-out) both; }
+.ks-word-block { animation: ks-word-in 0.9s var(--ks-ease-out) both; }
+.ks-signal { fill: none; stroke: hsl(var(--ks-lime)); stroke-width: 1; stroke-opacity: 0.38; stroke-dasharray: 900; stroke-dashoffset: 900; animation: sc-draw 2.2s var(--ks-ease-out) both; }
+@keyframes ks-travel { 0% { offset-distance: 0%; opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
+.ks-signal-dot { fill: hsl(var(--ks-lime)); animation: ks-travel 4.5s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .ks-word, .ks-word-block { animation: none; }
+  .ks-signal { animation: none; stroke-dashoffset: 0; }
+  .ks-signal-dot { animation: none; opacity: 0; }
 }

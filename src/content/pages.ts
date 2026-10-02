@@ -104,7 +104,7 @@ export const PLATFORM_PAGE = {
   hero: {
     eyebrow: "Platform",
     title: "One companion. Your farmer ecosystem.",
-    lead: "Three connected surfaces on one shared foundation. The Farmer App is the farmer's daily companion, the Partner Portal is the partner organisation's operating layer, and the Admin Portal is the control plane that governs the platform.",
+    lead: "Two connected surfaces on one shared, centrally governed foundation. The Farmer App is the farmer's daily companion. The Partner Portal is where a partner organisation runs its own farmer network under its own brand.",
     fact: "platform.surfaces",
   },
   transform: {
@@ -117,7 +117,7 @@ export const PLATFORM_PAGE = {
   architecture: {
     eyebrow: "Architecture",
     title: "How the companion fits together.",
-    hint: "Explore the Farmer App, Partner Portal, Admin Portal and the five named technologies.",
+    hint: "Explore the Farmer App, the Partner Portal and the five named technologies.",
   },
   days: {
     eyebrow: "Two days, side by side",
@@ -140,9 +140,9 @@ export const PLATFORM_PAGE = {
     ],
   },
   governance: {
-    eyebrow: "Governance",
-    title: "The Admin Portal is the governance layer, not another farmer app.",
-    body: "Partners, users, agronomy masters for crops, varieties, companies and products, and the advisory knowledge base are governed in one place, with monitoring across partners.",
+    eyebrow: "Governed centrally",
+    title: "One companion, kept honest for every partner.",
+    body: "Crops, varieties, products and the advisory knowledge every farmer receives are governed centrally and reviewed by experts, so a partner's farmers get the same trusted guidance under the partner's own name.",
     fact: "admin.portal",
   },
 };
@@ -233,7 +233,7 @@ export const SECURITY_PAGE = {
     { title: "Governed decisions", body: "Doses, quantities and timing come only from expert-approved guidance. The AI understands and explains; it never decides.", fact: "platform.separation" },
     { title: "Evidence chains", body: "Every piece of guidance keeps its source, the crop stage it applies to and its approval status. A recommendation can be followed back to its evidence.", fact: "tarka.chain" },
     { title: "Safety checks", body: "A chemical recommendation cannot reach a farmer without a dose, a waiting period and expert approval. Safety checks always win over advice.", fact: "tarka.chemical-gate" },
-    { title: "Controlled administration", body: "Partners, agronomy masters and the advisory knowledge base are administered from the Admin Portal, with monitoring.", fact: "admin.portal" },
+    { title: "Controlled administration", body: "Crops, varieties, products and the advisory knowledge base are administered centrally, with monitoring. Partners configure their ecosystem; they never change the guidance itself.", fact: "admin.portal" },
     { title: "Partner-specific context and branding", body: "Each partner runs under its own context and brand.", fact: "tenant.portal" },
   ],
   pending: {
@@ -286,7 +286,7 @@ export const INVESTORS_PAGE = {
   },
   thesis: [
     { title: "The thesis", body: "Every farmer and every land deserves a companion that understands nature, speaks their language and keeps its guidance honest, brought to them by the organisations that already serve them." },
-    { title: "What exists today", body: "A live Farmer App, a Partner Portal in limited release, a live Admin Portal, and the five-technology family at the maturity stated on this site." },
+    { title: "What exists today", body: "A live Farmer App, a Partner Portal in limited release, and the five-technology family at the maturity stated on this site." },
     { title: "How to reach us", body: "Use the partner form or the founder's contact card. We answer directly." },
   ],
 };

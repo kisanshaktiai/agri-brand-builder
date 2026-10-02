@@ -4,6 +4,7 @@ import { Container, Section, Eyebrow, Heading, Lead, Body, ButtonLink, TechMark,
 import { Reveal } from "@/components/site/Reveal";
 import { Phone, ScreenImage } from "@/components/site/Device";
 import { LivingPhone, type LivingStep } from "@/components/moments/LivingPhone";
+import { HeroSignals } from "@/components/moments/HeroSignals";
 import { FamilyEmerge } from "@/components/moments/FamilyEmerge";
 import { WhyTrust } from "@/components/moments/WhyTrust";
 import { PlatformZoom } from "@/components/moments/PlatformZoom";
@@ -19,32 +20,7 @@ export default function Home() {
       <Seo title={HOME.seo.title} description={HOME.seo.description} path="/" jsonLd={[ORGANIZATION_LD, WEBSITE_LD, SOFTWARE_LD]} />
 
       {/* Hero */}
-      <Container className="pt-[calc(var(--ks-section)*0.55)] pb-[calc(var(--ks-section)*0.5)]">
-        <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-          <Reveal>
-            <Eyebrow>{HOME.hero.eyebrow}</Eyebrow>
-            <Heading as="h1" size="display-1">
-              {HOME.hero.title}
-            </Heading>
-            <Lead>{HOME.hero.lead}</Lead>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href={CTA.openApp.href} size="lg" onClick={() => track("farmer_app_cta", { where: "hero" })}>
-                {CTA.openApp.label}
-              </ButtonLink>
-              <ButtonLink to={CTA.partner.to} variant="secondary" size="lg" onClick={() => track("partner_cta", { where: "hero" })}>
-                {CTA.partner.label}
-              </ButtonLink>
-            </div>
-          </Reveal>
-          <Reveal delay={0.15} className="hidden lg:block">
-            <div className="mx-auto w-[300px]">
-              <Phone label="Farmer App, Farm Today">
-                <ScreenImage screen="farm-today" priority />
-              </Phone>
-            </div>
-          </Reveal>
-        </div>
-      </Container>
+      <HeroSignals eyebrow={HOME.hero.eyebrow} title={HOME.hero.title} lead={HOME.hero.lead} />
 
       {/* Thesis */}
       <Section band labelledBy="thesis-h">

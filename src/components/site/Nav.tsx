@@ -41,9 +41,9 @@ export function Nav() {
       <a href="#main" className="ks-skip">
         Skip to content
       </a>
-      <div className="ks-container flex h-16 items-center justify-between gap-6">
+      <div className="ks-container flex h-[68px] items-center justify-between gap-6">
         <Link to="/" className="flex items-center gap-2.5 text-ks-ink" aria-label={`${BRAND} home`}>
-          <Wordmark />
+          <Wordmark height={40} />
         </Link>
 
         <nav aria-label="Primary" className="hidden lg:flex items-center gap-5 xl:gap-7">

@@ -56,7 +56,7 @@ export function ArchitectureDiagram({ eyebrow, title, hint }: { eyebrow: string;
       <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-12">
         <div className="rounded-ks-lg border border-ks-line bg-ks-paper-2 p-3 md:p-5" role="group" aria-label="Platform architecture">
           <p className="ks-label mb-2 px-1">Surfaces</p>
-          <div className="grid gap-2 sm:grid-cols-3">
+          <div className="grid gap-2 sm:grid-cols-2">
             {surfaces.map((n) => (
               <ArchNodeButton key={n.id} n={n} active={activeId === n.id} panelId={panelId} onSelect={select} />
             ))}
@@ -89,7 +89,7 @@ export function ArchitectureDiagram({ eyebrow, title, hint }: { eyebrow: string;
                   </Phone>
                 </div>
               ) : (
-                <Browser url={screenById(active.screen).surface === "tenant-portal" ? "partner.kisanshaktiai.in" : "admin · control plane"}>
+                <Browser url="partner.kisanshaktiai.in">
                   <ScreenImage screen={active.screen} />
                 </Browser>
               )}

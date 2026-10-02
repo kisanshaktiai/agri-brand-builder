@@ -4,7 +4,7 @@
  * drawn by hand. `captured: false` renders an explicit "capture pending"
  * tile, never a mock.
  */
-export type Surface = "farmer-app" | "tenant-portal" | "admin-portal";
+export type Surface = "farmer-app" | "tenant-portal";
 
 export interface Screen {
   id: string;
@@ -48,10 +48,6 @@ export const SCREENS: Screen[] = [
   { id: "tenant-farmers", surface: "tenant-portal", question: "Who are my farmers and what are they doing?", title: "Farmer management", alt: "Partner Portal farmer management list", file: "tenant/farmers.webp", captured: false, ...DESKTOP },
   { id: "tenant-branding", surface: "tenant-portal", question: "How does it carry my brand?", title: "Partner branding", alt: "Partner Portal branding settings", file: "tenant/branding.webp", captured: false, ...DESKTOP },
   { id: "tenant-login", surface: "tenant-portal", question: "How do organisations sign in?", title: "Partner sign-in", alt: "Partner Portal sign-in page", file: "tenant/login.webp", captured: false, ...DESKTOP },
-  { id: "admin-rules", surface: "admin-portal", question: "How is the platform governed?", title: "Decision rules", alt: "Admin Portal governance view of decision rules", file: "admin/rules.webp", captured: false, ...DESKTOP },
-  { id: "admin-knowledge", surface: "admin-portal", question: "Where does the knowledge come from?", title: "Knowledge sources", alt: "Admin Portal knowledge sources with document ingestion", file: "admin/knowledge.webp", captured: false, ...DESKTOP },
-  { id: "admin-tenants", surface: "admin-portal", question: "Who runs on the platform?", title: "Partner management", alt: "Admin Portal partner management", file: "admin/tenants.webp", captured: false, ...DESKTOP },
-  { id: "admin-login", surface: "admin-portal", question: "Who can administer the platform?", title: "Admin sign-in", alt: "Admin Portal sign-in page", file: "admin/login.webp", captured: false, ...DESKTOP },
 ];
 
 export const screenById = (id: string): Screen => {

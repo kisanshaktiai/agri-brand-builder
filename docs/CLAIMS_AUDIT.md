@@ -1,6 +1,6 @@
 # Claims audit
 
-Generated 2026-10-02T03:55:10.084Z. Every product statement below carries the fact it traces to and that fact's maturity label.
+Generated 2026-10-02T05:34:16.636Z. Every product statement below carries the fact it traces to and that fact's maturity label.
 
 | Where | Statement | Fact | Maturity | Check |
 |---|---|---|---|---|
@@ -32,14 +32,8 @@ Generated 2026-10-02T03:55:10.084Z. Every product statement below carries the fa
 | platform.tenant-portal | Partner onboarding and farmer management. | tenant.portal | Live, limited | ok |
 | platform.tenant-portal | Land management and farmer activity. | tenant.portal | Live, limited | ok |
 | platform.tenant-portal | Partner branding: the farmer experience runs under your name and colours. | tenant.portal | Live, limited | ok |
-| platform.admin-portal | Partner and user management, agronomy masters for crops, varieties, companies and products, governance of the advisory knowledge base, and monitoring across partners. | admin.portal | Live | ok |
-| platform.admin-portal | Partner and user management. | admin.portal | Live | ok |
-| platform.admin-portal | Agronomy masters: crops, varieties, companies, products. | admin.portal | Live | ok |
-| platform.admin-portal | Governance of the advisory knowledge base: what is approved, what is under review, and where it comes from. | admin.portal | Live | ok |
-| platform.admin-portal | Monitoring. | admin.portal | Live | ok |
 | architecture.farmer-app | Where a farmer talks to each land, sees what nature is doing, and knows what to do today. | app.companion | Live | ok |
 | architecture.tenant-portal | Where an FPO, dealer or agri-input company runs its branded farmer network. | tenant.portal | Live, limited | ok |
-| architecture.admin-portal | Where partners, agronomy masters and the advisory knowledge base are governed and monitored. | admin.portal | Live | ok |
 | architecture.tatva | Sky, soil, water, temperature and weather, read for each land. | tatva.ndvi | Live | ok |
 | architecture.pahra | Land-specific alerts as conditions change; look, confirm, then decide. | pahra.daily-risk | Early access | beta: statement itself lacks 'early access' (badge/limits must carry it) |
 | architecture.tarka | A conversation for each land, in your language, with practical guidance checked against expert-approved knowledge. | tarka.chain | Live, limited | ok |
@@ -70,36 +64,40 @@ Generated 2026-10-02T03:55:10.084Z. Every product statement below carries the fa
 | pages.FARMER_APP_PAGE.more[4] | A PWA plus Android and iOS builds that work on weak networks and sync when back online. | app.offline | Live | ok |
 | pages.FARMER_APP_PAGE.more[5] | Sign in with a mobile number and a PIN. No email needed. | app.login | Live | ok |
 | pages.HOME.thesis | From the first signal nature gives to the last rupee counted, one app stays with the farmer and with each of their lands: observing, alerting, seeing, understanding, planning, informing, connecting and accounting. FPOs, dealers, agri-input companies and agricultural enterprises bring that same companion to their farmers under their own name. | app.companion | Live | ok |
-| pages.HOME.living.steps[0] | Sky, soil, water, temperature and weather, read for this land: the satellite's view of the field, hourly weather, rainfall and the heat the crop has gathered. | tatva.weather | Live | ok |
-| pages.HOME.living.steps[1] | As conditions shift, a land-specific alert tells you what changed and what deserves a look. Early access. | pahra.daily-risk | Early access | ok |
-| pages.HOME.living.steps[2] | Capture a leaf, a pest or a patch of field. The photo is read in the context of this land, so the observation means something. | app.photo-scan | Live | ok |
-| pages.HOME.living.steps[3] | Talk to your land, in your language. Each field has its own conversation that already knows the crop and the season, and answers with practical guidance and the reason why. | tarka.land-space | Live, limited | ok |
-| pages.HOME.living.steps[4] | A stage-wise plan for this land, updated as nature changes, so Farm Today always says what is due, what to watch and what is blocked. | riitu.farm-today | Live, limited | ok |
-| pages.HOME.living.steps[5] | Mandi prices nearby, how they compare and what they mean for this crop, in plain words. | rukh.prices | Live, limited | ok |
-| pages.HOME.living.steps[6] | Find the government support you are eligible for, and the labour and machinery the work needs. | app.services | Live, limited | ok |
-| pages.HOME.living.steps[7] | A Telugu-speaking farmer and a Marathi-speaking farmer can talk to each other through the platform. | app.community | Live | ok |
-| pages.HOME.living.steps[8] | Crop-wise income and expenses for every land, so the season's result is clear. Beta, under development. | app.economics | Early access | beta: statement itself lacks 'early access' (badge/limits must carry it) |
+| pages.HOME.living.steps[0] | Map each land once, record the crop and season, and give the companion the field it needs to follow. Everything that comes next is tied to this land. | app.land | Live | ok |
+| pages.HOME.living.steps[1] | Sky, soil, water, temperature and weather, read for this land: the satellite's view of the field, hourly weather, rainfall and the heat the crop has gathered. | tatva.weather | Live | ok |
+| pages.HOME.living.steps[2] | As conditions shift, a land-specific alert tells you what changed and what deserves a look. Early access. | pahra.daily-risk | Early access | ok |
+| pages.HOME.living.steps[3] | Capture a leaf, a pest or a patch of field. The photo is read in the context of this land, so the observation means something. | app.photo-scan | Live | ok |
+| pages.HOME.living.steps[4] | Talk to your land, in your language. Each field has its own conversation that already knows the crop and the season, and answers with practical guidance and the reason why. | tarka.land-space | Live, limited | ok |
+| pages.HOME.living.steps[5] | A stage-wise plan for this land, updated as nature changes, so Farm Today always says what is due, what to watch and what is blocked. | riitu.farm-today | Live, limited | ok |
+| pages.HOME.living.steps[6] | RUKH brings nearby mandi prices, comparisons and market context into the farmer's day. Information for the decision, never a promised price. | rukh.prices | Live, limited | ok |
+| pages.HOME.living.steps[7] | Understand applicable agriculture schemes, benefits and eligibility in the farmer's language. No government affiliation is implied. | app.schemes | Live | ok |
+| pages.HOME.living.steps[8] | Connect with practical agricultural services such as labour and machinery, so the work the crop needs can be organised. | app.services | Live, limited | ok |
+| pages.HOME.living.steps[9] | Farmers can share knowledge across languages—for example, a Telugu-speaking farmer can communicate with a Marathi-speaking farmer through the platform. | app.community | Live | ok |
+| pages.HOME.living.steps[10] | Record crop-wise income and expenses for every land and understand the season's economics. Beta, under development and in testing. | app.economics | Early access | beta: statement itself lacks 'early access' (badge/limits must carry it) |
 | pages.HOME.separation | The AI understands your question and explains the answer in your language. What to apply, how much and when come only from expert-approved guidance that has been checked against your field and your crop's stage. The AI never invents a dose. | platform.separation | Live | ok |
 | pages.HOME.evidence | Follow one question from a rice field to the answer the farmer hears. Five plain checks stand between a question and a recommendation. | tarka.chain | Live, limited | ok |
 | pages.HOME.enterprise | Onboard your organisation, bring your farmers and their lands, set your brand, and follow farmer activity from the Partner Portal. KisanShakti AI is sold to organisations, never directly to farmers. | tenant.portal | Live, limited | ok |
 | pages.INVESTORS_PAGE.hero | We publish no customer logos, revenue, accuracy figures or certifications because we have none to publish yet. What we can show is a working companion, a governed knowledge base, and a clear thesis. | company.stage | Live | ok |
-| pages.PLATFORM_PAGE.hero | Three connected surfaces on one shared foundation. The Farmer App is the farmer's daily companion, the Partner Portal is the partner organisation's operating layer, and the Admin Portal is the control plane that governs the platform. | platform.surfaces | Live | ok |
+| pages.PLATFORM_PAGE.hero | Two connected surfaces on one shared, centrally governed foundation. The Farmer App is the farmer's daily companion. The Partner Portal is where a partner organisation runs its own farmer network under its own brand. | platform.surfaces | Live | ok |
 | pages.PLATFORM_PAGE.transform | A partner runs the farmer experience under its own name, colours and context. The guidance, crop plans and safety checks are shared and governed centrally. Partners configure their ecosystem; they do not receive or fork the platform's code. | platform.multi-tenant | Live, limited | ok |
-| pages.PLATFORM_PAGE.days.farmer[0] | What nature is doing on each land: weather, the satellite's view, water. | tatva.weather | Live | ok |
-| pages.PLATFORM_PAGE.days.farmer[1] | Farm Today lists what is due, what to watch and what is blocked. | riitu.farm-today | Live, limited | ok |
-| pages.PLATFORM_PAGE.days.farmer[2] | A photo of a leaf and a question to this land, in Marathi; practical guidance with the reason why. | tarka.land-space | Live, limited | ok |
-| pages.PLATFORM_PAGE.days.farmer[3] | An alert: something is changing on the north plot. Go and look. Early access. | pahra.daily-risk | Early access | ok |
-| pages.PLATFORM_PAGE.days.farmer[4] | Mandi prices nearby and the selling advisor; the day's expenses noted. Farm Economics is in beta. | rukh.prices | Live, limited | ok |
-| pages.PLATFORM_PAGE.days.tenant[0] | Onboard a new farmer group and their lands. | tenant.portal | Live, limited | ok |
-| pages.PLATFORM_PAGE.days.tenant[1] | Review farmer activity across the network. | tenant.portal | Live, limited | ok |
-| pages.PLATFORM_PAGE.days.tenant[2] | Update the organisation's branding; farmers see it on their next sync. | tenant.portal | Live, limited | ok |
-| pages.PLATFORM_PAGE.days.tenant[3] | Check land records and crop coverage across villages. | tenant.portal | Live, limited | ok |
-| pages.PLATFORM_PAGE.days.tenant[4] | Everything ran under the partner's own context, on the shared companion. | platform.multi-tenant | Live, limited | ok |
-| pages.PLATFORM_PAGE.governance | Partners, users, agronomy masters for crops, varieties, companies and products, and the advisory knowledge base are governed in one place, with monitoring across partners. | admin.portal | Live | ok |
+| pages.PLATFORM_PAGE.days.farmer[0] | TATVA shows what nature is doing on each land: sky, soil, water, temperature and weather. | tatva.weather | Live | ok |
+| pages.PLATFORM_PAGE.days.farmer[1] | PAHRA surfaces a land-specific change worth noticing; Early access. | pahra.daily-risk | Early access | ok |
+| pages.PLATFORM_PAGE.days.farmer[2] | Photo Scan helps inspect a crop photo, then TARKA lets the farmer ask that land about it. | app.photo-scan | Live | ok |
+| pages.PLATFORM_PAGE.days.farmer[3] | TARKA answers in the farmer's language with practical guidance and the reason why. | tarka.land-space | Live, limited | ok |
+| pages.PLATFORM_PAGE.days.farmer[4] | RIITU keeps Farm Today aligned with the crop's stage and changing conditions. | riitu.farm-today | Live, limited | ok |
+| pages.PLATFORM_PAGE.days.farmer[5] | RUKH brings nearby mandi prices and market context into the decision. | rukh.prices | Live, limited | ok |
+| pages.PLATFORM_PAGE.days.farmer[6] | Government schemes, agri services and community help the farmer act; Farm Economics records the season's numbers in beta. | app.companion | Live | ok |
+| pages.PLATFORM_PAGE.days.partner[0] | Onboard a new farmer group and their lands. | tenant.portal | Live, limited | ok |
+| pages.PLATFORM_PAGE.days.partner[1] | Review farmer activity across the network. | tenant.portal | Live, limited | ok |
+| pages.PLATFORM_PAGE.days.partner[2] | Update the organisation's branding; farmers see it on their next sync. | tenant.portal | Live, limited | ok |
+| pages.PLATFORM_PAGE.days.partner[3] | Check land records and crop coverage across villages. | tenant.portal | Live, limited | ok |
+| pages.PLATFORM_PAGE.days.partner[4] | Everything ran under the partner's own context, on the shared companion. | platform.multi-tenant | Live, limited | ok |
+| pages.PLATFORM_PAGE.governance | Crops, varieties, products and the advisory knowledge every farmer receives are governed centrally and reviewed by experts, so a partner's farmers get the same trusted guidance under the partner's own name. | admin.portal | Live | ok |
 | pages.SECURITY_PAGE.principles[0] | Doses, quantities and timing come only from expert-approved guidance. The AI understands and explains; it never decides. | platform.separation | Live | ok |
 | pages.SECURITY_PAGE.principles[1] | Every piece of guidance keeps its source, the crop stage it applies to and its approval status. A recommendation can be followed back to its evidence. | tarka.chain | Live, limited | ok |
 | pages.SECURITY_PAGE.principles[2] | A chemical recommendation cannot reach a farmer without a dose, a waiting period and expert approval. Safety checks always win over advice. | tarka.chemical-gate | Live, limited | ok |
-| pages.SECURITY_PAGE.principles[3] | Partners, agronomy masters and the advisory knowledge base are administered from the Admin Portal, with monitoring. | admin.portal | Live | ok |
+| pages.SECURITY_PAGE.principles[3] | Crops, varieties, products and the advisory knowledge base are administered centrally, with monitoring. Partners configure their ecosystem; they never change the guidance itself. | admin.portal | Live | ok |
 | pages.SECURITY_PAGE.principles[4] | Each partner runs under its own context and brand. | tenant.portal | Live, limited | ok |
 | pages.SECURITY_PAGE.pending | A partner-isolation security audit has not yet been completed. Until it is, we make no technical isolation claims and hold no security certifications. We will update this page when that changes. | security.verified | Live | ok |
 

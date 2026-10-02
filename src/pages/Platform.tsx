@@ -21,7 +21,7 @@ export default function Platform() {
 
       {/* Three surfaces */}
       <Container className="pb-[var(--ks-section)]">
-        <ol className="grid gap-5 lg:grid-cols-3">
+        <ol className="grid gap-5 lg:grid-cols-2">
           {SURFACES.map((s, i) => (
             <Reveal key={s.key} as="li" delay={i * 0.08} className="flex flex-col rounded-ks-lg border border-ks-line bg-ks-white p-6 shadow-ks-1">
               <div className="flex items-start justify-between gap-3">
@@ -39,7 +39,7 @@ export default function Platform() {
                     </Phone>
                   </div>
                 ) : (
-                  <Browser url={s.key === "tenant-portal" ? "partner.kisanshaktiai.in" : "admin · control plane"}>
+                  <Browser url="partner.kisanshaktiai.in">
                     <ScreenImage screen={s.screen} />
                   </Browser>
                 )}
@@ -91,8 +91,8 @@ export default function Platform() {
               </div>
             </Reveal>
             <Reveal delay={0.1} className="lg:col-span-7">
-              <Browser url="admin · control plane">
-                <ScreenImage screen="admin-knowledge" />
+              <Browser url="partner.kisanshaktiai.in">
+                <ScreenImage screen="tenant-dashboard" />
               </Browser>
             </Reveal>
           </div>

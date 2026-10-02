@@ -16,7 +16,7 @@ export interface Fact {
 
 export const FACTS: Fact[] = [
   // Platform
-  { id: "platform.surfaces", area: "Platform", maturity: "live", statement: "Three connected surfaces on one shared foundation: the Farmer App, the Partner Portal and the Admin Portal." },
+  { id: "platform.surfaces", area: "Platform", maturity: "live", statement: "Two connected surfaces on one shared, centrally governed foundation: the Farmer App and the Partner Portal." },
   { id: "platform.separation", area: "Platform", maturity: "live", statement: "The AI that talks with the farmer and the guidance that decides what to do are separate. AI understands and explains; doses, quantities and timing come only from expert-approved guidance." },
   { id: "platform.multi-tenant", area: "Platform", maturity: "live-limited", statement: "White-label platform: shared governed intelligence underneath; partner organisations run their own branded farmer ecosystems on top.", limits: ["Partners run under their own context and brand. They do not receive or fork source code."] },
   { id: "platform.commercial", area: "Commercial", maturity: "live", statement: "Sold to organisations, not directly to farmers. No farmer plans or prices are shown.", forbidden: ["per farmer", "₹/month"] },

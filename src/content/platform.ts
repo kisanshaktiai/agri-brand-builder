@@ -2,7 +2,7 @@ import type { Maturity } from "./site";
 import type { TechKey } from "./technologies";
 
 export interface SurfaceDef {
-  key: "farmer-app" | "tenant-portal" | "admin-portal";
+  key: "farmer-app" | "tenant-portal";
   name: string;
   role: string;
   maturity: Maturity;
@@ -49,24 +49,6 @@ export const SURFACES: SurfaceDef[] = [
     ],
     limits: ["Not a CRM, ERP, accounting or sales-force system."],
   },
-  {
-    key: "admin-portal",
-    name: "Admin Portal",
-    role: "The control plane that governs the platform",
-    maturity: "live",
-    question: "How is the platform governed?",
-    description:
-      "Partner and user management, agronomy masters for crops, varieties, companies and products, governance of the advisory knowledge base, and monitoring across partners.",
-    screen: "admin-rules",
-    fact: "admin.portal",
-    capabilities: [
-      { text: "Partner and user management.", fact: "admin.portal" },
-      { text: "Agronomy masters: crops, varieties, companies, products.", fact: "admin.portal" },
-      { text: "Governance of the advisory knowledge base: what is approved, what is under review, and where it comes from.", fact: "admin.portal" },
-      { text: "Monitoring.", fact: "admin.portal" },
-    ],
-    limits: ["The governance layer, not another farmer app."],
-  },
 ];
 
 export interface ArchNode {
@@ -84,7 +66,6 @@ export interface ArchNode {
 export const ARCHITECTURE: ArchNode[] = [
   { id: "farmer-app", kind: "surface", label: "Farmer App", purpose: "The farmer's daily companion", maturity: "live", description: "Where a farmer talks to each land, sees what nature is doing, and knows what to do today.", screen: "farm-today", fact: "app.companion" },
   { id: "tenant-portal", kind: "surface", label: "Partner Portal", purpose: "Partner organisation's operating layer", maturity: "live-limited", description: "Where an FPO, dealer or agri-input company runs its branded farmer network.", screen: "tenant-dashboard", fact: "tenant.portal" },
-  { id: "admin-portal", kind: "surface", label: "Admin Portal", purpose: "Governance control plane", maturity: "live", description: "Where partners, agronomy masters and the advisory knowledge base are governed and monitored.", screen: "admin-rules", fact: "admin.portal" },
   { id: "tatva", kind: "technology", tech: "tatva", label: "TATVA", purpose: "Understand what nature is doing", maturity: "live", description: "Sky, soil, water, temperature and weather, read for each land.", screen: "ndvi", fact: "tatva.ndvi" },
   { id: "pahra", kind: "technology", tech: "pahra", label: "PAHRA", purpose: "Know what is changing", maturity: "beta", description: "Land-specific alerts as conditions change; look, confirm, then decide.", screen: "alerts", fact: "pahra.daily-risk" },
   { id: "tarka", kind: "technology", tech: "tarka", label: "TARKA", purpose: "Talk to your land", maturity: "live-limited", description: "A conversation for each land, in your language, with practical guidance checked against expert-approved knowledge.", screen: "chat-marathi", fact: "tarka.chain" },

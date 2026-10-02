@@ -12,7 +12,7 @@ export function Footer() {
       <div className="ks-container py-16 md:py-20">
         <div className="grid gap-12 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)]">
           <div>
-            <Wordmark />
+            <Wordmark height={48} />
             <p className="ks-lead mt-5 max-w-sm text-ks-ink">{FOOTER.statement}</p>
             <div className="mt-6 flex flex-wrap gap-2">
               <ButtonLink href={CTA.openApp.href} onClick={() => track("farmer_app_cta", { where: "footer" })}>
