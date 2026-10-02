@@ -29,7 +29,7 @@ export const NAV = [
 export const CTA = {
   openApp: { label: "Open Farmer App", href: FARMER_APP_URL, event: "farmer_app_cta" },
   partner: { label: "Partner with us", to: "/contact", event: "partner_cta" },
-  tenant: { label: "Become a partner", to: "/enterprises", event: "tenant_cta" },
+  becomePartner: { label: "Become a partner", to: "/enterprises", event: "partner_cta" },
 } as const;
 
 export const FOOTER = {
