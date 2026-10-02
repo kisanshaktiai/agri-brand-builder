@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { Mark } from "@/components/site/Wordmark";
 import { Reveal } from "@/components/site/Reveal";
 import { useReducedMotion, useMinWidth, useGsap } from "@/lib/motion";
@@ -16,7 +16,7 @@ export function FinalStatement({ lines }: { lines: string[] }) {
   const gsap = useGsap(pinned);
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!gsap || !ref.current) return;
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ scrollTrigger: { trigger: ref.current, start: "top top", end: "+=160%", scrub: 1.2, pin: true } });
@@ -41,7 +41,9 @@ export function FinalStatement({ lines }: { lines: string[] }) {
     );
   }
 
+  // Outer wrapper stays React-owned; GSAP's pin-spacer wraps only the inner element.
   return (
+    <div>
     <div ref={ref} className="flex h-screen items-center">
       <div className="ks-container text-center">
         {lines.map((l, i) => (
@@ -53,6 +55,7 @@ export function FinalStatement({ lines }: { lines: string[] }) {
           <Mark size={44} />
         </div>
       </div>
+    </div>
     </div>
   );
 }

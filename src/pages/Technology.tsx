@@ -5,7 +5,8 @@ import { Container, Section, Eyebrow, Heading, Body, TechMark, MaturityBadge, Ha
 import { Reveal } from "@/components/site/Reveal";
 import { Phone, ScreenImage } from "@/components/site/Device";
 import { FamilyEmerge } from "@/components/moments/FamilyEmerge";
-import { EvidenceChain } from "@/components/moments/EvidenceChain";
+import { WhyTrust } from "@/components/moments/WhyTrust";
+import { TechScene } from "@/components/scenes/TechScene";
 import { TECHNOLOGY_PAGE, HOME } from "@/content/pages";
 import { TECHNOLOGIES, FAMILY_ORDER, HIERARCHY, techByKey } from "@/content/technologies";
 import { CTA } from "@/content/site";
@@ -18,7 +19,7 @@ export default function Technology() {
       <PageHero eyebrow={TECHNOLOGY_PAGE.hero.eyebrow} title={TECHNOLOGY_PAGE.hero.title} lead={TECHNOLOGY_PAGE.hero.lead} size="display-1" />
 
       <Section band className="!pt-[calc(var(--ks-section)*0.6)]">
-        <FamilyEmerge eyebrow="The family" title="Five technologies, one coherent intelligence." linkTo={null} />
+        <FamilyEmerge eyebrow="The family" title="Five technologies, one companion." linkTo={null} />
       </Section>
 
       <Section>
@@ -42,7 +43,6 @@ export default function Technology() {
       {FAMILY_ORDER.map((key, idx) => {
         const t = techByKey(key);
         const band = idx % 2 === 0;
-        const screens = t.screens.filter((s) => s !== "evidence").slice(0, 2);
         return (
           <Section key={key} id={key} band={band} labelledBy={`${key}-h`} className="scroll-mt-16">
             <Container>
@@ -61,7 +61,7 @@ export default function Technology() {
                     <Body className="mt-6">{t.summary}</Body>
                   </Reveal>
                   <Reveal delay={0.1} className="mt-10">
-                    <p className="ks-label mb-3">What it does today</p>
+                    <p className="ks-label mb-3">What it does for you</p>
                     <HairlineList items={t.capabilities.map((c) => ({ body: c.text }))} />
                   </Reveal>
                   <Reveal delay={0.15} className="mt-8">
@@ -75,21 +75,27 @@ export default function Technology() {
                   </Reveal>
                 </div>
                 <div className="lg:col-span-5">
-                  <Reveal delay={0.1} className="flex justify-center gap-4 lg:sticky lg:top-28">
-                    {screens.map((s, i) => (
-                      <div key={s} className={i === 1 ? "hidden w-[42%] max-w-[220px] sm:block" : "w-[52%] max-w-[260px]"} onMouseEnter={() => track("technology_engaged", { tech: key, where: "technology-page" }, true)}>
-                        <Phone label={`KisanShakti ${t.name} screen`}>
-                          <ScreenImage screen={s} />
-                        </Phone>
-                      </div>
-                    ))}
+                  <Reveal delay={0.1} className="lg:sticky lg:top-28">
+                    <div onMouseEnter={() => track("technology_engaged", { tech: key, where: "technology-page" }, true)}>
+                      <TechScene tech={key} />
+                    </div>
+                    <div className="mt-6 flex justify-center gap-4">
+                      {t.screens.filter((s) => s !== "evidence").slice(0, 2).map((s, i) => (
+                        <div key={s} className={i === 1 ? "hidden w-[40%] max-w-[180px] sm:block" : "w-[44%] max-w-[200px]"}>
+                          <Phone label={`In the Farmer App: ${t.name}`}>
+                            <ScreenImage screen={s} />
+                          </Phone>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="ks-small mt-3 text-center text-[0.75rem]">In the Farmer App</p>
                   </Reveal>
                 </div>
               </div>
             </Container>
             {key === "tarka" && (
               <div className="mt-[calc(var(--ks-section)*0.8)]">
-                <EvidenceChain eyebrow={HOME.evidence.eyebrow} title={HOME.evidence.title} body={HOME.evidence.body} />
+                <WhyTrust eyebrow={HOME.evidence.eyebrow} title={HOME.evidence.title} body={HOME.evidence.body} />
               </div>
             )}
           </Section>

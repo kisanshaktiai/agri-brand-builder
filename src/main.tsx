@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App, { AppProviders } from './App.tsx'
 import './index.css'
 import './styles/tokens.css'
+import './styles/scenes.css'
 import { logger } from './utils/logger'
 import { runStartupChecks } from './utils/startupChecks'
 

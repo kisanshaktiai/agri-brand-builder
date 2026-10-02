@@ -56,13 +56,13 @@ export const SURFACES: SurfaceDef[] = [
     maturity: "live",
     question: "How is the platform governed?",
     description:
-      "Tenant and user management, agronomy masters for crops, varieties, companies and products, and administration of the Decision Brain itself: rules, observations, hypotheses and knowledge sources with PDF and Markdown ingestion, plus monitoring.",
+      "Tenant and user management, agronomy masters for crops, varieties, companies and products, governance of the advisory knowledge base, and monitoring across tenants.",
     screen: "admin-rules",
     fact: "admin.portal",
     capabilities: [
       { text: "Tenant and user management.", fact: "admin.portal" },
       { text: "Agronomy masters: crops, varieties, companies, products.", fact: "admin.portal" },
-      { text: "Decision Brain administration: rules, observations, hypotheses, knowledge sources with PDF and Markdown ingestion.", fact: "admin.portal" },
+      { text: "Governance of the advisory knowledge base: what is approved, what is under review, and where it comes from.", fact: "admin.portal" },
       { text: "Monitoring.", fact: "admin.portal" },
     ],
     limits: ["The governance layer, not another farmer app."],
@@ -85,11 +85,11 @@ export interface ArchNode {
 export const ARCHITECTURE: ArchNode[] = [
   { id: "farmer-app", kind: "surface", label: "Farmer App", purpose: "Farmer's daily operating layer", maturity: "live", description: "Where a farmer asks, records, is reminded and decides.", screen: "farm-today", fact: "app.companion" },
   { id: "tenant-portal", kind: "surface", label: "Tenant SaaS Portal", purpose: "Organisation's operating layer", maturity: "live-limited", description: "Where an FPO, dealer or agri-input company runs its branded farmer network.", screen: "tenant-dashboard", fact: "tenant.portal" },
-  { id: "admin-portal", kind: "surface", label: "SaaS Admin Portal", purpose: "Governance control plane", maturity: "live", description: "Where rules, knowledge sources and tenants are administered and monitored.", screen: "admin-rules", fact: "admin.portal" },
+  { id: "admin-portal", kind: "surface", label: "SaaS Admin Portal", purpose: "Governance control plane", maturity: "live", description: "Where tenants, agronomy masters and the advisory knowledge base are governed and monitored.", screen: "admin-rules", fact: "admin.portal" },
   { id: "tatva", kind: "technology", tech: "tatva", label: "TATVA", purpose: "Land-state intelligence", maturity: "live", description: "Weather, satellite NDVI and water balance for each land.", screen: "ndvi", fact: "tatva.ndvi" },
-  { id: "tarka", kind: "technology", tech: "tarka", label: "TARKA", purpose: "Decision intelligence", maturity: "live-limited", description: "Governed rules, evidence chains and safety gates. The language model explains; it never decides doses.", screen: "chat-marathi", fact: "tarka.chain" },
-  { id: "riitu", kind: "technology", tech: "riitu", label: "RIITU", purpose: "Crop scheduling", maturity: "live-limited", description: "Stage graphs reconciled nightly into Farm Today.", screen: "farm-today", fact: "riitu.farm-today" },
+  { id: "tarka", kind: "technology", tech: "tarka", label: "TARKA", purpose: "Decision intelligence", maturity: "live-limited", description: "Checks every answer against the field, the crop's stage and expert-approved guidance. AI explains; it never invents a dose.", screen: "chat-marathi", fact: "tarka.chain" },
+  { id: "riitu", kind: "technology", tech: "riitu", label: "RIITU", purpose: "Crop scheduling", maturity: "live-limited", description: "A living crop schedule, updated every night into Farm Today.", screen: "farm-today", fact: "riitu.farm-today" },
   { id: "pahra", kind: "technology", tech: "pahra", label: "PAHRA", purpose: "Farm-risk intelligence", maturity: "beta", description: "Daily pest, disease and weather risk; scout, confirm, then decide.", screen: "alerts", fact: "pahra.daily-risk" },
   { id: "rukh", kind: "technology", tech: "rukh", label: "RUKH", purpose: "Market intelligence", maturity: "live-limited", description: "Mandi prices, comparisons and a selling advisor.", screen: "market", fact: "rukh.prices" },
-  { id: "foundation", kind: "foundation", label: "Shared data foundation", purpose: "One governed knowledge base", maturity: "live", description: "Rules, observations, hypotheses, knowledge sources, land state and schedules shared by every tenant's ecosystem.", fact: "platform.surfaces" },
+  { id: "foundation", kind: "foundation", label: "Shared data foundation", purpose: "One governed knowledge base", maturity: "live", description: "Expert-reviewed guidance, land state and crop schedules, shared by every tenant's ecosystem.", fact: "platform.surfaces" },
 ];

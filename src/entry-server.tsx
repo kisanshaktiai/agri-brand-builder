@@ -4,6 +4,7 @@ import { StaticRouter } from "react-router-dom/server";
 import { AppRoutes, AppProviders, preloadPages } from "./App";
 import "./index.css";
 import "./styles/tokens.css";
+import "./styles/scenes.css";
 
 export interface RenderResult {
   html: string;

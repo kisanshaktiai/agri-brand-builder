@@ -5,7 +5,7 @@ import { Reveal } from "@/components/site/Reveal";
 import { Phone, ScreenImage } from "@/components/site/Device";
 import { LivingPhone, type LivingStep } from "@/components/moments/LivingPhone";
 import { FamilyEmerge } from "@/components/moments/FamilyEmerge";
-import { EvidenceChain } from "@/components/moments/EvidenceChain";
+import { WhyTrust } from "@/components/moments/WhyTrust";
 import { PlatformZoom } from "@/components/moments/PlatformZoom";
 import { FinalStatement } from "@/components/moments/FinalStatement";
 import { HOME } from "@/content/pages";
@@ -94,21 +94,22 @@ export default function Home() {
               <Body>{HOME.separation.body}</Body>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-ks-md border border-ks-line bg-ks-white p-5">
-                  <p className="ks-label mb-2">Language intelligence</p>
+                  
+                  <p className="ks-label mb-2">AI</p>
                   <ul className="ks-body space-y-1 text-sm">
-                    <li>Understands 14 languages</li>
-                    <li>Turns questions into canonical intent</li>
-                    <li>Explains governed results</li>
+                    <li>Understands your question, in 14 languages</li>
+                    <li>Reads your photo</li>
+                    <li>Explains the answer and the reason</li>
                   </ul>
                   <p className="mt-4 text-xs text-ks-ink-3">Never decides doses, quantities or timing.</p>
                 </div>
                 <div className="rounded-ks-md border border-ks-field/30 bg-ks-field-soft p-5">
-                  <p className="ks-label mb-2 text-ks-field-deep">Decision intelligence</p>
+                  <p className="ks-label mb-2 text-ks-field-deep">Expert-approved guidance</p>
                   <ul className="ks-body space-y-1 text-sm text-ks-field-deep">
-                    <li>Evaluates observations and hypotheses</li>
-                    <li>Checks crop stage and land state</li>
-                    <li>Applies governed rules with evidence</li>
-                    <li>Enforces safety and servability gates</li>
+                    <li>Checks your field's state</li>
+                    <li>Checks your crop's stage</li>
+                    <li>Carries its dose, waiting period and approval</li>
+                    <li>Safety checks always win</li>
                   </ul>
                   <p className="mt-4">
                     <TechMark tech="tarka" name="TARKA" size="sm" />
@@ -122,7 +123,7 @@ export default function Home() {
 
       {/* 3. Evidence chain */}
       <Section band>
-        <EvidenceChain eyebrow={HOME.evidence.eyebrow} title={HOME.evidence.title} body={HOME.evidence.body} />
+        <WhyTrust eyebrow={HOME.evidence.eyebrow} title={HOME.evidence.title} body={HOME.evidence.body} />
       </Section>
 
       {/* 5. Platform zoom-out */}

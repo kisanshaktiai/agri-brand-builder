@@ -1,10 +1,15 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { screenById, type Screen } from "@/content/screens";
+import { FeatureScene, hasVignette } from "@/components/scenes/FeatureScene";
 
 /** Real product screen or an explicit "capture pending" tile. Never a mock. */
 export function ScreenImage({ screen, priority = false, className, sizes }: { screen: Screen | string; priority?: boolean; className?: string; sizes?: string }) {
   const s = typeof screen === "string" ? screenById(screen) : screen;
+  if (!s.captured && hasVignette(s.id)) {
+    // Until a real capture exists, an animated illustration explains the feature.
+    return <FeatureScene id={s.id} />;
+  }
   if (!s.captured) {
     return (
       <div className={cn("ks-screen-pending", className)} role="img" aria-label={`${s.title}: real screen capture pending`}>

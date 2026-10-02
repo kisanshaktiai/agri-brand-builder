@@ -19,7 +19,7 @@ export interface Fact {
 export const FACTS: Fact[] = [
   // Platform
   { id: "platform.surfaces", area: "Platform", maturity: "live", statement: "Three connected surfaces on one shared data foundation: the Farmer App, the Tenant SaaS Portal and the SaaS Admin Portal." },
-  { id: "platform.separation", area: "Platform", maturity: "live", statement: "Language intelligence and decision intelligence are separate. The language model understands, canonicalises and explains; the Decision Brain decides. The language model never decides doses, quantities or timing." },
+  { id: "platform.separation", area: "Platform", maturity: "live", statement: "The AI that talks with the farmer and the guidance that decides what to do are separate. AI understands and explains; doses, quantities and timing come only from expert-approved guidance." },
   { id: "platform.multi-tenant", area: "Platform", maturity: "live-limited", statement: "White-label, multi-tenant SaaS: shared governed intelligence underneath; organisations run their own branded farmer ecosystems on top.", limits: ["Tenants run under their own context and brand. They do not receive or fork source code."] },
   { id: "platform.commercial", area: "Commercial", maturity: "live", statement: "Sold to organisations, not directly to farmers. No farmer plans or prices are shown.", forbidden: ["per farmer", "₹/month"] },
 
@@ -37,19 +37,19 @@ export const FACTS: Fact[] = [
   { id: "app.schemes", area: "Government Schemes", maturity: "live", statement: "Plain-language information and eligibility for schemes such as PM-Kisan, crop insurance and Soil Health Card.", limits: ["No government affiliation is implied."] },
 
   // TARKA
-  { id: "tarka.chain", area: "TARKA", maturity: "live-limited", statement: "Question → canonical intent → observation → hypothesis → crop stage and land state → governed rule → evidence → safety and servability gate → decision → farmer-language explanation.", limits: ["An explanatory model, not a claim that every request visibly follows it."] },
+  { id: "tarka.chain", area: "TARKA", maturity: "live-limited", statement: "Every recommendation is checked against the field's state, the crop's stage and expert-approved guidance before it reaches the farmer, and is explained in the farmer's language.", limits: ["An explanatory model, not a claim that every request visibly follows it."] },
   { id: "tarka.chemical-gate", area: "TARKA", maturity: "live-limited", statement: "A chemical recommendation cannot reach a farmer without dose, pre-harvest interval and expert approval." },
   { id: "tarka.safety", area: "TARKA", maturity: "live-limited", statement: "Safety blocks always win over advisory rules. Photo evidence is the final authority over estimates." },
-  { id: "tarka.knowledge", area: "TARKA", maturity: "live-limited", statement: "2,169 active, farmer-servable governed rules (read from decision_rules on 2026-10-01) plus an English agronomy corpus including ICAR and state-university packages of practice.", limits: ["Coverage is deepest for rice and growing for sugarcane, soybean, cotton, chickpea, onion and jowar."], forbidden: ["all crops"] },
+  { id: "tarka.knowledge", area: "TARKA", maturity: "live-limited", statement: "A governed knowledge base of expert-reviewed agronomy guidance, including ICAR and state-university packages of practice. (Audit note: 2,169 active farmer-servable entries on 2026-10-01; the figure is not published.)", limits: ["Coverage is deepest for rice and growing for sugarcane, soybean, cotton, chickpea, onion and jowar."], forbidden: ["all crops"] },
 
   // TATVA
   { id: "tatva.weather", area: "TATVA", maturity: "live", statement: "Hourly weather for each land with hourly and 7-day forecasts, rainfall, growing-degree-days, weather alerts and recommendations." },
   { id: "tatva.ndvi", area: "TATVA", maturity: "live", statement: "Daily satellite NDVI with a land health score, trend, map view and early warning." },
-  { id: "tatva.water", area: "TATVA", maturity: "live", statement: "Evapotranspiration, a rain timeline, an irrigation gauge, a spray window, an FAO-56 daily water balance, and risk episodes.", limits: ["No soil sensors, IoT or drones."] },
+  { id: "tatva.water", area: "TATVA", maturity: "live", statement: "Evapotranspiration, a rain timeline, an irrigation gauge, a spray window, a daily water balance and risk episodes.", limits: ["No soil sensors, IoT or drones."] },
 
   // RIITU
-  { id: "riitu.stage-graph", area: "RIITU", maturity: "live-limited", statement: "A stage graph per crop and cultivation method, days-after-sowing and heat units, variety maturity, and region-scoped agronomy with Maharashtra first." },
-  { id: "riitu.reconcile", area: "RIITU", maturity: "live-limited", statement: "Nightly reconciliation." },
+  { id: "riitu.stage-graph", area: "RIITU", maturity: "live-limited", statement: "A living schedule for each crop and the way it is grown, built from days since sowing, heat units, variety maturity and region-specific agronomy, Maharashtra first." },
+  { id: "riitu.reconcile", area: "RIITU", maturity: "live-limited", statement: "The schedule is updated every night against the field's actual stage." },
   { id: "riitu.farm-today", area: "RIITU", maturity: "live-limited", statement: "Farm Today with Due, Watch, Blocked and Info decisions." },
   { id: "riitu.growth", area: "RIITU", maturity: "live-limited", statement: "Growth tracking, farmer field readings and crop photos.", forbidden: ["predicts yield", "predict yield", "yield prediction"] },
 
@@ -65,7 +65,7 @@ export const FACTS: Fact[] = [
   { id: "tenant.portal", area: "Tenant SaaS Portal", maturity: "live-limited", statement: "Tenant onboarding, farmer management, land management, tenant branding, farmer activity, and running under the organisation's own context and brand.", limits: ["No CRM, ERP, accounting or sales-force modules are claimed."], forbidden: ["CRM", "ERP", "accounting", "sales force"] },
 
   // Admin portal
-  { id: "admin.portal", area: "SaaS Admin Portal", maturity: "live", statement: "Tenant and user management; agronomy masters (crops, varieties, companies, products); Decision Brain administration (rules, observations, hypotheses, knowledge sources with PDF and Markdown ingestion); monitoring. The governance layer, not another farmer app." },
+  { id: "admin.portal", area: "SaaS Admin Portal", maturity: "live", statement: "Tenant and user management; agronomy masters (crops, varieties, companies, products); governance of the advisory knowledge base; monitoring. The governance layer, not another farmer app." },
 
   // Security
   { id: "security.verified", area: "Security & Governance", maturity: "live", statement: "Governed decisions, evidence chains, safety and servability gates, controlled administration, and tenant-specific context and branding.", limits: ["A tenant-isolation security audit is pending. No technical isolation, certification, zero-trust or military-grade claims."], forbidden: ["ISO 27001", "SOC 2", "zero-trust", "zero trust", "military-grade", "bank-grade"] },

@@ -7,14 +7,14 @@ export const HOME = {
     description: "A white-label, multi-tenant agricultural intelligence platform. Shared, governed intelligence underneath; your organisation's branded farmer ecosystem on top.",
   },
   hero: {
-    eyebrow: "Agricultural intelligence platform",
-    title: "One intelligence platform. Your agricultural ecosystem.",
-    lead: "KisanShakti AI connects field intelligence, governed reasoning, crop scheduling, risk and market intelligence with the farmers who use them, the organisations that serve them, and the governance that keeps every decision honest.",
+    eyebrow: "Agricultural intelligence, built for the field",
+    title: "One companion for the farmer. One platform for the ecosystem.",
+    lead: "The KisanShakti AI Farmer App gives a farmer, in their own language, what to do today, why, and what to watch for: weather and satellite for each land, a living crop schedule, explained answers, market insight, community and learning. Organisations run it for their own farmer networks under their own brand.",
   },
   thesis: {
     eyebrow: "What it is",
-    title: "Infrastructure for the agricultural ecosystem, not a farmer chatbot.",
-    body: "Underneath, one shared and governed intelligence: land state, crop biology, rules with evidence, risk and market signals. On top, FPOs, dealers, agri-input companies and agricultural enterprises run their own branded farmer ecosystems. The farmer sees one companion. The organisation sees its network. The platform sees that every decision is governed.",
+    title: "A complete farm companion, not a chatbot.",
+    body: "Farmers get one app that knows their land, their crop and their season, and answers in their language. FPOs, dealers, agri-input companies and agricultural enterprises run that same companion for their own farmer networks under their own brand, on one shared, governed platform.",
     fact: "platform.multi-tenant",
   },
   living: {
@@ -23,27 +23,27 @@ export const HOME = {
     steps: [
       { key: "observe", arc: "Observe", tech: "tatva", screen: "weather", title: "Morning. The field reports in.", body: "Hourly weather for this land, growing-degree-days and a seven-day outlook arrive before the farmer does.", fact: "tatva.weather" },
       { key: "understand", arc: "Understand", tech: "tatva", screen: "ndvi", title: "The satellite pass is scored.", body: "Daily NDVI becomes a land health score, a trend and an early warning on the map.", fact: "tatva.ndvi" },
-      { key: "reason", arc: "Reason", tech: "tarka", screen: "chat-marathi", title: "A question, in Marathi.", body: "The language model understands it. The Decision Brain evaluates it against the crop's stage, the land's state and governed rules.", fact: "tarka.chain" },
-      { key: "act", arc: "Act", tech: "riitu", screen: "farm-today", title: "Farm Today says what is due.", body: "Due, Watch, Blocked and Info decisions, reconciled overnight against the crop's actual stage.", fact: "riitu.farm-today" },
+      { key: "reason", arc: "Reason", tech: "tarka", screen: "chat-marathi", title: "A question, in Marathi.", body: "Ask with a photo. The answer is checked against the field, the crop's stage and expert-approved guidance, then explained with the reason why.", fact: "tarka.chain" },
+      { key: "act", arc: "Act", tech: "riitu", screen: "farm-today", title: "Farm Today says what is due.", body: "Due, Watch, Blocked and Info decisions, updated overnight to the crop's actual stage.", fact: "riitu.farm-today" },
       { key: "anticipate", arc: "Anticipate", tech: "pahra", screen: "alerts", title: "A risk to go and look at.", body: "Daily pest, disease and weather risk for this land. The alert asks the farmer to scout and confirm; it never prescribes a chemical. Early access.", fact: "pahra.daily-risk" },
       { key: "predict", arc: "Predict", tech: "rukh", screen: "market", title: "Evening. The market, in context.", body: "Mandi prices, nearby markets and a selling advisor, with market data flowing into Farm Analytics.", fact: "rukh.prices" },
     ],
   },
   family: {
     eyebrow: "The Technology Family",
-    title: "Five technologies. One coherent intelligence.",
-    body: "Each carries one part of the story, from observing the field to anticipating risk and reading the market. Together they are the intelligence every tenant's ecosystem runs on.",
+    title: "Five technologies. One companion.",
+    body: "Each carries one part of a farmer's day, from knowing the field to anticipating risk and reading the market. Together they are what every feature in the app runs on.",
   },
   separation: {
-    eyebrow: "The core differentiator",
-    title: "The language model explains. It never decides.",
-    body: "Language intelligence understands the farmer's words, turns them into canonical intent and explains governed results in the farmer's language. Decision intelligence evaluates observations and hypotheses against the crop's biological stage and the land's state, applies governed rules, keeps evidence chains and enforces safety gates. Doses, quantities and timing come only from governed rules.",
+    eyebrow: "Why it can be trusted",
+    title: "AI explains. Expert-approved guidance decides.",
+    body: "The AI understands your question and explains the answer in your language. What to apply, how much and when come only from expert-approved guidance that has been checked against your field and your crop's stage. The AI never invents a dose.",
     fact: "platform.separation",
   },
   evidence: {
-    eyebrow: "Why did the system recommend this?",
-    title: "Every decision keeps its evidence.",
-    body: "One real rule from the governed knowledge base, followed from a farmer's question to the explanation they hear. The chain is how decisions are governed; it is not a claim that every request visibly walks each step.",
+    eyebrow: "Why did it recommend this?",
+    title: "Every answer can explain itself.",
+    body: "Follow one question from a rice field to the answer the farmer hears. Five plain checks stand between a question and a recommendation.",
     fact: "tarka.chain",
   },
   zoom: {
@@ -78,7 +78,7 @@ export const TECHNOLOGY_PAGE = {
   hero: {
     eyebrow: "Technology",
     title: "The Technology Family.",
-    lead: "Five named technologies carry the platform's intelligence, from observing the field to anticipating risk and reading the market. They are presented as a story; the order is conceptual, not how the system runs.",
+    lead: "Five named technologies power the Farmer App, from knowing the field to anticipating risk and reading the market. Each is explained below by what it does for a farmer.",
   },
   hierarchy: {
     eyebrow: "How it fits together",
@@ -130,7 +130,7 @@ export const PLATFORM_PAGE = {
   governance: {
     eyebrow: "Governance",
     title: "The admin portal is the governance layer, not another farmer app.",
-    body: "Rules, observations, hypotheses and knowledge sources are administered in one place, with PDF and Markdown ingestion for new sources, agronomy masters for crops, varieties, companies and products, and monitoring across tenants.",
+    body: "Tenants, users, agronomy masters for crops, varieties, companies and products, and the advisory knowledge base are governed in one place, with monitoring across tenants.",
     fact: "admin.portal",
   },
 };
@@ -147,8 +147,9 @@ export const FARMER_APP_PAGE = {
   },
   sections: [
     { id: "land", title: "Start with the land.", body: "Map the boundary and get the area automatically. Record season, crop, variety, sowing date and cultivation method. Each land carries a satellite thumbnail and a land health score.", screen: "land", fact: "app.land" },
-    { id: "today", title: "Know what is due today.", body: "Farm Today lists Due, Watch, Blocked and Info decisions reconciled overnight against the crop's actual stage.", screen: "farm-today", fact: "riitu.farm-today" },
-    { id: "ask", title: "Ask in your language, with a photo.", body: "AI chat with photo capture and InstaScan. The language model understands; the Decision Brain decides from governed rules and explains why.", screen: "chat-marathi", fact: "app.companion" },
+    { id: "today", title: "Know what is due today.", body: "Farm Today lists Due, Watch, Blocked and Info decisions, updated overnight to the crop's actual stage.", screen: "farm-today", fact: "riitu.farm-today" },
+    { id: "ask", title: "Ask in your language, with a photo.", body: "AI chat with photo capture and InstaScan. The answer is checked against your field, your crop's stage and expert-approved guidance, and explained with the reason why.", screen: "chat-marathi", fact: "app.companion" },
+    { id: "voice", title: "Or just speak.", body: "Voice-first from the first minute: voice onboarding, voice land capture, questions by voice and answers read aloud.", screen: "voice", fact: "app.voice" },
     { id: "field", title: "See the field from the sky.", body: "Hourly weather for each land, daily satellite NDVI with a land health score, a spray window and an irrigation gauge.", screen: "ndvi", fact: "tatva.ndvi" },
     { id: "market", title: "Sell better informed.", body: "Current mandi prices, nearby markets, comparisons and a selling advisor. Market insight, not a guaranteed price.", screen: "market", fact: "rukh.prices" },
     { id: "analytics", title: "Track the season's numbers.", body: "Total area, active crops, projected revenue and projected profit, with Crop & Stage, Financial, Market Pulse, Soil Health, Task Performance, Water & Weather and Smart Recommendations. Projections come from logged expenses and expected yield at current market price, and every projection carries a notice.", screen: "analytics", fact: "app.analytics" },
@@ -160,6 +161,8 @@ export const FARMER_APP_PAGE = {
     { title: "Government Schemes", body: "Plain-language information and eligibility for schemes such as PM-Kisan, crop insurance and Soil Health Card. No government affiliation is implied.", fact: "app.schemes", maturity: "live" },
     { title: "Proactive alerts", body: "Daily pest, disease and weather risk for each land, with notification preferences. Alerts ask the farmer to scout and confirm; they never prescribe a chemical.", fact: "pahra.daily-risk", maturity: "beta" },
     { title: "Growth tracking", body: "Field readings and crop photos that keep the schedule honest about the crop's actual stage.", fact: "riitu.growth", maturity: "live-limited" },
+    { title: "Offline-first", body: "A PWA plus Android and iOS builds that work on weak networks and sync when back online.", fact: "app.offline", maturity: "live" },
+    { title: "Mobile number and PIN", body: "Sign in with a mobile number and a PIN. No email needed.", fact: "app.login", maturity: "live" },
   ],
 };
 
@@ -213,10 +216,10 @@ export const SECURITY_PAGE = {
     lead: "We describe the controls that exist in the product today, and we say what is still pending.",
   },
   principles: [
-    { title: "Governed decisions", body: "Doses, quantities and timing come only from governed rules. The language model understands and explains; it never decides.", fact: "platform.separation" },
-    { title: "Evidence chains", body: "Every rule keeps its source, its stage window and its approval status. A decision can be followed back to its evidence.", fact: "tarka.chain" },
-    { title: "Safety and servability gates", body: "A chemical recommendation cannot reach a farmer without a dose, a pre-harvest interval and expert approval. Safety blocks always win over advisory rules.", fact: "tarka.chemical-gate" },
-    { title: "Controlled administration", body: "Rules, observations, hypotheses and knowledge sources are administered from the SaaS Admin Portal, with monitoring.", fact: "admin.portal" },
+    { title: "Governed decisions", body: "Doses, quantities and timing come only from expert-approved guidance. The AI understands and explains; it never decides.", fact: "platform.separation" },
+    { title: "Evidence chains", body: "Every piece of guidance keeps its source, the crop stage it applies to and its approval status. A recommendation can be followed back to its evidence.", fact: "tarka.chain" },
+    { title: "Safety and servability gates", body: "A chemical recommendation cannot reach a farmer without a dose, a pre-harvest interval and expert approval. Safety checks always win over advice.", fact: "tarka.chemical-gate" },
+    { title: "Controlled administration", body: "Tenants, agronomy masters and the advisory knowledge base are administered from the SaaS Admin Portal, with monitoring.", fact: "admin.portal" },
     { title: "Tenant-specific context and branding", body: "Each tenant runs under its own context and brand.", fact: "tenant.portal" },
   ],
   pending: {

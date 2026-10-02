@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { Phone, ScreenImage } from "@/components/site/Device";
 import { Eyebrow, Heading } from "@/components/site/primitives";
 import { TENANT_EXAMPLES } from "@/content/tenants";
@@ -24,7 +24,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
   const stageRef = useRef<HTMLDivElement>(null);
   const [level, setLevel] = useState(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!gsap || !sectionRef.current || !stageRef.current) return;
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -113,6 +113,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
   }
 
   return (
+    <div>
     <div ref={sectionRef} className="relative flex h-screen flex-col justify-center overflow-hidden">
       <div className="ks-container grid h-full grid-cols-[minmax(0,4fr)_minmax(0,8fr)] items-center gap-12">
         <div>
@@ -134,6 +135,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -13,7 +13,7 @@ export function Mark({ size = 24, className }: { size?: number; className?: stri
 
 export function Wordmark({ className }: { className?: string }) {
   return (
-    <span className={"inline-flex items-center gap-2.5 " + (className ?? "")}>
+    <span className={"inline-flex items-center gap-2.5 whitespace-nowrap " + (className ?? "")}>
       <Mark />
       <span className="font-display text-[1.0625rem] font-semibold tracking-[-0.02em] text-ks-ink" style={{ fontVariationSettings: '"opsz" 24' }}>
         KisanShakti <span className="font-medium text-ks-ink-3">AI</span>
