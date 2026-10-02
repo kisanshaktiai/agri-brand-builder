@@ -131,7 +131,7 @@ export const PLATFORM_PAGE = {
       { time: "18:00", text: "RUKH brings nearby mandi prices and market context into the decision.", fact: "rukh.prices" },
       { time: "19:00", text: "Government schemes, agri services and community help the farmer act; Farm Economics records the season's numbers in beta.", fact: "app.companion" },
     ],
-    tenant: [
+    partner: [
       { time: "09:00", text: "Onboard a new farmer group and their lands.", fact: "tenant.portal" },
       { time: "10:30", text: "Review farmer activity across the network.", fact: "tenant.portal" },
       { time: "12:00", text: "Update the organisation's branding; farmers see it on their next sync.", fact: "tenant.portal" },
