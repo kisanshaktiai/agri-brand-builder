@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { TENANT_EXAMPLES } from "@/content/tenants";
-import { FAMILY_ORDER, techByKey } from "@/content/technologies";
+import { FAMILY_ORDER } from "@/content/technologies";
+import { useContent } from "@/i18n";
 import { Phone, ScreenImage } from "@/components/site/Device";
 import { Eyebrow, Heading, Body, TechMark } from "@/components/site/primitives";
 import { useReducedMotion, EASE_OUT } from "@/lib/motion";
@@ -15,6 +15,8 @@ import { cn } from "@/lib/utils";
  */
 export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: string; title: string; body: string; layers: string[] }) {
   const reduced = useReducedMotion();
+  const { TENANT_EXAMPLES, TECHNOLOGIES, UI } = useContent();
+  const techByKey = (k: (typeof FAMILY_ORDER)[number]) => TECHNOLOGIES.find((t) => t.key === k)!;
   const [active, setActive] = useState(0);
   const stepRefs = useRef<(HTMLLIElement | null)[]>([]);
 
@@ -54,8 +56,8 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
   const Shared = () => (
     <div className="mt-4 rounded-ks-md border border-ks-line bg-ks-white p-4">
       <div className="flex items-center justify-between gap-3">
-        <p className="ks-label">Shared companion, governed centrally</p>
-        <p className="ks-label text-[0.625rem] text-ks-field">Same for every partner</p>
+        <p className="ks-label">{UI.sharedCompanion}</p>
+        <p className="ks-label text-[0.625rem] text-ks-field">{UI.sameForEveryPartner}</p>
       </div>
       <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
         {FAMILY_ORDER.map((k) => (
@@ -101,7 +103,7 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
             </div>
           </Plate>
           <Shared />
-          <p className="ks-small mt-3">The phone screen does not change. Partners configure brand and context; they do not receive or fork source code.</p>
+          <p className="ks-small mt-3">{UI.phoneDoesNotChange}</p>
         </div>
         <div>
           <Eyebrow>{eyebrow}</Eyebrow>
@@ -113,7 +115,7 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
                 <p className="ks-label mb-2">{tenant.type}</p>
                 <h3 className={cn("ks-h3 transition-colors duration-500", active === i ? "text-ks-ink" : "text-ks-ink-3")}>{tenant.name}</h3>
                 <p className={cn("ks-body mt-2 transition-colors duration-500", active === i ? "text-ks-ink-2" : "text-ks-ink-3")}>
-                  {i === 0 ? "The platform's own brand, as farmers see it on app.kisanshaktiai.in." : `The same Farmer App, run under ${tenant.name.toLowerCase()}'s name, colours and context.`}
+                  {i === 0 ? UI.platformDefaultLine : UI.sameAppUnder.replace("{name}", tenant.name)}
                 </p>
               </li>
             ))}
@@ -123,7 +125,7 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
               <li key={l} className="flex items-center gap-3 text-sm">
                 <span className="ks-mono text-xs text-ks-ink-4">{String(i + 1).padStart(2, "0")}</span>
                 <span className={i < 2 ? "text-ks-ink" : "text-ks-ink-2"}>{l}</span>
-                <span className="ml-auto ks-label text-[0.625rem]">{i < 2 ? "per partner" : "shared"}</span>
+                <span className="ml-auto ks-label text-[0.625rem]">{i < 2 ? UI.perPartner : UI.shared}</span>
               </li>
             ))}
           </ol>

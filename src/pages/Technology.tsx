@@ -7,19 +7,20 @@ import { Phone, ScreenImage } from "@/components/site/Device";
 import { FamilyEmerge } from "@/components/moments/FamilyEmerge";
 import { WhyTrust } from "@/components/moments/WhyTrust";
 import { TechScene } from "@/components/scenes/TechScene";
-import { TECHNOLOGY_PAGE, HOME } from "@/content/pages";
-import { TECHNOLOGIES, FAMILY_ORDER, HIERARCHY, techByKey } from "@/content/technologies";
-import { CTA } from "@/content/site";
+import { FAMILY_ORDER } from "@/content/technologies";
+import { useContent } from "@/i18n";
 import { track } from "@/lib/analytics";
 
 export default function Technology() {
+  const { TECHNOLOGY_PAGE, HOME, TECHNOLOGIES, HIERARCHY, CTA, UI } = useContent();
+  const techByKey = (k: (typeof FAMILY_ORDER)[number]) => TECHNOLOGIES.find((t) => t.key === k)!;
   return (
     <>
       <Seo title={TECHNOLOGY_PAGE.seo.title} description={TECHNOLOGY_PAGE.seo.description} path="/technology" />
       <PageHero eyebrow={TECHNOLOGY_PAGE.hero.eyebrow} title={TECHNOLOGY_PAGE.hero.title} lead={TECHNOLOGY_PAGE.hero.lead} size="display-1" />
 
       <Section band className="!pt-[calc(var(--ks-section)*0.6)]">
-        <FamilyEmerge eyebrow="The family" title="Five technologies, one companion." linkTo={null} />
+        <FamilyEmerge eyebrow={UI.theFamily} title={UI.fiveTechOneCompanion} linkTo={null} />
       </Section>
 
       <Section>
@@ -36,7 +37,7 @@ export default function Technology() {
               </Reveal>
             ))}
           </ol>
-          <p className="ks-small mt-4">A conceptual hierarchy of what serves what, not a runtime order.</p>
+          <p className="ks-small mt-4">{UI.hierarchyNote}</p>
         </Container>
       </Section>
 
@@ -61,17 +62,17 @@ export default function Technology() {
                     <Body className="mt-6">{t.summary}</Body>
                   </Reveal>
                   <Reveal delay={0.1} className="mt-10">
-                    <p className="ks-label mb-3">What it does for you</p>
+                    <p className="ks-label mb-3">{UI.whatItDoes}</p>
                     <HairlineList items={t.capabilities.map((c) => ({ body: c.text }))} />
                   </Reveal>
                   <Reveal delay={0.15} className="mt-8">
-                    <p className="ks-label mb-3">{t.maturity === "beta" ? "Early access" : "Stated limits"}</p>
+                    <p className="ks-label mb-3">{t.maturity === "beta" ? UI.earlyAccess : UI.statedLimits}</p>
                     <ul className="ks-body list-disc space-y-1 pl-5 text-sm">
                       {t.limits.map((l) => (
                         <li key={l}>{l}</li>
                       ))}
                     </ul>
-                    <p className="ks-small mt-6">Answers: “{t.question}”</p>
+                    <p className="ks-small mt-6">{UI.answers}: “{t.question}”</p>
                   </Reveal>
                 </div>
                 <div className="lg:col-span-5">
@@ -88,7 +89,7 @@ export default function Technology() {
                         </div>
                       ))}
                     </div>
-                    <p className="ks-small mt-3 text-center text-[0.75rem]">In the Farmer App</p>
+                    <p className="ks-small mt-3 text-center text-[0.75rem]">{UI.inTheApp}</p>
                   </Reveal>
                 </div>
               </div>
@@ -105,12 +106,12 @@ export default function Technology() {
       <Section>
         <Container className="flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <Eyebrow>Next</Eyebrow>
-            <Heading>See how the family runs under your brand.</Heading>
+            <Eyebrow>{UI.next}</Eyebrow>
+            <Heading>{UI.seeFamilyUnderBrand}</Heading>
           </div>
           <div className="flex flex-wrap gap-3">
             <ButtonLink to="/platform" size="lg">
-              The platform
+              {UI.thePlatform}
             </ButtonLink>
             <ButtonLink to={CTA.partner.to} variant="secondary" size="lg" onClick={() => track("partner_cta", { where: "technology" })}>
               {CTA.partner.label}

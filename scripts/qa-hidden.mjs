@@ -1,10 +1,10 @@
 /** After scrolling each route top to bottom, reports elements still hidden by reveal/emerge classes or zero opacity text. */
 import { chromium } from "playwright";
 import { serve } from "./_serve.mjs";
-import { ROUTES, launchOpts } from "./_routes.mjs";
+import { ROUTES, LOCALE_ROUTES, launchOpts } from "./_routes.mjs";
 const PORT = 4194; const server = await serve(PORT); const browser = await chromium.launch(launchOpts);
 for (const w of [1440, 390]) {
-  for (const route of ROUTES) {
+  for (const route of [...ROUTES, ...LOCALE_ROUTES]) {
     const page = await browser.newPage({ viewport: { width: w, height: w > 1000 ? 900 : 844 } });
     const errors = []; page.on("pageerror", (e) => errors.push(e.message));
     await page.goto(`http://127.0.0.1:${PORT}${route}`, { waitUntil: "networkidle" });

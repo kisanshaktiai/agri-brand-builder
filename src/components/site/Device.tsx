@@ -2,10 +2,12 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { screenById, type Screen } from "@/content/screens";
 import { FeatureScene, hasVignette } from "@/components/scenes/FeatureScene";
+import { useT } from "@/i18n";
 
 /** Real product screen or an explicit "capture pending" tile. Never a mock. */
 export function ScreenImage({ screen, priority = false, className, sizes }: { screen: Screen | string; priority?: boolean; className?: string; sizes?: string }) {
   const s = typeof screen === "string" ? screenById(screen) : screen;
+  const UI = useT();
   if (!s.captured && hasVignette(s.id)) {
     // Until a real capture exists, an animated illustration explains the feature.
     return <FeatureScene id={s.id} />;
@@ -13,7 +15,7 @@ export function ScreenImage({ screen, priority = false, className, sizes }: { sc
   if (!s.captured) {
     return (
       <div className={cn("ks-screen-pending", className)} role="img" aria-label={`${s.title}: real screen capture pending`}>
-        <span className="ks-label text-[0.625rem]">Capture pending</span>
+        <span className="ks-label text-[0.625rem]">{UI.capturePending}</span>
         <span className="text-sm font-medium text-ks-ink-2">{s.title}</span>
         <span className="text-xs">{s.question}</span>
       </div>

@@ -3,9 +3,10 @@ import { Seo, ORGANIZATION_LD } from "@/components/site/Seo";
 import { PageHero } from "@/components/site/PageHero";
 import { Container, Section, Eyebrow, Heading, Body, ButtonLink } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
-import { COMPANY_PAGE } from "@/content/pages";
+import { useContent } from "@/i18n";
 
 export default function Company() {
+  const { COMPANY_PAGE, UI } = useContent();
   const p = COMPANY_PAGE;
   return (
     <>
@@ -38,7 +39,7 @@ export default function Company() {
             <Body className="mt-4">{p.founder.body}</Body>
             <div className="mt-6 flex flex-wrap gap-3">
               <ButtonLink to="/founder">{p.founder.cta}</ButtonLink>
-              <ButtonLink to="/company/investors" variant="secondary">Investors & Press</ButtonLink>
+              <ButtonLink to="/company/investors" variant="secondary">{UI.investorsPress}</ButtonLink>
             </div>
           </Reveal>
         </Container>

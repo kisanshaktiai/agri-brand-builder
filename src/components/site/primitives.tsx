@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { MATURITY_LABEL, type Maturity } from "@/content/site";
+import { type Maturity } from "@/content/site";
+import { useLocale } from "@/i18n";
 import type { TechKey } from "@/content/technologies";
 
 /* ── Layout ─────────────────────────────────────────────────────── */
@@ -80,6 +81,7 @@ export function TechMark({ tech, name, house = true, size = "md", className }: {
 }
 
 export function MaturityBadge({ maturity, className }: { maturity: Maturity; className?: string }) {
+  const { content } = useLocale();
   const tone =
     maturity === "beta"
       ? "bg-ks-signal-soft text-ks-signal border-transparent"
@@ -88,7 +90,7 @@ export function MaturityBadge({ maturity, className }: { maturity: Maturity; cla
         : "bg-ks-field-soft text-ks-field-deep border-transparent";
   return (
     <span className={cn("inline-flex items-center rounded-full border px-2.5 py-1 ks-label normal-case tracking-[0.02em] text-[0.6875rem]", tone, className)}>
-      {MATURITY_LABEL[maturity]}
+      {content.MATURITY_LABEL[maturity]}
     </span>
   );
 }
@@ -108,6 +110,7 @@ const btn = (variant: BtnVariant, size: "md" | "lg") =>
 
 export function ButtonLink({ to, href, children, variant = "primary", size = "md", className, onClick, ...rest }: { to?: string; href?: string; children: React.ReactNode; variant?: BtnVariant; size?: "md" | "lg"; className?: string; onClick?: () => void } & Record<string, unknown>) {
   const cls = cn(btn(variant, size), className);
+  const { href: localize } = useLocale();
   if (href) {
     return (
       <a href={href} className={cls} data-variant={variant} onClick={onClick} target="_blank" rel="noopener" {...rest}>
@@ -116,7 +119,7 @@ export function ButtonLink({ to, href, children, variant = "primary", size = "md
     );
   }
   return (
-    <Link to={to ?? "/"} className={cls} data-variant={variant} onClick={onClick} {...rest}>
+    <Link to={localize(to ?? "/")} className={cls} data-variant={variant} onClick={onClick} {...rest}>
       {children}
     </Link>
   );

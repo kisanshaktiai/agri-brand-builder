@@ -4,11 +4,11 @@ import { PageHero } from "@/components/site/PageHero";
 import { Container, Section, Eyebrow, Heading, Body, ButtonLink } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
 import { Browser, ScreenImage } from "@/components/site/Device";
-import { ENTERPRISES_PAGE } from "@/content/pages";
-import { CTA } from "@/content/site";
+import { useContent } from "@/i18n";
 import { track } from "@/lib/analytics";
 
 export default function Enterprises() {
+  const { ENTERPRISES_PAGE, CTA } = useContent();
   const p = ENTERPRISES_PAGE;
   return (
     <>

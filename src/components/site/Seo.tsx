@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { SITE_URL, BRAND } from "@/content/site";
+import { LOCALES, localePath, stripLocale, useLocale } from "@/i18n";
 
 interface SeoProps {
   title: string;
@@ -13,10 +14,17 @@ interface SeoProps {
 const DEFAULT_IMAGE = `${SITE_URL}/og/default.png`;
 
 export function Seo({ title, description, path, type = "website", jsonLd, image = DEFAULT_IMAGE }: SeoProps) {
-  const url = `${SITE_URL}${path === "/" ? "/" : path.replace(/\/$/, "")}`;
+  const { locale } = useLocale();
+  const clean = stripLocale(path);
+  const url = `${SITE_URL}${localePath(clean, locale)}`;
   return (
-    <Helmet prioritizeSeoTags>
+    <Helmet prioritizeSeoTags htmlAttributes={{ lang: locale }}>
       <title>{title}</title>
+      {LOCALES.map((l) => (
+        <link key={l.code} rel="alternate" hrefLang={l.code} href={`${SITE_URL}${localePath(clean, l.code)}`} />
+      ))}
+      <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${clean}`} />
+      <meta property="og:locale" content={locale === "en" ? "en_IN" : locale === "mr" ? "mr_IN" : "hi_IN"} />
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
       <meta property="og:type" content={type} />

@@ -8,12 +8,11 @@ import { TenantTransform } from "@/components/moments/TenantTransform";
 import { PlatformZoom } from "@/components/moments/PlatformZoom";
 import { ArchitectureDiagram } from "@/components/site/ArchitectureDiagram";
 import { TwoDays } from "@/components/site/TwoDays";
-import { PLATFORM_PAGE, HOME } from "@/content/pages";
-import { SURFACES } from "@/content/platform";
-import { CTA } from "@/content/site";
+import { useContent } from "@/i18n";
 import { track } from "@/lib/analytics";
 
 export default function Platform() {
+  const { PLATFORM_PAGE, HOME, SURFACES, CTA, UI } = useContent();
   return (
     <>
       <Seo title={PLATFORM_PAGE.seo.title} description={PLATFORM_PAGE.seo.description} path="/platform" />
@@ -44,7 +43,7 @@ export default function Platform() {
                   </Browser>
                 )}
               </div>
-              <p className="ks-label mb-2">Answers</p>
+              <p className="ks-label mb-2">{UI.answers}</p>
               <p className="font-medium text-ks-ink">“{s.question}”</p>
               <p className="ks-body mt-3 text-sm">{s.description}</p>
               {s.limits && <p className="ks-small mt-4">{s.limits.join(" ")}</p>}
@@ -84,7 +83,7 @@ export default function Platform() {
               <Heading>{PLATFORM_PAGE.governance.title}</Heading>
               <Body className="mt-6">{PLATFORM_PAGE.governance.body}</Body>
               <div className="mt-8 flex flex-wrap gap-3">
-                <ButtonLink to="/security">Security & Governance</ButtonLink>
+                <ButtonLink to="/security">{UI.securityGovernance}</ButtonLink>
                 <ButtonLink to={CTA.partner.to} variant="secondary" onClick={() => track("partner_cta", { where: "platform" })}>
                   {CTA.partner.label}
                 </ButtonLink>

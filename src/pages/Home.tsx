@@ -8,12 +8,12 @@ import { LivingPhone, type LivingStep } from "@/components/moments/LivingPhone";
 import { HeroSignals } from "@/components/moments/HeroSignals";
 import { FamilyEmerge } from "@/components/moments/FamilyEmerge";
 import { FinalStatement } from "@/components/moments/FinalStatement";
-import { HOME } from "@/content/pages";
-import { CTA } from "@/content/site";
-import { SURFACES } from "@/content/platform";
+import { useLocale } from "@/i18n";
 import { track } from "@/lib/analytics";
 
 export default function Home() {
+  const { content, href } = useLocale();
+  const { HOME, CTA, SURFACES, UI } = content;
   return (
     <>
       <Seo title={HOME.seo.title} description={HOME.seo.description} path="/" jsonLd={[ORGANIZATION_LD, WEBSITE_LD, SOFTWARE_LD]} />
@@ -70,21 +70,20 @@ export default function Home() {
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-ks-md border border-ks-line bg-ks-white p-5">
                   
-                  <p className="ks-label mb-2">AI</p>
+                  <p className="ks-label mb-2">{UI.ai}</p>
                   <ul className="ks-body space-y-1 text-sm">
-                    <li>Understands your question, in 14 languages</li>
-                    <li>Reads your photo</li>
-                    <li>Explains the answer and the reason</li>
+                    {UI.aiBullets.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
                   </ul>
-                  <p className="mt-4 text-xs text-ks-ink-3">Never decides doses, quantities or timing.</p>
+                  <p className="mt-4 text-xs text-ks-ink-3">{UI.aiNever}</p>
                 </div>
                 <div className="rounded-ks-md border border-ks-field/30 bg-ks-field-soft p-5">
-                  <p className="ks-label mb-2 text-ks-field-deep">Expert-approved guidance</p>
+                  <p className="ks-label mb-2 text-ks-field-deep">{UI.guidanceLabel}</p>
                   <ul className="ks-body space-y-1 text-sm text-ks-field-deep">
-                    <li>Checks your field's state</li>
-                    <li>Checks your crop's stage</li>
-                    <li>Carries its dose, waiting period and approval</li>
-                    <li>Safety checks always win</li>
+                    {UI.guidanceBullets.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
                   </ul>
                   <p className="mt-4">
                     <TechMark tech="tarka" name="TARKA" size="sm" />
@@ -92,8 +91,8 @@ export default function Home() {
                 </div>
               </div>
               <p className="mt-6">
-                <Link to="/technology#tarka" className="text-sm font-medium text-ks-field underline-offset-4 hover:underline">
-                  See how one answer explains itself
+                <Link to={href("/technology#tarka")} className="text-sm font-medium text-ks-field underline-offset-4 hover:underline">
+                  {UI.seeHowAnswerExplains}
                 </Link>
               </p>
             </Reveal>

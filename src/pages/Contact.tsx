@@ -3,10 +3,11 @@ import { Seo } from "@/components/site/Seo";
 import { PageHero } from "@/components/site/PageHero";
 import { Container, Section, Eyebrow, Body } from "@/components/site/primitives";
 import { PartnerForm } from "@/components/site/PartnerForm";
-import { CONTACT_PAGE } from "@/content/pages";
 import { Link } from "react-router-dom";
+import { useContent } from "@/i18n";
 
 export default function Contact() {
+  const { CONTACT_PAGE, UI } = useContent();
   return (
     <>
       <Seo title={CONTACT_PAGE.seo.title} description={CONTACT_PAGE.seo.description} path="/contact" />
@@ -18,9 +19,9 @@ export default function Contact() {
               <PartnerForm />
             </div>
             <aside className="lg:col-span-4 lg:col-start-9">
-              <Eyebrow>Before you write</Eyebrow>
-              <Body>KisanShakti AI is sold to organisations, not directly to farmers. Farmers can open the app directly.</Body>
-              <Body className="mt-4">Prefer to talk to a person? The founder's contact card is at{" "}
+              <Eyebrow>{UI.beforeYouWrite}</Eyebrow>
+              <Body>{UI.soldToOrgs}</Body>
+              <Body className="mt-4">{UI.preferPerson}{" "}
                 <Link to="/founder" className="underline underline-offset-4">/founder</Link>.
               </Body>
             </aside>

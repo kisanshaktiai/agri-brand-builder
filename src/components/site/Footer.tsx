@@ -1,12 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FOOTER, CTA, BRAND } from "@/content/site";
+import { BRAND } from "@/content/site";
 import { track } from "@/lib/analytics";
 import { ButtonLink } from "./primitives";
 import { Wordmark } from "./Wordmark";
-import { LOCALES } from "@/i18n";
+import { LOCALES, useLocale } from "@/i18n";
+import { LanguageSwitch } from "./LanguageSwitch";
 
 export function Footer() {
+  const { content, href } = useLocale();
+  const { FOOTER, CTA, UI } = content;
   return (
     <footer className="border-t border-ks-line bg-ks-paper">
       <div className="ks-container py-16 md:py-20">
@@ -29,7 +32,7 @@ export function Footer() {
               <ul className="space-y-2.5">
                 {col.links.map((l) => (
                   <li key={l.to}>
-                    <Link to={l.to} className="text-sm text-ks-ink-2 transition-colors hover:text-ks-ink">
+                    <Link to={href(l.to)} className="text-sm text-ks-ink-2 transition-colors hover:text-ks-ink">
                       {l.label}
                     </Link>
                   </li>
@@ -42,15 +45,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {BRAND}. {FOOTER.legal}
           </p>
-          <p aria-label="Languages">
-            {LOCALES.map((l, i) => (
-              <span key={l.code}>
-                {i > 0 && <span aria-hidden> · </span>}
-                <span className={l.available ? "text-ks-ink-2" : ""}>{l.label}</span>
-                {!l.available && <span className="sr-only"> (coming next)</span>}
-              </span>
-            ))}
-          </p>
+          <LanguageSwitch />
         </div>
       </div>
     </footer>

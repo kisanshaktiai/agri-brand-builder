@@ -1,6 +1,7 @@
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App, { AppProviders, preloadRoute } from './App.tsx'
+import './i18n/register'
 import './index.css'
 import './styles/tokens.css'
 import './styles/scenes.css'

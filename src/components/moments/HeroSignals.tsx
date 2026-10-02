@@ -1,7 +1,7 @@
 import React from "react";
 import { Phone, ScreenImage } from "@/components/site/Device";
 import { ButtonLink, Eyebrow } from "@/components/site/primitives";
-import { CTA } from "@/content/site";
+import { useContent } from "@/i18n";
 import { track } from "@/lib/analytics";
 
 /**
@@ -34,6 +34,7 @@ export function Kinetic({ text, className }: { text: string; className?: string 
 }
 
 export function HeroSignals({ eyebrow, title, lead }: { eyebrow: string; title: string; lead: string }) {
+  const { CTA, UI } = useContent();
   return (
     <section className="ks-hero ks-on-dark relative overflow-hidden bg-ks-night text-ks-paper" aria-labelledby="hero-h">
       <div aria-hidden className="ks-hero-glow" />
@@ -54,9 +55,9 @@ export function HeroSignals({ eyebrow, title, lead }: { eyebrow: string; title: 
               {CTA.partner.label}
             </ButtonLink>
           </div>
-          <ul className="ks-word-block mt-12 flex flex-wrap gap-x-6 gap-y-2 ks-label" style={{ color: "hsl(var(--ks-paper) / 0.7)" }} aria-label="What the companion reads for every land">
-            {SIGNALS.map((s) => (
-              <li key={s.key}>{s.label}</li>
+          <ul className="ks-word-block mt-12 flex flex-wrap gap-x-6 gap-y-2 ks-label" style={{ color: "hsl(var(--ks-paper) / 0.7)" }} aria-label={UI.signalsLabel}>
+            {SIGNALS.map((s, i) => (
+              <li key={s.key}>{UI.signals[i] ?? s.label}</li>
             ))}
           </ul>
         </div>
@@ -73,7 +74,7 @@ export function HeroSignals({ eyebrow, title, lead }: { eyebrow: string; title: 
           </svg>
           <div className="relative mx-auto w-[72%] max-w-[300px] lg:w-[300px]">
             <div className="ks-phone-halo" aria-hidden />
-            <Phone label="Farmer App, Farm Today">
+            <Phone label={UI.heroPhoneLabel}>
               <ScreenImage screen="farm-today" priority />
             </Phone>
           </div>

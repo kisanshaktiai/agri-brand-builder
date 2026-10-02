@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { TECHNOLOGIES, FAMILY_ORDER, techByKey } from "@/content/technologies";
+import { FAMILY_ORDER } from "@/content/technologies";
+import { useLocale } from "@/i18n";
 import { TechMark, MaturityBadge, Eyebrow, Heading, Body } from "@/components/site/primitives";
 import { useReducedMotion } from "@/lib/motion";
 import { useInView } from "@/lib/useInView";
@@ -14,6 +15,9 @@ import { cn } from "@/lib/utils";
  */
 export function FamilyEmerge({ eyebrow, title, body, linkTo = "/technology" }: { eyebrow: string; title: string; body?: string; linkTo?: string | null }) {
   const reduced = useReducedMotion();
+  const { content, href } = useLocale();
+  const { TECHNOLOGIES, UI } = content;
+  const techByKey = (k: (typeof FAMILY_ORDER)[number]) => TECHNOLOGIES.find((t) => t.key === k)!;
   const { ref, inView } = useInView<HTMLDivElement>({ rootMargin: "0px 0px -20% 0px", threshold: 0.2 });
   const n = FAMILY_ORDER.length;
   // Server HTML stays visible; the emergence only arms after mount, off-screen.
@@ -60,7 +64,7 @@ export function FamilyEmerge({ eyebrow, title, body, linkTo = "/technology" }: {
                 </div>
                 <p className="mt-6 ks-label text-ks-ink-4">{t.arc.join(" · ")}</p>
                 {linkTo && (
-                  <Link to={`${linkTo}#${key}`} className="absolute inset-0 rounded-ks-md focus-visible:outline-offset-[-2px]" aria-label={`KisanShakti ${t.name}: ${t.positioning}`}>
+                  <Link to={href(`${linkTo}#${key}`)} className="absolute inset-0 rounded-ks-md focus-visible:outline-offset-[-2px]" aria-label={`KisanShakti ${t.name}: ${t.positioning}`}>
                     <span className="sr-only">Read about KisanShakti {t.name}</span>
                   </Link>
                 )}
@@ -69,7 +73,7 @@ export function FamilyEmerge({ eyebrow, title, body, linkTo = "/technology" }: {
           })}
         </ol>
         <div aria-hidden className={cn("mx-auto mt-6 h-px max-w-4xl origin-left bg-ks-line transition-transform duration-[1200ms] ease-ks-out", shown ? "scale-x-100 delay-500" : "scale-x-0 !duration-0")} />
-        <p className="mt-4 text-center text-xs text-ks-ink-3">Observe · Understand · Reason · Decide · Act · Anticipate · Predict — a conceptual arc, not the order things run.</p>
+        <p className="mt-4 text-center text-xs text-ks-ink-3">{UI.arcNote}</p>
       </div>
       <p className="sr-only">{TECHNOLOGIES.map((t) => `KisanShakti ${t.name}: ${t.fullForm}. ${t.positioning}.`).join(" ")}</p>
     </div>

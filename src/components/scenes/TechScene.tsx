@@ -1,6 +1,7 @@
 import React from "react";
 import type { TechKey } from "@/content/technologies";
 import { SceneFrame } from "./SceneFrame";
+import { useT } from "@/i18n";
 
 /**
  * Animated explainers for the five technologies. Diagrams, not product
@@ -222,6 +223,7 @@ const SCENES: Record<TechKey, { C: React.FC; label: string }> = {
 
 export function TechScene({ tech, className }: { tech: TechKey; className?: string }) {
   const { C, label } = SCENES[tech];
+  const UI = useT();
   return (
     <div className={className}>
       <div className="aspect-[3/2] w-full overflow-hidden rounded-ks-lg border border-ks-line bg-ks-white shadow-ks-1">
@@ -229,7 +231,7 @@ export function TechScene({ tech, className }: { tech: TechKey; className?: stri
           <C />
         </SceneFrame>
       </div>
-      <p className="ks-small mt-2 text-center text-[0.75rem]">Illustration</p>
+      <p className="ks-small mt-2 text-center text-[0.75rem]">{UI.illustration}</p>
     </div>
   );
 }

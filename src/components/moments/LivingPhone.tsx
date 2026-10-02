@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Phone, ScreenImage } from "@/components/site/Device";
 import { TechMark, Eyebrow, Heading } from "@/components/site/primitives";
-import { techByKey, type TechKey } from "@/content/technologies";
+import { type TechKey } from "@/content/technologies";
+import { useContent } from "@/i18n";
 import { useReducedMotion } from "@/lib/motion";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -38,6 +39,8 @@ const FeatureMark = ({ label, size = "md" }: { label: string; size?: "sm" | "md"
 
 export function LivingPhone({ eyebrow, title, steps }: { eyebrow: string; title: string; steps: LivingStep[] }) {
   const reduced = useReducedMotion();
+  const { TECHNOLOGIES } = useContent();
+  const techByKey = (k: TechKey) => TECHNOLOGIES.find((t) => t.key === k)!;
   const [active, setActive] = useState(0);
   const refs = useRef<(HTMLElement | null)[]>([]);
 

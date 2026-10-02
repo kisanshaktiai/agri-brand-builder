@@ -3,9 +3,10 @@ import { Seo } from "@/components/site/Seo";
 import { PageHero } from "@/components/site/PageHero";
 import { Container, Section, Eyebrow, Heading, Body } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
-import { SECURITY_PAGE } from "@/content/pages";
+import { useContent } from "@/i18n";
 
 export default function Security() {
+  const { SECURITY_PAGE, UI } = useContent();
   const p = SECURITY_PAGE;
   return (
     <>
@@ -27,7 +28,7 @@ export default function Security() {
       <Section band>
         <Container>
           <Reveal className="max-w-3xl">
-            <Eyebrow>Pending</Eyebrow>
+            <Eyebrow>{UI.pending}</Eyebrow>
             <Heading>{p.pending.title}</Heading>
             <Body className="mt-6">{p.pending.body}</Body>
           </Reveal>

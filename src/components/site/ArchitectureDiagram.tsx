@@ -1,5 +1,6 @@
 import React, { useId, useState } from "react";
-import { ARCHITECTURE, type ArchNode } from "@/content/platform";
+import { type ArchNode } from "@/content/platform";
+import { useContent } from "@/i18n";
 import { Eyebrow, Heading, MaturityBadge, TechMark } from "@/components/site/primitives";
 import { Phone, Browser, ScreenImage } from "@/components/site/Device";
 import { screenById } from "@/content/screens";
@@ -32,6 +33,7 @@ function ArchNodeButton({ n, active, panelId, onSelect }: { n: ArchNode; active:
  * On phones the detail opens beneath the diagram (progressive disclosure).
  */
 export function ArchitectureDiagram({ eyebrow, title, hint }: { eyebrow: string; title: string; hint: string }) {
+  const { ARCHITECTURE, UI } = useContent();
   const [activeId, setActiveId] = useState<string>("farmer-app");
   const panelId = useId();
   const active = ARCHITECTURE.find((n) => n.id === activeId) ?? ARCHITECTURE[0];
@@ -54,22 +56,22 @@ export function ArchitectureDiagram({ eyebrow, title, hint }: { eyebrow: string;
       </div>
 
       <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-12">
-        <div className="rounded-ks-lg border border-ks-line bg-ks-paper-2 p-3 md:p-5" role="group" aria-label="Platform architecture">
-          <p className="ks-label mb-2 px-1">Surfaces</p>
+        <div className="rounded-ks-lg border border-ks-line bg-ks-paper-2 p-3 md:p-5" role="group" aria-label={UI.platformArchitecture}>
+          <p className="ks-label mb-2 px-1">{UI.surfaces}</p>
           <div className="grid gap-2 sm:grid-cols-2">
             {surfaces.map((n) => (
               <ArchNodeButton key={n.id} n={n} active={activeId === n.id} panelId={panelId} onSelect={select} />
             ))}
           </div>
           <div aria-hidden className="mx-auto my-3 h-5 w-px bg-ks-line-strong" />
-          <p className="ks-label mb-2 px-1">Technology Family</p>
+          <p className="ks-label mb-2 px-1">{UI.technologyFamily}</p>
           <div className="grid gap-2 sm:grid-cols-5">
             {techs.map((n) => (
               <ArchNodeButton key={n.id} n={n} active={activeId === n.id} panelId={panelId} onSelect={select} />
             ))}
           </div>
           <div aria-hidden className="mx-auto my-3 h-5 w-px bg-ks-line-strong" />
-          <p className="ks-label mb-2 px-1">Foundation</p>
+          <p className="ks-label mb-2 px-1">{UI.foundation}</p>
           <ArchNodeButton n={foundation} active={activeId === foundation.id} panelId={panelId} onSelect={select} />
         </div>
 

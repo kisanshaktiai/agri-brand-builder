@@ -1,8 +1,8 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { Phone, ScreenImage } from "@/components/site/Device";
 import { Eyebrow, Heading } from "@/components/site/primitives";
-import { TENANT_EXAMPLES } from "@/content/tenants";
-import { FAMILY_ORDER, techByKey } from "@/content/technologies";
+import { FAMILY_ORDER } from "@/content/technologies";
+import { useContent } from "@/i18n";
 import { useReducedMotion, useMinWidth, useGsap } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +16,8 @@ interface ZoomStep { title: string; body: string }
  * with the composite shown at each level, no pinning.
  */
 export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title: string; steps: ZoomStep[] }) {
+  const { TENANT_EXAMPLES, TECHNOLOGIES, UI } = useContent();
+  const techByKey = (k: (typeof FAMILY_ORDER)[number]) => TECHNOLOGIES.find((t) => t.key === k)!;
   const reduced = useReducedMotion();
   const desktop = useMinWidth(1024);
   const pinned = desktop && !reduced;
@@ -53,7 +55,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
     <div className={cn("relative mx-auto w-full max-w-[880px]", className)}>
       <div className="relative p-4 md:p-6">
         <div aria-hidden className="pz-l3 absolute inset-0 rounded-ks-lg border border-ks-line bg-ks-paper-2" style={vis(3, lvl)} />
-        <p className="pz-l3 relative ks-label mb-3" style={vis(3, lvl)} aria-hidden={!pinned && lvl < 3}>Shared platform · governed intelligence</p>
+        <p className="pz-l3 relative ks-label mb-3" style={vis(3, lvl)} aria-hidden={!pinned && lvl < 3}>{UI.sharedPlatformLabel}</p>
         <div className="relative grid grid-cols-3 gap-3">
           {TENANT_EXAMPLES.slice(1).map((t, i) => (
             <div key={t.id} className={cn("relative p-3", i > 0 && "pz-l2")} style={i > 0 ? vis(2, lvl) : undefined}>
@@ -64,7 +66,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
               </div>
               {i === 0 ? (
                 <div className="relative mx-auto w-[42%] min-w-[64px]">
-                  <Phone className="!rounded-[16px] !p-[3px] [&>.ks-phone-screen]:!rounded-[13px] after:!hidden" label="A farmer">
+                  <Phone className="!rounded-[16px] !p-[3px] [&>.ks-phone-screen]:!rounded-[13px] after:!hidden" label={UI.aFarmer}>
                     <ScreenImage screen="farm-today" />
                   </Phone>
                 </div>
@@ -122,7 +124,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
           <div className="mt-8 min-h-[9rem]" aria-live="polite">
             {steps.map((s, i) => (
               <div key={s.title} className={cn("transition-opacity duration-500", level === i ? "opacity-100" : "absolute opacity-0 pointer-events-none")} aria-hidden={level !== i}>
-                <p className="ks-label mb-2">{String(i + 1).padStart(2, "0")} / 04</p>
+                <p className="ks-label mb-2">{String(i + 1).padStart(2, "0")} {UI.fourOfFour}</p>
                 <h3 className="ks-h3">{s.title}</h3>
                 <p className="ks-body mt-2">{s.body}</p>
               </div>

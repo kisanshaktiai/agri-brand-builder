@@ -4,11 +4,12 @@ import { PageHero } from "@/components/site/PageHero";
 import { Container, Section, Eyebrow, Heading, Body, ButtonLink, MaturityBadge } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
 import { Phone, ScreenImage } from "@/components/site/Device";
-import { FARMER_APP_PAGE } from "@/content/pages";
-import { CTA, type Maturity } from "@/content/site";
+import { type Maturity } from "@/content/site";
+import { useContent } from "@/i18n";
 import { track } from "@/lib/analytics";
 
 export default function FarmerApp() {
+  const { FARMER_APP_PAGE, CTA, UI } = useContent();
   return (
     <>
       <Seo title={FARMER_APP_PAGE.seo.title} description={FARMER_APP_PAGE.seo.description} path="/farmer-app" jsonLd={SOFTWARE_LD} />
@@ -42,7 +43,7 @@ export default function FarmerApp() {
       ))}
       <Section>
         <Container>
-          <Eyebrow>Also in the companion</Eyebrow>
+          <Eyebrow>{UI.alsoInCompanion}</Eyebrow>
           <ul className="grid gap-4 md:grid-cols-2">
             {FARMER_APP_PAGE.more.map((m) => (
               <Reveal key={m.title} as="li" className="rounded-ks-md border border-ks-line bg-ks-white p-5">

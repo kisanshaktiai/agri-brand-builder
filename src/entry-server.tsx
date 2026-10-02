@@ -2,6 +2,7 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
 import { AppRoutes, AppProviders, preloadPages } from "./App";
+import "./i18n/register";
 import "./index.css";
 import "./styles/tokens.css";
 import "./styles/scenes.css";

@@ -3,10 +3,10 @@ import { Seo } from "@/components/site/Seo";
 import { PageHero } from "@/components/site/PageHero";
 import { Container, Section, ButtonLink } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
-import { INVESTORS_PAGE } from "@/content/pages";
-import { CTA } from "@/content/site";
+import { useContent } from "@/i18n";
 
 export default function Investors() {
+  const { INVESTORS_PAGE, CTA, UI } = useContent();
   const p = INVESTORS_PAGE;
   return (
     <>
@@ -23,8 +23,8 @@ export default function Investors() {
             ))}
           </ol>
           <div className="mt-10 flex flex-wrap gap-3">
-            <ButtonLink to={CTA.partner.to}>Contact</ButtonLink>
-            <ButtonLink to="/founder" variant="secondary">Founder</ButtonLink>
+            <ButtonLink to={CTA.partner.to}>{UI.contact}</ButtonLink>
+            <ButtonLink to="/founder" variant="secondary">{UI.founder}</ButtonLink>
           </div>
         </Container>
       </Section>

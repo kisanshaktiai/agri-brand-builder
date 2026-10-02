@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { leadsService, type LeadData } from "@/services/LeadsService";
-import { CONTACT_PAGE } from "@/content/pages";
+import { useContent } from "@/i18n";
 import { Button } from "./primitives";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -19,10 +19,10 @@ const ORG_TYPE_MAP: Record<string, LeadData["organization_type"]> = {
   other: "other",
 };
 
-const f = CONTACT_PAGE.form;
 const field = "h-11 w-full rounded-ks-sm border border-ks-line-strong bg-ks-white px-3 text-base text-ks-ink placeholder:text-ks-ink-4 focus:border-ks-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ks-field/40";
 
 export function PartnerForm() {
+  const f = useContent().CONTACT_PAGE.form;
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
   const started = useRef(false);

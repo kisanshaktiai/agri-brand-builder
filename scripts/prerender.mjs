@@ -43,7 +43,9 @@ async function main() {
   await mod.preload();
 
   // Strip Vite's module-less duplicate of index.css link? Not needed; template already links built CSS.
-  for (const route of ROUTES) {
+  const LOCALE_PREFIXES = ["", "/mr", "/hi"];
+  const ALL = ROUTES.flatMap((r) => (r === "/founder" ? [r] : LOCALE_PREFIXES.map((p) => (p ? `${p}${r === "/" ? "" : r}` : r))));
+  for (const route of ALL) {
     const { html, head } = mod.render(route);
     let page = template.replace("<!--app-head-->", head).replace('<div id="root"><!--app-html--></div>', `<div id="root" data-prerendered="true">${html}</div>`);
     // The template carries a default <title> and description; Helmet supplies the real ones.
@@ -55,6 +57,8 @@ async function main() {
     // first paint of the static HTML never waits on JavaScript on slow phones.
     page = page.replace(/\s*<link rel="modulepreload"[^>]*>/g, "");
     // The founder profile uses its own typefaces; do not preload the site's display fonts there.
+    const lm = route.match(/^\/(mr|hi)(?=\/|$)/);
+    if (lm) page = page.replace('<html lang="en">', `<html lang="${lm[1]}">`);
     if (route === "/founder") page = page.replace(/\s*<link rel="preload" href="\/fonts[^>]*>/g, "");
     // The static HTML is complete on its own, so the app bundle is loaded on
     // the first interaction (scroll, touch, key, pointer) or when the browser

@@ -1,11 +1,13 @@
 import React from "react";
 import { Eyebrow, Heading } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
+import { useT } from "@/i18n";
 
 interface Entry { time: string; text: string }
 
 /** One farmer's day and one partner's day, as parallel timelines. */
 export function TwoDays({ eyebrow, title, farmer, partner }: { eyebrow: string; title: string; farmer: Entry[]; partner: Entry[] }) {
+  const UI = useT();
   const Col = ({ heading, items, who }: { heading: string; items: Entry[]; who: string }) => (
     <div>
       <p className="ks-label mb-1">{who}</p>
@@ -26,8 +28,8 @@ export function TwoDays({ eyebrow, title, farmer, partner }: { eyebrow: string; 
       <Eyebrow>{eyebrow}</Eyebrow>
       <Heading>{title}</Heading>
       <div className="mt-12 grid gap-12 md:grid-cols-2 md:gap-16">
-        <Col who="Farmer App" heading="One farmer's day" items={farmer} />
-        <Col who="Partner Portal" heading="One partner's day" items={partner} />
+        <Col who={UI.farmerApp} heading={UI.oneFarmersDay} items={farmer} />
+        <Col who={UI.partnerPortal} heading={UI.onePartnersDay} items={partner} />
       </div>
     </div>
   );

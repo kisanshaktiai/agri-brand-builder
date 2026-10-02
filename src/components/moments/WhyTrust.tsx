@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { TRUST_STEPS, TRUST_OWNERS, type TrustStep } from "@/content/trust";
+import { type TrustStep } from "@/content/trust";
+import { useContent } from "@/i18n";
 import { Eyebrow, Heading, Body, TechMark } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
 import { TechScene } from "@/components/scenes/TechScene";
@@ -17,6 +18,7 @@ const OWNER_CLS: Record<TrustStep["owner"], string> = {
  * through five plain checks; the rail is drawn by scroll on desktop.
  */
 export function WhyTrust({ eyebrow, title, body }: { eyebrow: string; title: string; body: string }) {
+  const { TRUST_STEPS, TRUST_OWNERS } = useContent();
   const reduced = useReducedMotion();
   const desktop = useMinWidth(1024);
   const gsap = useGsap(desktop && !reduced);
