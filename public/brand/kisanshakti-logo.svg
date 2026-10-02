@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 250" role="img" aria-labelledby="title desc">
+  <title id="title">KisanShakti AI</title>
+  <desc id="desc">KisanShakti AI — AI for Every Farmer</desc>
+  <defs>
+    <linearGradient id="leaf1" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#4aa62c"/><stop offset="1" stop-color="#8bc63f"/></linearGradient>
+    <linearGradient id="leaf2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#2f8f3a"/><stop offset="1" stop-color="#0e9b58"/></linearGradient>
+  </defs>
+
+  <!-- Three-leaf identity mark -->
+  <g transform="translate(250 8)">
+    <path d="M130 0 C105 32 102 64 130 94 C157 65 157 33 130 0Z" fill="url(#leaf1)"/>
+    <path d="M35 46 C70 42 97 55 108 83 C75 94 48 82 35 46Z" fill="url(#leaf1)"/>
+    <path d="M225 46 C190 42 163 55 152 83 C185 94 212 82 225 46Z" fill="url(#leaf2)"/>
+    <path d="M130 92 C73 92 29 108 0 145 C53 119 94 112 130 112 C166 112 207 119 260 145 C231 108 187 92 130 92Z" fill="#07583f"/>
+    <path d="M130 15v78 M60 58c26 11 45 20 65 34 M200 58c-26 11-45 20-65 34" stroke="#eef8ec" stroke-width="3" stroke-linecap="round" opacity=".95"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="380" y="174" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="800" letter-spacing="-3">
+    <tspan fill="#0b5b43">KisanShakti</tspan><tspan fill="#77787a"> AI</tspan>
+  </text>
+  <path d="M535 116 C542 106 557 104 567 113 C558 126 545 129 535 126Z" fill="#4aa62c"/>
+
+  <!-- Farmer-facing tagline -->
+  <g fill="#1f4f91" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700">
+    <text x="380" y="220" text-anchor="middle">AI for Every Farmer</text>
+  </g>
+  <path d="M210 214H295 M465 214H550" stroke="#8b8f95" stroke-width="2"/>
+</svg>
