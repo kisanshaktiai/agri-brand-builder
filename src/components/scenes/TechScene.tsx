@@ -10,48 +10,56 @@ import { SceneFrame } from "./SceneFrame";
 const D = (d: number) => ({ "--d": `${d}s` }) as React.CSSProperties;
 
 function TatvaScene() {
+  const elements = [
+    { x: 240, y: 46, label: "Sky", detail: "above the field" },
+    { x: 92, y: 112, label: "Weather", detail: "what changes next" },
+    { x: 388, y: 112, label: "Temperature", detail: "heat the crop receives" },
+    { x: 108, y: 250, label: "Water", detail: "rain · balance" },
+    { x: 372, y: 250, label: "Soil", detail: "your soil test" },
+  ];
+
   return (
     <svg className="ks-scene" viewBox="0 0 480 320" aria-hidden>
-      {/* sky with a sun that travels */}
-      <g className="sc-sun" style={{ transformOrigin: "240px 60px" }}>
-        <circle cx="300" cy="62" r="14" className="fill-signal-soft" />
-        <circle cx="300" cy="62" r="8" className="fill-signal" />
+      <g className="sc-rise" style={D(0.15)}>
+        <circle cx="240" cy="157" r="48" className="fill-field-soft" />
+        <polygon points="210,142 270,136 282,182 220,191" className="fill-white" stroke="hsl(var(--ks-ink))" strokeWidth="1.5" />
+        <polyline points="220,191 210,142 270,136 282,182" className="field sc-draw" style={{ "--len": "170", "--dur": "1.1s" } as React.CSSProperties} />
+        <text x="246" y="163" textAnchor="middle" className="t-sans t-ink" style={{ fontSize: 12 }}>THIS LAND</text>
       </g>
-      <path d="M86 92c8-18 34-20 44-6 10-10 30-6 32 10 14 0 18 18 4 20H86c-12 0-14-20 0-24z" className="fill-soft sc-rise" style={D(0.3)} />
-      {/* satellite sweep */}
-      <g className="sc-sweep" style={D(1)}>
-        <rect x="90" y="150" width="4" height="130" className="fill-field" opacity="0.5" />
-        <rect x="80" y="150" width="24" height="130" fill="url(#tatva-glow)" opacity="0.5" />
+
+      <g className="sc-sweep" style={D(0.5)}>
+        <rect x="154" y="126" width="5" height="64" className="fill-field" opacity="0.55" />
       </g>
-      <defs>
-        <linearGradient id="tatva-glow" x1="0" x2="1">
-          <stop offset="0" stopColor="hsl(var(--ks-field))" stopOpacity="0" />
-          <stop offset="1" stopColor="hsl(var(--ks-field))" stopOpacity="0.5" />
-        </linearGradient>
-      </defs>
-      {/* field parcel: greens up as the satellite scores it */}
-      <polygon points="120,160 330,146 360,250 150,276" fill="hsl(42 40% 86%)" className="sc-green" style={D(1.2)} stroke="hsl(var(--ks-ink))" strokeWidth="1.5" />
-      <polyline points="150,276 120,160 330,146 360,250 150,276" className="ink sc-draw" style={{ "--len": "760", "--dur": "1.4s" } as React.CSSProperties} />
-      {/* rows */}
-      {[0, 1, 2, 3].map((i) => (
-        <line key={i} x1={150 + i * 22} y1={276 - i * 28} x2={330 + i * 8} y2={146 + i * 26} className="ln sc-in" style={D(1.6 + i * 0.1)} opacity="0.7" />
+
+      {elements.map((e, i) => (
+        <g key={e.label}>
+          <line
+            x1={e.x}
+            y1={e.y}
+            x2="240"
+            y2="157"
+            className="ln sc-draw"
+            style={{ "--len": "120", "--d": `${0.7 + i * 0.22}s`, "--dur": "0.8s" } as React.CSSProperties}
+          />
+          <g className="sc-rise" style={D(0.45 + i * 0.28)}>
+            <circle cx={e.x} cy={e.y} r="26" className="fill-white" stroke="hsl(var(--ks-line-strong))" />
+            <circle cx={e.x} cy={e.y} r="6" className="fill-field" />
+            <text x={e.x} y={e.y + 44} textAnchor="middle" className="t-sans t-ink" style={{ fontSize: 13 }}>{e.label}</text>
+            <text x={e.x} y={e.y + 59} textAnchor="middle" style={{ fontSize: 10 }}>{e.detail}</text>
+          </g>
+        </g>
       ))}
-      {/* rain gauge */}
-      <g className="sc-rise" style={D(2)}>
-        <rect x="392" y="170" width="22" height="90" rx="6" className="fill-white" stroke="hsl(var(--ks-ink))" strokeWidth="1.5" />
-        <rect x="395" y="215" width="16" height="42" rx="4" className="fill-field sc-bar" style={{ "--d": "2.3s", "--dur": "1.8s" } as React.CSSProperties} opacity="0.8" />
-        <text x="403" y="282" textAnchor="middle">water</text>
+
+      <g className="sc-rise" style={D(2.3)}>
+        <rect x="177" y="215" width="126" height="28" rx="14" className="fill-field-soft" />
+        <text x="240" y="233" textAnchor="middle" className="t-sans" style={{ fill: "hsl(var(--ks-field-deep))", fontSize: 12 }}>
+          one land · five elements
+        </text>
       </g>
-      {/* readings */}
-      <g className="sc-rise" style={D(2.6)}>
-        <text x="120" y="304">hourly weather</text>
-        <text x="250" y="304">daily satellite</text>
-        <text x="362" y="304">health score</text>
-      </g>
-      <g className="sc-rise" style={D(3)}>
-        <circle cx="240" cy="210" r="18" className="fill-white" stroke="hsl(var(--ks-field))" strokeWidth="2" />
-        <text x="240" y="214" textAnchor="middle" className="t-ink">NDVI</text>
-        <circle cx="240" cy="210" r="18" className="field sc-pulse" style={D(3.2)} />
+
+      <g className="sc-rise" style={D(2.8)}>
+        <text x="48" y="298">satellite · weather · rainfall · thermal · soil</text>
+        <text x="432" y="298" textAnchor="end">land-specific view</text>
       </g>
     </svg>
   );
