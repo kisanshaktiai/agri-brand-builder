@@ -23,8 +23,8 @@ export const HOME = {
     fact: "app.companion",
   },
   living: {
-    eyebrow: "One farmer's day, one land at a time",
-    title: "Nature gives the signals. The companion does the rest.",
+    eyebrow: "One farmer. One land. One season.",
+    title: "Start with the land. Let the companion follow the season.",
     steps: [
       { key: "land", arc: "Begin", feature: "Land setup", screen: "land", title: "Start with your land.", body: "Map each land once, record the crop and season, and give the companion the field it needs to follow. Everything that comes next is tied to this land.", fact: "app.land" },
       { key: "observe", arc: "Observe", tech: "tatva", screen: "weather", title: "TATVA understands what nature is doing.", body: "Sky, soil, water, temperature and weather, read for this land: the satellite's view of the field, hourly weather, rainfall and the heat the crop has gathered.", fact: "tatva.weather" },
