@@ -143,8 +143,8 @@ export default function Home() {
               <Lead>{HOME.enterprise.body}</Lead>
             </Reveal>
             <Reveal delay={0.1} className="flex flex-wrap gap-3 lg:col-span-4 lg:col-start-9 lg:justify-end">
-              <ButtonLink to={CTA.tenant.to} size="lg" onClick={() => track("tenant_cta", { where: "home" })}>
-                {CTA.tenant.label}
+              <ButtonLink to={CTA.becomePartner.to} size="lg" onClick={() => track("partner_cta", { where: "home" })}>
+                {CTA.becomePartner.label}
               </ButtonLink>
               <ButtonLink to={CTA.partner.to} variant="secondary" size="lg" onClick={() => track("partner_cta", { where: "home-enterprise" })}>
                 {CTA.partner.label}
