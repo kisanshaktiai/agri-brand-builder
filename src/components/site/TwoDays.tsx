@@ -4,8 +4,8 @@ import { Reveal } from "@/components/site/Reveal";
 
 interface Entry { time: string; text: string }
 
-/** One farmer's day and one tenant's day, as parallel timelines. */
-export function TwoDays({ eyebrow, title, farmer, tenant }: { eyebrow: string; title: string; farmer: Entry[]; tenant: Entry[] }) {
+/** One farmer's day and one partner's day, as parallel timelines. */
+export function TwoDays({ eyebrow, title, farmer, partner }: { eyebrow: string; title: string; farmer: Entry[]; partner: Entry[] }) {
   const Col = ({ heading, items, who }: { heading: string; items: Entry[]; who: string }) => (
     <div>
       <p className="ks-label mb-1">{who}</p>
@@ -27,7 +27,7 @@ export function TwoDays({ eyebrow, title, farmer, tenant }: { eyebrow: string; t
       <Heading>{title}</Heading>
       <div className="mt-12 grid gap-12 md:grid-cols-2 md:gap-16">
         <Col who="Farmer App" heading="One farmer's day" items={farmer} />
-        <Col who="Partner Portal" heading="One partner's day" items={tenant} />
+        <Col who="Partner Portal" heading="One partner's day" items={partner} />
       </div>
     </div>
   );
