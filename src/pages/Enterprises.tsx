@@ -15,7 +15,7 @@ export default function Enterprises() {
       <Seo title={p.seo.title} description={p.seo.description} path="/enterprises" />
       <PageHero eyebrow={p.hero.eyebrow} title={p.hero.title} lead={p.hero.lead} size="display-1">
         <div className="mt-8 flex flex-wrap gap-3">
-          <ButtonLink to={CTA.partner.to} size="lg" onClick={() => track("tenant_cta", { where: "enterprises-hero" })}>
+          <ButtonLink to={CTA.partner.to} size="lg" onClick={() => track("partner_cta", { where: "enterprises-hero" })}>
             {CTA.partner.label}
           </ButtonLink>
         </div>
