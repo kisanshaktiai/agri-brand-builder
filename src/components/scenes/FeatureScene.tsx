@@ -189,22 +189,28 @@ function Market() {
 function Community() {
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
-      <Header title="Farmers near you" />
-      {[0, 1, 2].map((i) => (
-        <g key={i} className="sc-rise" style={D(0.3 + i * 0.4)}>
-          <rect x="32" y={130 + i * 190} width="326" height="170" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
-          <circle cx="62" cy={160 + i * 190} r="14" className="fill-soft" />
-          <text x="86" y={165 + i * 190} className="t-sans t-ink" style={{ fontSize: 14 }}>{["Sangli group", "Rice growers · Kolhapur", "Village post"][i]}</text>
-          <rect x="48" y={184 + i * 190} width="294" height="60" rx="8" className="fill-field-soft" />
-          <text x="48" y={268 + i * 190} className="t-sans" style={{ fontSize: 13 }}>{["पावसानंतर रोपं असं दिसत आहेत…", "आज तुडतुडे दिसले का?", "ऊस लागवडीचा अनुभव"][i]}</text>
-          <text x="300" y={268 + i * 190}>▶ read aloud</text>
-        </g>
-      ))}
-      <text x="32" y="730" className="sc-in" style={D(1.8)}>photos · comments · groups · moderation</text>
+      <Header title="Farmers connected beyond language" />
+      <g className="sc-rise" style={D(0.3)}>
+        <rect x="32" y="130" width="326" height="190" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
+        <text x="52" y="165" className="t-sans t-ink" style={{ fontSize: 15 }}>Marathi farmer</text>
+        <rect x="52" y="182" width="245" height="52" rx="14" className="fill-field-soft" />
+        <text x="68" y="214" className="t-sans t-ink" style={{ fontSize: 15 }}>“पावसानंतर ऊस कसा दिसतोय?”</text>
+        <text x="52" y="260" className="t-sans" style={{ fontSize: 12 }}>shared to the community</text>
+        <text x="52" y="288" className="t-sans" style={{ fontSize: 13 }}>read aloud · translate · reply</text>
+      </g>
+      <g className="sc-rise" style={D(1.2)}>
+        <rect x="76" y="355" width="282" height="150" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
+        <text x="96" y="390" className="t-sans t-ink" style={{ fontSize: 15 }}>Telugu farmer</text>
+        <rect x="96" y="410" width="235" height="48" rx="14" className="fill-soft" />
+        <text x="112" y="439" className="t-sans t-ink" style={{ fontSize: 15 }}>“వర్షం తర్వాత నా పొలం ఎలా…?”</text>
+        <text x="96" y="482" className="t-sans" style={{ fontSize: 12 }}>same conversation · different language</text>
+      </g>
+      <path d="M195 320 C195 340 214 350 230 364" className="field sc-draw" strokeDasharray="4 6" style={{ "--len": "70", "--d": "1.6s", "--dur": "0.8s" } as React.CSSProperties} />
+      <Pill x="32" y="560" w="326" text="Many languages · one farmer community" tone="fill-field-soft" d={1.9} />
+      <text x="32" y="650" className="sc-in" style={D(2.3)}>local-language posts · groups · read aloud</text>
     </svg>
   );
 }
-
 function Reels() {
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
@@ -425,42 +431,50 @@ function PhotoScan() {
 }
 
 function Schemes() {
+  const items = [
+    ["PM-Kisan", "Income support information", "Check eligibility"],
+    ["Crop insurance", "Coverage and enrolment information", "View details"],
+    ["Soil Health Card", "How to obtain and use it", "Learn more"],
+  ];
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
-      <Header title="Support you are eligible for" />
-      {[["PM-Kisan", "Income support · eligible", true], ["Crop insurance", "Enrolment window open", true], ["Soil Health Card", "Free soil test · how to apply", false]].map((r, i) => (
-        <g key={String(r[0])} className="sc-rise" style={D(0.3 + i * 0.4)}>
+      <Header title="Government support, explained" />
+      {items.map(([name, detail, action], i) => (
+        <g key={name} className="sc-rise" style={D(0.3 + i * 0.4)}>
           <rect x="32" y={130 + i * 130} width="326" height="110" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
-          <text x="52" y={166 + i * 130} className="t-sans t-ink" style={{ fontSize: 17 }}>{String(r[0])}</text>
-          <text x="52" y={192 + i * 130} className="t-sans" style={{ fontSize: 14 }}>{String(r[1])}</text>
-          <rect x="52" y={206 + i * 130} width={r[2] ? 92 : 120} height="22" rx="11" className={r[2] ? "fill-field-soft" : "fill-soft"} />
-          <text x={r[2] ? 98 : 112} y={221 + i * 130} textAnchor="middle" style={{ fontSize: 11 }}>{r[2] ? "eligible" : "read more"}</text>
+          <text x="52" y={166 + i * 130} className="t-sans t-ink" style={{ fontSize: 17 }}>{name}</text>
+          <text x="52" y={192 + i * 130} className="t-sans" style={{ fontSize: 14 }}>{detail}</text>
+          <rect x="52" y={206 + i * 130} width={action === "Check eligibility" ? 118 : 96} height="22" rx="11" className="fill-field-soft" />
+          <text x={action === "Check eligibility" ? 111 : 100} y={221 + i * 130} textAnchor="middle" className="t-sans" style={{ fontSize: 11 }}>{action}</text>
         </g>
       ))}
-      <text x="32" y="560" className="sc-in" style={D(1.8)}>explained in your language</text>
-      <text x="32" y="582" className="sc-in" style={D(2)}>no government affiliation implied</text>
+      <text x="32" y="560" className="sc-in" style={D(1.8)}>explained in the farmer's language</text>
+      <text x="32" y="582" className="sc-in" style={D(2)}>information service · no government affiliation implied</text>
     </svg>
   );
 }
-
 function Services() {
+  const items = [
+    ["Labour", "Search workers for the task", "Find labour"],
+    ["Machinery", "Find equipment near the land", "Find machinery"],
+    ["Transport", "Arrange movement to market", "Request service"],
+  ];
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
-      <Header title="Find the help the farm needs" />
-      {[["Labour", "Harvest crew · 6 people", "available this week"], ["Machinery", "Rotavator · 4 km away", "book for Tuesday"], ["Transport", "Pickup to Nashik mandi", "ask for a quote"]].map((r, i) => (
-        <g key={r[0]} className="sc-rise" style={D(0.3 + i * 0.4)}>
+      <Header title="Services for the work ahead" />
+      {items.map(([name, detail, action], i) => (
+        <g key={name} className="sc-rise" style={D(0.3 + i * 0.4)}>
           <rect x="32" y={130 + i * 150} width="326" height="128" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
           <rect x="48" y={146 + i * 150} width="64" height="64" rx="12" className="fill-soft" />
-          <text x="128" y={176 + i * 150} className="t-sans t-ink" style={{ fontSize: 17 }}>{r[0]}</text>
-          <text x="128" y={200 + i * 150} className="t-sans" style={{ fontSize: 14 }}>{r[1]}</text>
-          <text x="128" y={240 + i * 150} className="t-sans" style={{ fontSize: 13, fill: "hsl(var(--ks-field-deep))" }}>{r[2]} ›</text>
+          <text x="128" y={176 + i * 150} className="t-sans t-ink" style={{ fontSize: 17 }}>{name}</text>
+          <text x="128" y={200 + i * 150} className="t-sans" style={{ fontSize: 14 }}>{detail}</text>
+          <text x="128" y={240 + i * 150} className="t-sans" style={{ fontSize: 13, fill: "hsl(var(--ks-field-deep))" }}>{action} ›</text>
         </g>
       ))}
-      <text x="32" y="620" className="sc-in" style={D(1.8)}>services that help the plan get done</text>
+      <text x="32" y="620" className="sc-in" style={D(1.8)}>services help turn a crop plan into farm work</text>
     </svg>
   );
 }
-
 function Economics() {
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
