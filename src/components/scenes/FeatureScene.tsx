@@ -202,7 +202,7 @@ function Community() {
         <rect x="76" y="355" width="282" height="150" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
         <text x="96" y="390" className="t-sans t-ink" style={{ fontSize: 15 }}>Telugu farmer</text>
         <rect x="96" y="410" width="235" height="48" rx="14" className="fill-soft" />
-        <text x="112" y="439" className="t-sans t-ink" style={{ fontSize: 15 }}>“వర్షం తర్వాత నా పొలం ఎలా…?”</text>
+        <text x="112" y="439" className="t-sans t-ink" style={{ fontSize: 15 }}>“వర్షం తర్వాత నా పొలం?”</text>
         <text x="96" y="482" className="t-sans" style={{ fontSize: 12 }}>same conversation · different language</text>
       </g>
       <path d="M195 320 C195 340 214 350 230 364" className="field sc-draw" strokeDasharray="4 6" style={{ "--len": "70", "--d": "1.6s", "--dur": "0.8s" } as React.CSSProperties} />
