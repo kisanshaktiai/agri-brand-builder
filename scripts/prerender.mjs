@@ -54,6 +54,8 @@ async function main() {
     // Move the entry module to the end of <body> and drop modulepreload hints so
     // first paint of the static HTML never waits on JavaScript on slow phones.
     page = page.replace(/\s*<link rel="modulepreload"[^>]*>/g, "");
+    // The founder profile uses its own typefaces; do not preload the site's display fonts there.
+    if (route === "/founder") page = page.replace(/\s*<link rel="preload" href="\/fonts[^>]*>/g, "");
     // The static HTML is complete on its own, so the app bundle is loaded on
     // the first interaction (scroll, touch, key, pointer) or when the browser
     // is idle, whichever comes first. Readers on slow phones get the page
