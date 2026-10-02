@@ -9,7 +9,9 @@ import { cn } from "@/lib/utils";
 export interface LivingStep {
   key: string;
   arc: string;
-  tech: TechKey;
+  tech?: TechKey;
+  /** General farmer-app feature; use when the feature is not one of the five named technologies. */
+  feature?: string;
   screen: string;
   title: string;
   body: string;
@@ -23,6 +25,17 @@ export interface LivingStep {
  * viewport at a smaller size and the steps pass beneath it. Under reduced
  * motion every step shows its own screen inline, with the same content.
  */
+const FeatureMark = ({ label, size = "md" }: { label: string; size?: "sm" | "md" | "lg" }) => {
+  const dot = size === "lg" ? "h-3 w-3" : size === "sm" ? "h-1.5 w-1.5" : "h-2 w-2";
+  const text = size === "lg" ? "text-base" : size === "sm" ? "text-[0.6875rem]" : "text-xs";
+  return (
+    <span className={`inline-flex items-center gap-2 ks-mark text-ks-ink ${text}`}>
+      <span aria-hidden className={`rounded-full bg-ks-line-strong ${dot}`} />
+      <span className="font-medium">{label}</span>
+    </span>
+  );
+};
+
 export function LivingPhone({ eyebrow, title, steps }: { eyebrow: string; title: string; steps: LivingStep[] }) {
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
@@ -50,11 +63,11 @@ export function LivingPhone({ eyebrow, title, steps }: { eyebrow: string; title:
   }, [reduced, steps.length]);
 
   useEffect(() => {
-    if (active > 0) track("technology_engaged", { tech: steps[active].tech, where: "living-phone" }, true);
+    if (active > 0 && steps[active]?.tech) track("technology_engaged", { tech: steps[active].tech, where: "living-phone" }, true);
   }, [active, steps]);
 
   const step = steps[active];
-  const tech = techByKey(step.tech);
+  const tech = step.tech ? techByKey(step.tech) : null;
 
   if (reduced) {
     return (
@@ -63,7 +76,7 @@ export function LivingPhone({ eyebrow, title, steps }: { eyebrow: string; title:
         <Heading>{title}</Heading>
         <ol className="mt-12 grid gap-12 md:grid-cols-2 lg:grid-cols-3">
           {steps.map((s, i) => {
-            const t = techByKey(s.tech);
+            const t = s.tech ? techByKey(s.tech) : null;
             return (
               <li key={s.key} className="grid gap-5">
                 <Phone className="max-w-[240px]" label={`${s.title}`}>
@@ -73,7 +86,7 @@ export function LivingPhone({ eyebrow, title, steps }: { eyebrow: string; title:
                   <p className="ks-label mb-2">
                     {String(i + 1).padStart(2, "0")} · {s.arc}
                   </p>
-                  <TechMark tech={t.key} name={t.name} />
+                  {t ? <TechMark tech={t.key} name={t.name} /> : <FeatureMark label={s.feature ?? "Farmer feature"} />}
                   <h3 className="ks-h3 mt-3">{s.title}</h3>
                   <p className="ks-body mt-2">{s.body}</p>
                 </div>
@@ -110,8 +123,14 @@ export function LivingPhone({ eyebrow, title, steps }: { eyebrow: string; title:
                 <p className="ks-label mb-2">
                   {String(active + 1).padStart(2, "0")} · {step.arc}
                 </p>
-                <TechMark tech={tech.key} name={tech.name} size="md" />
-                <p className="mt-1 text-xs text-ks-ink-3 lg:hidden">{tech.positioning}</p>
+                {tech ? (
+                  <>
+                    <TechMark tech={tech.key} name={tech.name} size="md" />
+                    <p className="mt-1 text-xs text-ks-ink-3 lg:hidden">{tech.positioning}</p>
+                  </>
+                ) : (
+                  <FeatureMark label={step.feature ?? "Farmer feature"} size="md" />
+                )}
               </div>
             </div>
           </div>
@@ -120,7 +139,7 @@ export function LivingPhone({ eyebrow, title, steps }: { eyebrow: string; title:
         {/* Story */}
         <ol className="lg:pt-[8vh]">
           {steps.map((s, i) => {
-            const t = techByKey(s.tech);
+            const t = s.tech ? techByKey(s.tech) : null;
             return (
               <li
                 key={s.key}
@@ -134,8 +153,14 @@ export function LivingPhone({ eyebrow, title, steps }: { eyebrow: string; title:
                 <h3 className={cn("ks-h2 transition-colors duration-500", active === i ? "text-ks-ink" : "text-ks-ink-3")}>{s.title}</h3>
                 <p className={cn("ks-lead mt-4 max-w-prose transition-colors duration-500", active === i ? "text-ks-ink-2" : "text-ks-ink-3")}>{s.body}</p>
                 <p className="mt-5 hidden lg:block">
-                  <TechMark tech={t.key} name={t.name} />
-                  <span className="ml-3 text-sm text-ks-ink-3">{t.positioning}</span>
+                  {t ? (
+                    <>
+                      <TechMark tech={t.key} name={t.name} />
+                      <span className="ml-3 text-sm text-ks-ink-3">{t.positioning}</span>
+                    </>
+                  ) : (
+                    <FeatureMark label={s.feature ?? "Farmer feature"} />
+                  )}
                 </p>
               </li>
             );
