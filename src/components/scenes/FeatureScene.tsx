@@ -485,6 +485,69 @@ function Economics() {
   );
 }
 
+
+function Schedule() {
+  const stages = [
+    ["1", "Sowing", "Foundation"],
+    ["2", "Vegetative growth", "Build"],
+    ["3", "Reproductive stage", "Watch"],
+    ["4", "Flowering", "Protect"],
+    ["5", "Maturity", "Harvest"],
+  ];
+  return (
+    <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
+      <Header title="Your crop plan" />
+      <text x="32" y="138" className="t-sans t-ink" style={{ fontSize: 16 }}>This land · this crop · this stage</text>
+      <line x1="52" y1="188" x2="338" y2="188" className="ln sc-draw" style={{ "--len": "286", "--dur": "1.2s" } as React.CSSProperties} />
+      {stages.map(([n, title, sub], i) => (
+        <g key={n} className="sc-rise" style={D(0.4 + i * 0.25)}>
+          <circle cx={52 + i * 71} cy="188" r={i === 2 ? 10 : 6} className={i === 2 ? "fill-field" : "fill-line"} />
+          <text x={52 + i * 71} y="218" textAnchor="middle">{n}</text>
+          <text x={52 + i * 71} y="244" textAnchor="middle" className="t-sans t-ink" style={{ fontSize: 12 }}>{title}</text>
+          <text x={52 + i * 71} y="263" textAnchor="middle" style={{ fontSize: 11 }}>{sub}</text>
+        </g>
+      ))}
+      <g className="sc-rise" style={D(2.2)}>
+        <rect x="32" y="310" width="326" height="92" rx="16" className="fill-field-soft" />
+        <text x="52" y="342" className="t-sans t-ink" style={{ fontSize: 16 }}>Today on this land</text>
+        <text x="52" y="368" className="t-sans" style={{ fontSize: 14 }}>1 task due · 1 condition to watch</text>
+        <text x="52" y="388" className="t-sans" style={{ fontSize: 13 }}>Plan adjusts when field conditions change.</text>
+      </g>
+      <Pill x="32" y="442" w="326" text="Updated with crop stage and season" tone="fill-soft" d={2.7} />
+      <Pill x="32" y="492" w="326" text="Farm Today · Due · Watch · Blocked · Info" tone="fill-soft" d={3.0} />
+      <text x="32" y="574" className="sc-in" style={D(3.5)}>A living plan, not a fixed calendar.</text>
+    </svg>
+  );
+}
+
+function Evidence() {
+  return (
+    <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
+      <Header title="Why this answer?" />
+      {[
+        ["01", "This land", "Field conditions"],
+        ["02", "This crop", "Current biological stage"],
+        ["03", "Trusted guidance", "Agricultural evidence"],
+      ].map(([n, title, sub], i) => (
+        <g key={n} className="sc-rise" style={D(0.35 + i * 0.45)}>
+          <circle cx="58" cy={160 + i * 118} r="18" className="fill-field-soft" />
+          <text x="58" y={165 + i * 118} textAnchor="middle" className="t-ink">{n}</text>
+          <text x="92" y={157 + i * 118} className="t-sans t-ink" style={{ fontSize: 17 }}>{title}</text>
+          <text x="92" y={181 + i * 118} className="t-sans" style={{ fontSize: 13 }}>{sub}</text>
+          {i < 2 && <line x1="58" y1={182 + i * 118} x2="58" y2={262 + i * 118} className="ln sc-draw" style={{ "--len": "80", "--d": "0.7s" } as React.CSSProperties} />}
+        </g>
+      ))}
+      <g className="sc-rise" style={D(1.9)}>
+        <rect x="32" y="500" width="326" height="110" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
+        <text x="52" y="534" className="t-sans t-ink" style={{ fontSize: 16 }}>Explained in your language</text>
+        <text x="52" y="560" className="t-sans" style={{ fontSize: 14 }}>What to do · what to watch · why</text>
+        <text x="52" y="586" className="t-sans" style={{ fontSize: 13 }}>The farmer can see the reason behind the guidance.</text>
+      </g>
+      <text x="32" y="660" className="sc-in" style={D(2.5)}>Clear enough to act. Honest enough to verify.</text>
+    </svg>
+  );
+}
+
 const VIGNETTES: Record<string, { C: React.FC; label: string }> = {
   "photo-scan": { C: PhotoScan, label: "Illustration of Photo Scan: a crop photo observed in the context of the land" },
   schemes: { C: Schemes, label: "Illustration of government schemes with eligibility" },
@@ -510,8 +573,8 @@ const VIGNETTES: Record<string, { C: React.FC; label: string }> = {
   analytics: { C: Analytics, label: "Illustration of Farm Analytics with a projection notice" },
   alerts: { C: Alerts, label: "Illustration of proactive alerts" },
   growth: { C: Growth, label: "Illustration of crop growth tracking" },
-  evidence: { C: Chat, label: "Illustration of an explained recommendation" },
-  schedule: { C: Growth, label: "Illustration of the crop schedule" },
+  evidence: { C: Evidence, label: "Illustration of how a farmer can understand the reason behind guidance" },
+  schedule: { C: Schedule, label: "Illustration of the living crop schedule adapting to the current stage" },
   login: { C: Login, label: "Illustration of mobile number and PIN sign-in" },
 };
 
