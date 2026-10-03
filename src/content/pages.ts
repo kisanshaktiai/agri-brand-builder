@@ -20,7 +20,7 @@ export const HOME = {
     eyebrow: "What it is",
     title: "Not an AI product. A companion for the whole season.",
     body: "From the first signal nature gives to the last rupee counted, one app stays with the farmer and with each of their lands: observing, alerting, seeing, understanding, planning, informing, connecting and accounting. Government programmes, sugar factories, co-operative societies, FPOs, agri-input companies, dealers and retailers, agribusinesses, NGOs, development organisations, banks, insurers and other farmer-serving organisations can bring that same companion to their farmer networks under their own name.",
-    fact: "app.companion",
+    fact: "platform.ai-intelligence",
   },
   living: {
     eyebrow: "One farmer. One land. One season.",
