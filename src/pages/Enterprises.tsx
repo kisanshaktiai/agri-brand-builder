@@ -3,7 +3,7 @@ import { Seo } from "@/components/site/Seo";
 import { PageHero } from "@/components/site/PageHero";
 import { Container, Section, Eyebrow, Heading, Body, ButtonLink } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
-import { Browser, ScreenImage } from "@/components/site/Device";
+import { PartnerPortalSimulation } from "@/components/site/PartnerPortalSimulation";
 import { useContent } from "@/i18n";
 import { track } from "@/lib/analytics";
 
@@ -22,9 +22,8 @@ export default function Enterprises() {
       </PageHero>
       <Container className="pb-[var(--ks-section)] pt-[calc(var(--ks-section)*0.6)]">
         <Reveal>
-          <Browser url="partner.kisanshaktiai.in">
-            <ScreenImage screen="tenant-dashboard" priority />
-          </Browser>
+          <PartnerPortalSimulation tenantIndex={0} />
+          <p className="ks-small mt-3 text-center">Illustrative Partner Portal simulation — concept only, not a live product screenshot.</p>
         </Reveal>
       </Container>
       <Section band>
