@@ -147,28 +147,28 @@ export const founderProfile: FounderProfile = {
     modules: [
       {
         acronym: "TARKA",
-        expansion: "Trusted Agricultural Reasoning & Knowledge Architecture",
-        category: "Neuro-symbolic AI reasoning",
+        expansion: "Land-Specific Multilingual AI",
+        category: "TARKA — multilingual land-specific conversation",
       },
       {
         acronym: "TATVA",
-        expansion: "Terrain, Atmosphere, Thermal & Vegetation Analytics",
-        category: "Multimodal AI land-state intelligence",
+        expansion: "Five-Element Land Intelligence",
+        category: "TATVA — sky, soil, water, temperature and weather",
       },
       {
         acronym: "RIITU",
-        expansion: "Responsive Intelligence for Integrated Temporal Agriculture",
-        category: "Adaptive AI prescription",
+        expansion: "Dynamic Crop Scheduling & Guidance",
+        category: "RIITU — adaptive stage-wise crop planning",
       },
       {
         acronym: "PAHRA",
-        expansion: "Proactive Agricultural Hazard & Risk Assessment",
-        category: "Predictive AI risk intelligence",
+        expansion: "Proactive Farm Alerts",
+        category: "PAHRA — land-specific risk alerts",
       },
       {
         acronym: "RUKH",
-        expansion: "Regional Understanding, Knowledge & Harvest",
-        category: "Predictive AI market intelligence",
+        expansion: "Crop & Market Intelligence",
+        category: "RUKH — market intelligence around the crop",
       },
     ],
   },
