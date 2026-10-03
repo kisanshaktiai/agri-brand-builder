@@ -152,7 +152,7 @@ export const founderProfile: FounderProfile = {
       },
       {
         acronym: "TATVA",
-        expansion: "Terrain, Atmosphere, Thermal & Vegetation Assessment",
+        expansion: "Terrain, Atmosphere, Thermal & Vegetation Analytics",
         category: "Multimodal AI land-state intelligence",
       },
       {
@@ -167,7 +167,7 @@ export const founderProfile: FounderProfile = {
       },
       {
         acronym: "RUKH",
-        expansion: "Real-time Unified Knowledge for Market Horizons",
+        expansion: "Regional Understanding, Knowledge & Harvest",
         category: "Predictive AI market intelligence",
       },
     ],
