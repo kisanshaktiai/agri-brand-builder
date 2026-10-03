@@ -37,7 +37,7 @@ export const TECHNOLOGIES: Technology[] = [
   {
     key: "tatva",
     name: "TATVA",
-    fullForm: "Terrain, Atmosphere, Thermal & Vegetation Assessment",
+    fullForm: "Terrain, Atmosphere, Thermal & Vegetation Analytics",
     positioning: "Five-Element Land Intelligence",
     maturity: "live",
     arc: ["Observe", "Understand"],
@@ -118,7 +118,7 @@ export const TECHNOLOGIES: Technology[] = [
   {
     key: "rukh",
     name: "RUKH",
-    fullForm: "Real-time Unified Knowledge for Market Horizons",
+    fullForm: "Regional Understanding, Knowledge & Harvest",
     positioning: "Crop & Market Intelligence",
     maturity: "live-limited",
     arc: ["Predict"],
