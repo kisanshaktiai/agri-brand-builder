@@ -4,6 +4,15 @@
    scene shows its finished state.
    ────────────────────────────────────────────────────────────────── */
 .ks-scene { width: 100%; height: 100%; display: block; font-family: var(--ks-font-mono); }
+/* Before IntersectionObserver activates, scenes must remain fully visible.
+   Motion is enhancement; it must never become the visibility mechanism. */
+.ks-scene-wrap .scene-static * {
+  animation: none !important;
+  opacity: 1 !important;
+  stroke-dashoffset: 0 !important;
+  transform: none !important;
+}
+
 .ks-scene text { font-family: var(--ks-font-mono); font-size: 11px; letter-spacing: 0.04em; fill: hsl(var(--ks-ink-3)); }
 .ks-scene .t-ink { fill: hsl(var(--ks-ink)); }
 .ks-scene .t-sans { font-family: var(--ks-font-text); letter-spacing: 0; }
