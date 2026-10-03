@@ -3,7 +3,7 @@ import { FAMILY_ORDER } from "@/content/technologies";
 import { useContent } from "@/i18n";
 import { PartnerPortalSimulation } from "@/components/site/PartnerPortalSimulation";
 import { Eyebrow, Heading, Body, TechMark } from "@/components/site/primitives";
-import { useReducedMotion, EASE_OUT } from "@/lib/motion";
+import { useReducedMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -31,7 +31,6 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
     return () => io.disconnect();
   }, [reduced]);
 
-  const t = TENANT_EXAMPLES[active];
   const Plate = ({ tenantIndex }: { tenantIndex: number }) => (
     <div className="transition-all duration-700 ease-ks-out">
       <PartnerPortalSimulation tenantIndex={tenantIndex} />
@@ -63,7 +62,7 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
         <ul className="mt-12 grid gap-6 md:grid-cols-2">
           {TENANT_EXAMPLES.map((tenant) => (
             <li key={tenant.id}>
-              <Plate tenantIndex={active} />
+              <Plate tenantIndex={i} />
             </li>
           ))}
         </ul>
@@ -76,13 +75,7 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
     <div className="ks-container">
       <div className="grid gap-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,6fr)] lg:gap-16">
         <div className="lg:sticky lg:top-24 lg:self-start">
-          <Plate tenant={t}>
-            <div className="mx-auto w-[56%] max-w-[260px]">
-              <Phone label="Farmer App, identical under every brand">
-                <ScreenImage screen="farm-today" />
-              </Phone>
-            </div>
-          </Plate>
+          <Plate tenantIndex={active} />
           <Shared />
           <p className="ks-small mt-3">Illustrative Partner Portal simulation — concept only, not a captured product screen.</p>
         </div>
