@@ -183,12 +183,12 @@ export const FARMER_APP_PAGE = {
 export const ENTERPRISES_PAGE = {
   seo: {
     title: "For Partners — Bring the companion to your farmers",
-    description: "For FPOs, dealers, agri-input companies and agricultural enterprises: run a branded farmer ecosystem on one shared, governed companion.",
+    description: "For organisations that serve farmers: run a branded farmer ecosystem with farmer and land operations, field intelligence, engagement, analytics and enabled commercial workflows on one shared, governed platform.",
   },
   hero: {
     eyebrow: "For partner organisations",
     title: "Your farmers. Your brand. A full partner operating layer.",
-    lead: "KisanShakti AI is sold to organisations, not directly to farmers. An FPO, a dealer network, an agri-input company or an agricultural enterprise becomes a partner and brings the companion to its own farmer network.",
+    lead: "KisanShakti AI is sold to organisations, not directly to farmers. Government programmes, sugar factories, co-operative societies, FPOs, agri companies, dealers and retailers, NGOs, banks, insurers and other farmer-serving organisations can bring the companion to their own farmer network under their own brand.",
   },
   capabilities: {
     eyebrow: "The Partner Portal",
