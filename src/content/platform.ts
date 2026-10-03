@@ -39,15 +39,18 @@ export const SURFACES: SurfaceDef[] = [
     maturity: "live-limited",
     question: "How do I run my farmer network?",
     description:
-      "For FPOs, dealers, agri-input companies and agricultural enterprises: onboard your organisation, bring your farmers and their lands, set your brand, and follow farmer activity, all under your own name.",
+      "For organisations that serve farmers: onboard your organisation, bring your farmers and their lands, configure your enabled capabilities, set your brand and manage the farmer ecosystem from one partner portal, all under your own name.",
     screen: "tenant-dashboard",
     fact: "tenant.portal",
     capabilities: [
-      { text: "Partner onboarding and farmer management.", fact: "tenant.portal" },
-      { text: "Land management and farmer activity.", fact: "tenant.portal" },
-      { text: "Partner branding: the farmer experience runs under your name and colours.", fact: "tenant.portal" },
+      { text: "Partner onboarding, organisation setup, users, roles and permissions.", fact: "tenant.portal" },
+      { text: "Farmer and land management, with crop monitoring, NDVI and soil-analysis surfaces.", fact: "tenant.portal" },
+      { text: "Product catalog, dealer management, sales and order workflows where enabled.", fact: "tenant.portal" },
+      { text: "Campaigns, notifications, messages and farmer communication tools.", fact: "tenant.portal" },
+      { text: "Analytics, reports, performance views and proactive alerts.", fact: "tenant.portal" },
+      { text: "White-label branding, appearance, localization, integrations and partner settings.", fact: "tenant.portal" },
     ],
-    limits: ["Not a CRM, ERP, accounting or sales-force system."],
+    limits: ["Capabilities are enabled according to partner configuration and release maturity. The portal is not presented as a generic CRM, ERP or accounting replacement."],
   },
 ];
 
