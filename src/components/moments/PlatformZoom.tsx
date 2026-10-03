@@ -70,10 +70,17 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
       tl.fromTo(stageRef.current, { scale: 2.6 }, { scale: 1, ease: "none", duration: 4 }, 0);
 
       // The composition and copy advance on the same four-part rhythm.
-      tl.to(lines[0], { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, 0.05);
-      if (lines[1]) tl.to(lines[1], { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, 1.0);
-      if (lines[2]) tl.to(lines[2], { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, 2.0);
-      if (lines[3]) tl.to(lines[3], { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, 3.0);
+      // Keep one caption visible at a time. Each new step fades in while
+      // the previous step fades away, so captions never overlap or stack.
+      lines.forEach((el, i) => {
+        const start = Math.max(0, i * 0.95);
+        if (i === 0) {
+          tl.to(el, { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, start);
+          return;
+        }
+        tl.to(lines[i - 1], { opacity: 0, y: -10, duration: 0.38, ease: "power2.inOut" }, start);
+        tl.to(el, { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, start + 0.08);
+      });
 
       tl.to(layers.l1, { opacity: 1, duration: 0.6, ease: "power2.out" }, 0.9);
       tl.to(layers.l2, { opacity: 1, duration: 0.6, ease: "power2.out" }, 1.9);
