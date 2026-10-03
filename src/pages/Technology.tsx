@@ -50,15 +50,20 @@ export default function Technology() {
               <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
                 <div className="lg:col-span-7">
                   <Reveal>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <TechMark tech={key} name={t.name} size="lg" />
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <TechIcon src={t.icon} name={t.name} size="lg" />
+                        <div>
+                          <TechMark tech={key} name={t.name} size="lg" />
+                          <p className="ks-label mt-1 normal-case tracking-normal text-xs text-ks-ink-3">{t.positioning}</p>
+                        </div>
+                      </div>
                       <MaturityBadge maturity={t.maturity} />
                     </div>
                     <p className="ks-label mt-4 normal-case tracking-normal text-sm text-ks-ink-2">{t.fullForm}</p>
                     <Heading id={`${key}-h`} className="mt-6">
                       {t.tagline}
                     </Heading>
-                    <p className="ks-label mt-3">{t.positioning}</p>
                     <Body className="mt-6">{t.summary}</Body>
                   </Reveal>
                   <Reveal delay={0.1} className="mt-10">
