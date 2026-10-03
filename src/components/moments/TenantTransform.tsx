@@ -1,17 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FAMILY_ORDER } from "@/content/technologies";
 import { useContent } from "@/i18n";
-import { Phone, ScreenImage } from "@/components/site/Device";
+import { PartnerPortalSimulation } from "@/components/site/PartnerPortalSimulation";
 import { Eyebrow, Heading, Body, TechMark } from "@/components/site/primitives";
 import { useReducedMotion, EASE_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**
  * Signature moment 4 — the multi-tenant transformation.
- * One Farmer App stays exactly the same (the real screen never changes)
- * while the organisation's brand plate around it changes with scroll, and
- * the shared-intelligence strip beneath stays fixed. The copy states that
- * tenants configure their ecosystem and do not receive or fork code.
+ * The left-hand workspace is an illustrative Partner Portal simulation.
+ * It intentionally does not reuse a Farmer App screen. As the visitor scrolls,
+ * the simulated workspace changes organisation, colour and dashboard context.
  */
 export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: string; title: string; body: string; layers: string[] }) {
   const reduced = useReducedMotion();
@@ -33,23 +32,9 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
   }, [reduced]);
 
   const t = TENANT_EXAMPLES[active];
-  const brandStyle = { "--brand": t.brand, "--brand-soft": t.brandSoft } as React.CSSProperties;
-
-  const Plate = ({ tenant, children }: { tenant: typeof t; children: React.ReactNode }) => (
-    <div className="rounded-ks-lg border border-ks-line p-5 shadow-ks-2 transition-colors duration-700 ease-ks-out md:p-8" style={{ background: `hsl(${tenant.brandSoft})`, borderColor: `hsl(${tenant.brand} / 0.25)` }}>
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <span aria-hidden className="flex h-9 w-9 items-center justify-center rounded-ks-sm text-sm font-semibold text-white transition-colors duration-700" style={{ background: `hsl(${tenant.brand})` }}>
-            {tenant.initials}
-          </span>
-          <div>
-            <p className="text-sm font-medium text-ks-ink">{tenant.name}</p>
-            <p className="text-xs text-ks-ink-3">{tenant.type}</p>
-          </div>
-        </div>
-        <p className="ks-label text-[0.625rem]">{tenant.farmersLabel}</p>
-      </div>
-      {children}
+  const Plate = ({ tenantIndex }: { tenantIndex: number }) => (
+    <div className="transition-all duration-700 ease-ks-out">
+      <PartnerPortalSimulation tenantIndex={tenantIndex} />
     </div>
   );
 
@@ -78,11 +63,7 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
         <ul className="mt-12 grid gap-6 md:grid-cols-2">
           {TENANT_EXAMPLES.map((tenant) => (
             <li key={tenant.id}>
-              <Plate tenant={tenant}>
-                <Phone className="max-w-[200px]">
-                  <ScreenImage screen="farm-today" />
-                </Phone>
-              </Plate>
+              <Plate tenantIndex={active} />
             </li>
           ))}
         </ul>
@@ -92,7 +73,7 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
   }
 
   return (
-    <div className="ks-container" style={brandStyle}>
+    <div className="ks-container">
       <div className="grid gap-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,6fr)] lg:gap-16">
         <div className="lg:sticky lg:top-24 lg:self-start">
           <Plate tenant={t}>
@@ -103,7 +84,7 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
             </div>
           </Plate>
           <Shared />
-          <p className="ks-small mt-3">{UI.phoneDoesNotChange}</p>
+          <p className="ks-small mt-3">Illustrative Partner Portal simulation — concept only, not a captured product screen.</p>
         </div>
         <div>
           <Eyebrow>{eyebrow}</Eyebrow>
