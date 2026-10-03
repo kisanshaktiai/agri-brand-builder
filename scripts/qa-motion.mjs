@@ -24,6 +24,16 @@ async function check(name, ctxOpts, run, route = "/") {
   await page.goto(`http://127.0.0.1:${PORT}${route}`, { waitUntil: "networkidle" });
   const h0 = await page.evaluate(() => document.documentElement.scrollHeight);
   await run(page);
+  await page.waitForTimeout(900);
+  const visibility = await page.evaluate(() => {
+    const hiddenAnimated = [...document.querySelectorAll(".ks-scene .sc-rise, .ks-scene .sc-in, .ks-scene .sc-draw, .ks-reveal")]
+      .filter((el) => {
+        const r = el.getBoundingClientRect();
+        const cs = getComputedStyle(el);
+        return r.width > 4 && r.height > 4 && cs.opacity === "0";
+      }).length;
+    return { hiddenAnimated };
+  });
   const data = await page.evaluate(() => ({
     overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
     height: document.documentElement.scrollHeight,
@@ -31,9 +41,9 @@ async function check(name, ctxOpts, run, route = "/") {
     ctaVisible: !!Array.from(document.querySelectorAll("a")).find((a) => /Open Farmer App/.test(a.textContent) && a.getBoundingClientRect().width > 0),
     pinned: document.querySelectorAll(".pin-spacer").length,
   }));
-  const row = { name, route, ...data, heightBefore: h0, errors };
+  const row = { name, route, ...data, ...visibility, heightBefore: h0, errors };
   report.push(row);
-  console.log(`${name.padEnd(28)} overflow=${data.overflow} height ${h0}→${data.height} scrollY=${data.scrollY} cta=${data.ctaVisible} pins=${data.pinned} errors=${errors.length}`);
+  console.log(`${name.padEnd(28)} overflow=${data.overflow} hiddenAnimated=${visibility.hiddenAnimated} height ${h0}→${data.height} scrollY=${data.scrollY} cta=${data.ctaVisible} pins=${data.pinned} errors=${errors.length}`);
   await page.screenshot({ path: `qa-output/motion/${name.replace(/\W+/g, "-")}.png` });
   await ctx.close();
 }
@@ -65,6 +75,8 @@ await check("mobile touch scroll", { ...devices["Pixel 7"], viewport: { width: 3
 await check("mobile reduced motion", { ...devices["Pixel 7"], viewport: { width: 360, height: 780 }, reducedMotion: "reduce" }, async (p) => { const h = await p.evaluate(() => document.documentElement.scrollHeight); for (let y = 0; y < h; y += 900) { await p.evaluate((yy) => window.scrollTo({ top: yy }), y); await p.waitForTimeout(30); } });
 await check("platform desktop scroll", desktop, async (p) => { await scrollBy(p, 500, 40); await p.waitForTimeout(400); }, "/platform");
 await check("platform mobile scroll", { ...devices["Pixel 7"], viewport: { width: 360, height: 780 } }, async (p) => { const h = await p.evaluate(() => document.documentElement.scrollHeight); for (let y = 0; y < h; y += 700) { await p.evaluate((yy) => window.scrollTo({ top: yy }), y); await p.waitForTimeout(40); } }, "/platform");
+await check("partner desktop scroll", desktop, async (p) => { await scrollBy(p, 420, 45); await p.waitForTimeout(500); }, "/enterprises");
+await check("partner mobile scroll", { ...devices["Pixel 7"], viewport: { width: 360, height: 780 } }, async (p) => { const h = await p.evaluate(() => document.documentElement.scrollHeight); for (let y = 0; y < h; y += 650) { await p.evaluate((yy) => window.scrollTo({ top: yy }), y); await p.waitForTimeout(50); } }, "/enterprises");
 await writeFile("qa-output/motion/report.json", JSON.stringify(report, null, 2));
 await browser.close();
 server.close();
