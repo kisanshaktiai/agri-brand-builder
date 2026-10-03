@@ -111,13 +111,13 @@ export const PLATFORM_PAGE = {
     eyebrow: "White-label, for partners",
     title: "Your brand on top. The same companion underneath.",
     body: "A partner runs the farmer experience under its own name, colours and context. The guidance, crop plans and safety checks are shared and governed centrally. Partners configure their ecosystem; they do not receive or fork the platform's code.",
-    fact: "platform.multi-tenant",
-    layers: ["Partner brand and context", "Farmer App experience", "Shared governed intelligence", "Platform administration"],
+    fact: "platform.core",
+    layers: ["Partner brand and context", "Farmer App experience", "Core Agricultural Intelligence Platform", "Platform administration"],
   },
   architecture: {
     eyebrow: "Architecture",
     title: "How the companion fits together.",
-    hint: "Explore the Farmer App, the Partner Portal and the five named technologies.",
+    hint: "Explore the Farmer App, the Partner Portal and the Core Agricultural Intelligence Platform behind the five named technologies.",
   },
   days: {
     eyebrow: "Two days, side by side",
