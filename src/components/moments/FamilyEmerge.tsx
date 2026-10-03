@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FAMILY_ORDER } from "@/content/technologies";
 import { useLocale } from "@/i18n";
-import { TechMark, MaturityBadge, Eyebrow, Heading, Body } from "@/components/site/primitives";
+import { TechMark, TechIcon, MaturityBadge, Eyebrow, Heading, Body } from "@/components/site/primitives";
 import { useReducedMotion } from "@/lib/motion";
 import { useInView } from "@/lib/useInView";
 import { track } from "@/lib/analytics";
@@ -56,8 +56,11 @@ export function FamilyEmerge({ eyebrow, title, body, linkTo = "/technology" }: {
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
-                    <TechMark tech={key} name={t.name} house={false} size="lg" />
+                    <TechIcon src={t.icon} name={t.name} size="lg" />
                     <MaturityBadge maturity={t.maturity} />
+                  </div>
+                  <div className="mt-4">
+                    <TechMark tech={key} name={t.name} house={false} size="lg" />
                   </div>
                   <p className="mt-3 text-sm leading-snug text-ks-ink-2">{t.fullForm}</p>
                   <p className="ks-label mt-4 normal-case tracking-normal text-[0.75rem] text-ks-ink-3">{t.positioning}</p>
