@@ -1,7 +1,7 @@
 import type { Maturity } from "./site";
 
 /**
- * The Technology Family — locked brand assets.
+ * The Technology Family — public brand language. All descriptions stay at the farmer/partner level; implementation details remain internal.
  * Names, full forms and positioning lines are final and used verbatim.
  * Everything else is written for a farmer: what it does, in plain words.
  */
@@ -38,11 +38,11 @@ export const TECHNOLOGIES: Technology[] = [
     key: "tatva",
     name: "TATVA",
     fullForm: "Terrain, Atmosphere, Thermal & Vegetation Analytics",
-    positioning: "Five-Element Land Intelligence",
+    positioning: "AI Land Intelligence",
     maturity: "live",
     arc: ["Observe", "Understand"],
     question: "What is nature doing on my land right now?",
-    tagline: "Understand what nature is doing.",
+    tagline: "AI that understands what nature is doing.",
     summary:
       "Five natural elements shape every season: Sky, Soil, Water, Temperature and Weather. KisanShakti TATVA reads all five for each of your lands, so you know what nature is doing on your field today, not what it is doing somewhere in the district.",
     capabilities: [
@@ -60,7 +60,7 @@ export const TECHNOLOGIES: Technology[] = [
     key: "pahra",
     name: "PAHRA",
     fullForm: "Proactive Agricultural Hazard & Risk Assessment",
-    positioning: "Proactive Farm Alerts",
+    positioning: "Proactive Farm Intelligence",
     maturity: "beta",
     arc: ["Anticipate"],
     question: "What is changing on my land while I am away?",
@@ -85,7 +85,7 @@ export const TECHNOLOGIES: Technology[] = [
     question: "Can I just ask my land what it needs?",
     tagline: "Talk to your land.",
     summary:
-      "KisanShakti TARKA is a multilingual AI assistant developed in India, and it is not a generic chatbot. Every land you own has its own conversation, which already knows your crop, your field and your season. Ask in your language, add a photo, and get practical guidance that fits this field, explained with the reason why.",
+      "KisanShakti TARKA is a multilingual agricultural AI companion developed in India. Every land you own has its own conversation, which already knows your crop, your field and your season. Ask in your language, add a photo, and get practical guidance that fits this field, explained with the reason why.",
     capabilities: [
       { text: "A separate conversation for each land, carrying that land's crop, stage and conditions into every answer.", fact: "tarka.land-space" },
       { text: "Understands questions by voice or text, photos of the crop, and the context of your field.", fact: "tarka.chain" },
@@ -99,7 +99,7 @@ export const TECHNOLOGIES: Technology[] = [
     key: "riitu",
     name: "RIITU",
     fullForm: "Responsive Intelligence for Integrated Temporal Agriculture",
-    positioning: "Dynamic Crop Scheduling & Guidance",
+    positioning: "Adaptive Crop Intelligence",
     maturity: "live-limited",
     arc: ["Act"],
     question: "What should I do on this land today?",
