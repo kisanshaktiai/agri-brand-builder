@@ -29,6 +29,8 @@ export interface Technology {
   limits: string[];
   /** Screen ids from src/content/screens.ts */
   screens: string[];
+  /** Public icon asset for this technology's visual identity. */
+  icon: string;
   /** Badge detail: TATVA carries a small numeral 5 for the five elements. */
   badge?: "5";
 }
@@ -36,9 +38,10 @@ export interface Technology {
 export const TECHNOLOGIES: Technology[] = [
   {
     key: "tatva",
+    icon: "/technology-icons/tatva.png",
     name: "TATVA",
     fullForm: "Terrain, Atmosphere, Thermal & Vegetation Analytics",
-    positioning: "AI Land Intelligence",
+    positioning: "Panch Tatva Land Intelligence",
     maturity: "live",
     arc: ["Observe", "Understand"],
     question: "What is nature doing on my land right now?",
@@ -46,11 +49,11 @@ export const TECHNOLOGIES: Technology[] = [
     summary:
       "Five natural elements shape every season: Sky, Soil, Water, Temperature and Weather. KisanShakti TATVA reads all five for each of your lands, so you know what nature is doing on your field today, not what it is doing somewhere in the district.",
     capabilities: [
-      { text: "Sky: a satellite view of your field, scored daily into a simple land health picture, with a trend and an early warning when a patch changes.", fact: "tatva.ndvi" },
-      { text: "Weather: hourly weather for each land, a 7-day outlook, rainfall and alerts, with a window for spraying.", fact: "tatva.weather" },
-      { text: "Water: how much your field has received and used, a rain timeline and an irrigation gauge.", fact: "tatva.water" },
-      { text: "Temperature: the heat your crop has accumulated, so its stage is judged by what it has actually experienced.", fact: "tatva.weather" },
-      { text: "Soil: a soil health picture built from your own soil-test results.", fact: "app.soil" },
+      { text: "Panch Tatva — Sky: a satellite view of your field, scored daily into a simple land health picture, with a trend and an early warning when a patch changes.", fact: "tatva.ndvi" },
+      { text: "Panch Tatva — Weather: hourly weather for each land, a 7-day outlook, rainfall and alerts, with a window for spraying.", fact: "tatva.weather" },
+      { text: "Panch Tatva — Water: how much your field has received and used, a rain timeline and an irrigation gauge.", fact: "tatva.water" },
+      { text: "Panch Tatva — Temperature: the heat your crop has accumulated, so its stage is judged by what it has actually experienced.", fact: "tatva.weather" },
+      { text: "Panch Tatva — Soil: a soil health picture built from your own soil-test results.", fact: "app.soil" },
     ],
     limits: ["Satellite, weather and your own soil test. No sensors, drones or devices to buy."],
     screens: ["weather", "ndvi"],
@@ -58,6 +61,7 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "pahra",
+    icon: "/technology-icons/pahra.png",
     name: "PAHRA",
     fullForm: "Proactive Agricultural Hazard & Risk Assessment",
     positioning: "Proactive Farm Intelligence",
@@ -77,6 +81,7 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "tarka",
+    icon: "/technology-icons/tarka.png",
     name: "TARKA",
     fullForm: "Trusted Agricultural Reasoning & Knowledge Architecture",
     positioning: "Land-Specific Multilingual AI",
@@ -97,6 +102,7 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "riitu",
+    icon: "/technology-icons/riitu.png",
     name: "RIITU",
     fullForm: "Responsive Intelligence for Integrated Temporal Agriculture",
     positioning: "Adaptive Crop Intelligence",
@@ -117,6 +123,7 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "rukh",
+    icon: "/technology-icons/rukh.png",
     name: "RUKH",
     fullForm: "Regional Understanding, Knowledge & Harvest",
     positioning: "Crop & Market Intelligence",
