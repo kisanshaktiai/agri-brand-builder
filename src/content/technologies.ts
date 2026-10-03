@@ -1,7 +1,7 @@
 import type { Maturity } from "./site";
 
 /**
- * The Technology Family — locked brand assets.
+ * The Technology Family — public brand language. All descriptions stay at the farmer/partner level; implementation details remain internal.
  * Names, full forms and positioning lines are final and used verbatim.
  * Everything else is written for a farmer: what it does, in plain words.
  */
@@ -29,6 +29,8 @@ export interface Technology {
   limits: string[];
   /** Screen ids from src/content/screens.ts */
   screens: string[];
+  /** Public icon asset for this technology's visual identity. */
+  icon: string;
   /** Badge detail: TATVA carries a small numeral 5 for the five elements. */
   badge?: "5";
 }
@@ -36,21 +38,22 @@ export interface Technology {
 export const TECHNOLOGIES: Technology[] = [
   {
     key: "tatva",
+    icon: "/technology-icons/tatva.svg",
     name: "TATVA",
-    fullForm: "Sky · Soil · Water · Temperature · Weather",
-    positioning: "Five-Element Land Intelligence",
+    fullForm: "Terrain, Atmosphere, Thermal & Vegetation Analytics",
+    positioning: "Panch Tatva Land Intelligence",
     maturity: "live",
     arc: ["Observe", "Understand"],
     question: "What is nature doing on my land right now?",
-    tagline: "Understand what nature is doing.",
+    tagline: "AI that understands what nature is doing.",
     summary:
       "Five natural elements shape every season: Sky, Soil, Water, Temperature and Weather. KisanShakti TATVA reads all five for each of your lands, so you know what nature is doing on your field today, not what it is doing somewhere in the district.",
     capabilities: [
-      { text: "Sky: a satellite view of your field, scored daily into a simple land health picture, with a trend and an early warning when a patch changes.", fact: "tatva.ndvi" },
-      { text: "Weather: hourly weather for each land, a 7-day outlook, rainfall and alerts, with a window for spraying.", fact: "tatva.weather" },
-      { text: "Water: how much your field has received and used, a rain timeline and an irrigation gauge.", fact: "tatva.water" },
-      { text: "Temperature: the heat your crop has accumulated, so its stage is judged by what it has actually experienced.", fact: "tatva.weather" },
-      { text: "Soil: a soil health picture built from your own soil-test results.", fact: "app.soil" },
+      { text: "Panch Tatva — Sky: a satellite view of your field, scored daily into a simple land health picture, with a trend and an early warning when a patch changes.", fact: "tatva.ndvi" },
+      { text: "Panch Tatva — Weather: hourly weather for each land, a 7-day outlook, rainfall and alerts, with a window for spraying.", fact: "tatva.weather" },
+      { text: "Panch Tatva — Water: how much your field has received and used, a rain timeline and an irrigation gauge.", fact: "tatva.water" },
+      { text: "Panch Tatva — Temperature: the heat your crop has accumulated, so its stage is judged by what it has actually experienced.", fact: "tatva.weather" },
+      { text: "Panch Tatva — Soil: a soil health picture built from your own soil-test results.", fact: "app.soil" },
     ],
     limits: ["Satellite, weather and your own soil test. No sensors, drones or devices to buy."],
     screens: ["weather", "ndvi"],
@@ -58,9 +61,10 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "pahra",
+    icon: "/technology-icons/pahra.svg",
     name: "PAHRA",
-    fullForm: "Land-specific proactive farm alerts",
-    positioning: "Proactive Farm Alerts",
+    fullForm: "Proactive Agricultural Hazard & Risk Assessment",
+    positioning: "Proactive Farm Intelligence",
     maturity: "beta",
     arc: ["Anticipate"],
     question: "What is changing on my land while I am away?",
@@ -77,15 +81,16 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "tarka",
+    icon: "/technology-icons/tarka.svg",
     name: "TARKA",
-    fullForm: "A multilingual conversation for each land",
+    fullForm: "Trusted Agricultural Reasoning & Knowledge Architecture",
     positioning: "Land-Specific Multilingual AI",
     maturity: "live-limited",
     arc: ["Reason", "Decide"],
     question: "Can I just ask my land what it needs?",
     tagline: "Talk to your land.",
     summary:
-      "KisanShakti TARKA is a multilingual AI assistant developed in India, and it is not a generic chatbot. Every land you own has its own conversation, which already knows your crop, your field and your season. Ask in your language, add a photo, and get practical guidance that fits this field, explained with the reason why.",
+      "KisanShakti TARKA is a multilingual agricultural AI companion developed in India. Every land you own has its own conversation, which already knows your crop, your field and your season. Ask in your language, add a photo, and get practical guidance that fits this field, explained with the reason why.",
     capabilities: [
       { text: "A separate conversation for each land, carrying that land's crop, stage and conditions into every answer.", fact: "tarka.land-space" },
       { text: "Understands questions by voice or text, photos of the crop, and the context of your field.", fact: "tarka.chain" },
@@ -97,9 +102,10 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "riitu",
+    icon: "/technology-icons/riitu.svg",
     name: "RIITU",
-    fullForm: "Dynamic stage-wise crop scheduling",
-    positioning: "Dynamic Crop Scheduling & Guidance",
+    fullForm: "Responsive Intelligence for Integrated Temporal Agriculture",
+    positioning: "Adaptive Crop Intelligence",
     maturity: "live-limited",
     arc: ["Act"],
     question: "What should I do on this land today?",
@@ -117,8 +123,9 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "rukh",
+    icon: "/technology-icons/rukh.svg",
     name: "RUKH",
-    fullForm: "Market intelligence around your crop",
+    fullForm: "Regional Understanding, Knowledge & Harvest",
     positioning: "Crop & Market Intelligence",
     maturity: "live-limited",
     arc: ["Predict"],

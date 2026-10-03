@@ -24,10 +24,10 @@ const Pill = ({ x, y, w, text, tone = "fill-soft", d = 0 }: { x: number | string
 
 function FarmToday() {
   const rows = [
-    { tone: "fill-field-soft", k: "Due", t: "Second nitrogen top-dress", d: 0.4 },
-    { tone: "fill-signal-soft", k: "Watch", t: "Leaf colour, north plot", d: 0.8 },
-    { tone: "fill-soft", k: "Blocked", t: "Spray: rain in 6 hours", d: 1.2 },
-    { tone: "fill-soft", k: "Info", t: "Panicle initiation begins", d: 1.6 },
+    { tone: "fill-field-soft", k: "Due", t: "Stage-based task", d: 0.4 },
+    { tone: "fill-signal-soft", k: "Watch", t: "Field observation to check", d: 0.8 },
+    { tone: "fill-soft", k: "Blocked", t: "Action waiting on weather", d: 1.2 },
+    { tone: "fill-soft", k: "Info", t: "Crop-stage update", d: 1.6 },
   ];
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
@@ -41,10 +41,10 @@ function FarmToday() {
           <path d={`M330 ${184 + i * 110} l5 5 l9 -10`} className="field sc-tick" strokeWidth="2" style={D(r.d + 0.3)} />
         </g>
       ))}
-      <text x="32" y="640" className="sc-in" style={D(2.2)}>reconciled overnight against your crop's stage</text>
+      <text x="32" y="640" className="sc-in" style={D(2.2)}>illustrative workflow · checked against crop stage</text>
       <g className="sc-rise" style={D(2.6)}>
         <rect x="32" y="680" width="326" height="56" rx="28" className="fill-ink" />
-        <text x="195" y="714" textAnchor="middle" className="t-sans" style={{ fill: "hsl(var(--ks-paper))", fontSize: 16 }}>Mark done · ask why</text>
+        <text x="195" y="714" textAnchor="middle" className="t-sans" style={{ fill: "hsl(var(--ks-paper))", fontSize: 16 }}>Mark done · see why</text>
       </g>
     </svg>
   );
@@ -56,18 +56,18 @@ function Chat() {
       <Header title="Ask in your language" />
       <g className="sc-rise" style={D(0.3)}>
         <rect x="90" y="140" width="268" height="96" rx="18" className="fill-field" />
-        <text x="110" y="176" className="t-sans" style={{ fill: "hsl(var(--ks-field-ink))", fontSize: 17 }}>माझ्या भाताची पाने</text>
+        <text x="110" y="176" className="t-sans" style={{ fill: "hsl(var(--ks-field-ink))", fontSize: 17 }}>माझ्या पिकाची पाने</text>
         <text x="110" y="202" className="t-sans" style={{ fill: "hsl(var(--ks-field-ink))", fontSize: 17 }}>पिवळी पडत आहेत</text>
         <text x="110" y="226" className="t-sans" style={{ fill: "hsl(var(--ks-field-ink))", opacity: 0.75, fontSize: 13 }}>+ photo of the leaf</text>
       </g>
       <g className="sc-rise" style={D(1.4)}>
         <rect x="32" y="266" width="300" height="200" rx="18" className="fill-white" stroke="hsl(var(--ks-line))" />
-        <text x="52" y="300" className="t-sans t-ink" style={{ fontSize: 16 }}>पॅनिकल सुरू होत आहे.</text>
-        <text x="52" y="326" className="t-sans t-ink" style={{ fontSize: 16 }}>युरिया + पोटॅश द्या,</text>
-        <text x="52" y="352" className="t-sans t-ink" style={{ fontSize: 16 }}>उभ्या पाण्यात.</text>
+        <text x="52" y="300" className="t-sans t-ink" style={{ fontSize: 16 }}>Crop stage is being checked.</text>
+        <text x="52" y="326" className="t-sans t-ink" style={{ fontSize: 16 }}>Guidance is matched to this field,</text>
+        <text x="52" y="352" className="t-sans t-ink" style={{ fontSize: 16 }}>crop stage and conditions.</text>
         <line x1="52" y1="376" x2="312" y2="376" className="ln" />
-        <text x="52" y="402" className="t-sans" style={{ fontSize: 13 }}>checked: field state · crop stage</text>
-        <text x="52" y="424" className="t-sans" style={{ fontSize: 13 }}>source: expert-approved guidance</text>
+        <text x="52" y="402" className="t-sans" style={{ fontSize: 13 }}>checked: field context · crop stage</text>
+        <text x="52" y="424" className="t-sans" style={{ fontSize: 13 }}>source: governed agricultural knowledge</text>
         <text x="52" y="446" className="t-sans" style={{ fontSize: 13, fill: "hsl(var(--ks-field-deep))" }}>why this? ›</text>
       </g>
       {/* voice bars */}
@@ -110,16 +110,16 @@ function Weather() {
         <circle cx="195" cy="200" r="30" className="fill-signal-soft" />
         <circle cx="195" cy="200" r="16" className="fill-signal" />
       </g>
-      <text x="32" y="300">next 24 hours</text>
+      <text x="32" y="300">forecast window</text>
       {hours.map((h, i) => (
         <g key={i}>
           <rect x={40 + i * 40} y={420 - h * 3} width="22" height={h * 3} rx="4" className="fill-field sc-bar" style={D(0.3 + i * 0.1)} opacity={0.4 + i * 0.07} />
           <text x={51 + i * 40} y="440" textAnchor="middle">{h}°</text>
         </g>
       ))}
-      <Pill x="32" y="490" w="326" text="Rain likely after 6 pm · spray window closes" tone="fill-signal-soft" d={1.4} />
-      <Pill x="32" y="540" w="326" text="Growing-degree-days: on track for stage" tone="fill-field-soft" d={1.8} />
-      <text x="32" y="620" className="sc-in" style={D(2.2)}>7-day outlook</text>
+      <Pill x="32" y="490" w="326" text="Rain signal · field activity window may change" tone="fill-signal-soft" d={1.4} />
+      <Pill x="32" y="540" w="326" text="Crop heat units · stage check" tone="fill-field-soft" d={1.8} />
+      <text x="32" y="620" className="sc-in" style={D(2.2)}>7-day forecast</text>
       {[0, 1, 2, 3, 4, 5, 6].map((i) => (
         <g key={i} className="sc-rise" style={D(2.3 + i * 0.08)}>
           <circle cx={56 + i * 46} cy="660" r="12" className={i === 2 || i === 3 ? "fill-soft" : "fill-signal-soft"} />
@@ -133,7 +133,7 @@ function Weather() {
 function Ndvi() {
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
-      <Header title="Your field from above" />
+      <Header title="Your field from above · illustrative" />
       <rect x="32" y="130" width="326" height="300" rx="18" className="fill-soft" />
       <polygon points="80,170 300,160 330,380 90,400" fill="hsl(42 40% 86%)" className="sc-green" style={D(0.4)} stroke="hsl(var(--ks-ink))" strokeWidth="1.5" />
       <polygon points="200,250 300,245 310,330 210,340" className="fill-signal-soft sc-in" style={D(1.6)} />
@@ -150,22 +150,22 @@ function Ndvi() {
         <text x="90" y="536" textAnchor="middle">health</text>
       </g>
       <g className="sc-rise" style={D(1.3)}>
-        <text x="160" y="505" className="t-sans t-ink" style={{ fontSize: 15 }}>Trend: steady this week</text>
-        <text x="160" y="530" className="t-sans" style={{ fontSize: 14 }}>Early warning: one patch</text>
-        <text x="160" y="552" className="t-sans" style={{ fontSize: 14 }}>greening slower. Go and look.</text>
+        <text x="160" y="505" className="t-sans t-ink" style={{ fontSize: 15 }}>Trend: example field pattern</text>
+        <text x="160" y="530" className="t-sans" style={{ fontSize: 14 }}>Early signal: one patch changed</text>
+        <text x="160" y="552" className="t-sans" style={{ fontSize: 14 }}>growth pattern changed. Go and look.</text>
       </g>
-      <Pill x="32" y="610" w="326" text="Irrigation gauge · evapotranspiration" d={2.2} />
-      <Pill x="32" y="660" w="326" text="Daily satellite pass, no sensors needed" d={2.5} />
+      <Pill x="32" y="610" w="326" text="Water balance · illustrative" d={2.2} />
+      <Pill x="32" y="660" w="326" text="Satellite view · illustrative" d={2.5} />
     </svg>
   );
 }
 
 function Market() {
-  const bars = [{ m: "Pune", v: 2240 }, { m: "Nashik", v: 2410 }, { m: "Sangli", v: 2180 }];
+  const bars = [{ m: "Nearby market", v: 2240 }, { m: "Regional market", v: 2410 }, { m: "State market", v: 2180 }];
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
-      <Header title="Where should I sell?" />
-      <text x="32" y="140">onion · ₹ per quintal · today</text>
+      <Header title="Market view" />
+      <text x="32" y="140">example crop · example market view</text>
       {bars.map((b, i) => (
         <g key={b.m} className="sc-rise" style={D(0.3 + i * 0.25)}>
           <text x="32" y={190 + i * 70} className="t-sans t-ink" style={{ fontSize: 16 }}>{b.m}</text>
@@ -177,11 +177,11 @@ function Market() {
       <polyline points="32,520 80,505 128,512 176,490 224,484 272,470 320,476 358,462" className="field sc-draw" strokeWidth="2" style={{ "--len": "360", "--d": "1.4s" } as React.CSSProperties} />
       <g className="sc-rise" style={D(2.4)}>
         <rect x="32" y="580" width="326" height="92" rx="16" className="fill-white" stroke="hsl(var(--ks-ink))" strokeWidth="1.5" />
-        <text x="52" y="612" className="t-sans t-ink" style={{ fontSize: 16 }}>Selling advisor</text>
-        <text x="52" y="638" className="t-sans" style={{ fontSize: 14 }}>Nashik pays ₹170 more today.</text>
-        <text x="52" y="658" className="t-sans" style={{ fontSize: 14 }}>Prices firmed for three weeks.</text>
+        <text x="52" y="612" className="t-sans t-ink" style={{ fontSize: 16 }}>Market context</text>
+        <text x="52" y="638" className="t-sans" style={{ fontSize: 14 }}>Regional market pays ₹170 more today.</text>
+        <text x="52" y="658" className="t-sans" style={{ fontSize: 14 }}>Trend example — not a market quote.</text>
       </g>
-      <text x="32" y="720" className="sc-in" style={D(3)}>market insight · not a guaranteed price</text>
+      <text x="32" y="720" className="sc-in" style={D(3)}>illustrative market view · not live pricing</text>
     </svg>
   );
 }
@@ -258,21 +258,21 @@ function Analytics() {
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
       <Header title="This season's numbers" />
-      {[["Total area", "4.2 acres"], ["Active crops", "2"], ["Projected revenue", "₹ 1.9 L"], ["Projected profit", "₹ 0.7 L"]].map((k, i) => (
+      {[["Land area", "Example"], ["Crop count", "2"], ["Revenue view", "Example"], ["Profit view", "Example"]].map((k, i) => (
         <g key={k[0]} className="sc-rise" style={D(0.3 + i * 0.2)}>
           <rect x={32 + (i % 2) * 170} y={130 + Math.floor(i / 2) * 96} width="156" height="80" rx="14" className="fill-white" stroke="hsl(var(--ks-line))" />
           <text x={48 + (i % 2) * 170} y={158 + Math.floor(i / 2) * 96} style={{ fontSize: 11 }}>{k[0]}</text>
           <text x={48 + (i % 2) * 170} y={190 + Math.floor(i / 2) * 96} className="t-sans t-ink" style={{ fontSize: 20 }}>{k[1]}</text>
         </g>
       ))}
-      <text x="32" y="360" className="sc-in" style={D(1.2)}>expenses logged · expected yield × current price</text>
+      <text x="32" y="360" className="sc-in" style={D(1.2)}>example inputs · illustrative projection</text>
       {[60, 30, 80, 45, 70].map((h, i) => (
         <rect key={i} x={48 + i * 64} y={480 - h} width="34" height={h} rx="6" className={i === 4 ? "fill-field sc-bar" : "fill-line sc-bar"} style={D(1.4 + i * 0.12)} />
       ))}
       <g className="sc-rise" style={D(2.4)}>
         <rect x="32" y="520" width="326" height="72" rx="14" className="fill-signal-soft" />
         <text x="48" y="548" className="t-sans t-ink" style={{ fontSize: 14 }}>Projection notice</text>
-        <text x="48" y="572" className="t-sans" style={{ fontSize: 13 }}>Estimates from your logs and today's prices.</text>
+        <text x="48" y="572" className="t-sans" style={{ fontSize: 13 }}>Illustrative only · not live farm data.</text>
       </g>
       <text x="32" y="640" className="sc-in" style={D(2.8)}>Crop & Stage · Financial · Market Pulse · Soil</text>
       <text x="32" y="662" className="sc-in" style={D(3)}>Task Performance · Water & Weather</text>
@@ -288,15 +288,15 @@ function Alerts() {
         <rect x="32" y="130" width="326" height="150" rx="16" className="fill-white" stroke="hsl(var(--ks-signal))" strokeWidth="1.5" />
         <circle cx="62" cy="166" r="10" className="fill-signal" />
         <circle cx="62" cy="166" r="10" className="sc-pulse" fill="none" stroke="hsl(var(--ks-signal))" strokeWidth="2" />
-        <text x="84" y="171" className="t-sans t-ink" style={{ fontSize: 16 }}>Leaf blast risk rising</text>
-        <text x="48" y="206" className="t-sans" style={{ fontSize: 14 }}>Humid nights, 25–28°C. Go and look</text>
-        <text x="48" y="228" className="t-sans" style={{ fontSize: 14 }}>for diamond-shaped lesions.</text>
+        <text x="84" y="171" className="t-sans t-ink" style={{ fontSize: 16 }}>Crop risk signal rising</text>
+        <text x="48" y="206" className="t-sans" style={{ fontSize: 14 }}>Changing field conditions · go and look</text>
+        <text x="48" y="228" className="t-sans" style={{ fontSize: 14 }}>for visible crop symptoms.</text>
         <text x="48" y="262" className="t-sans" style={{ fontSize: 13, fill: "hsl(var(--ks-field-deep))" }}>Scout → confirm with a photo → decide</text>
       </g>
       <g className="sc-rise" style={D(1)}>
         <rect x="32" y="300" width="326" height="100" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
-        <text x="48" y="334" className="t-sans t-ink" style={{ fontSize: 16 }}>Heavy rain in 2 days</text>
-        <text x="48" y="360" className="t-sans" style={{ fontSize: 14 }}>Check drainage on the low plot.</text>
+        <text x="48" y="334" className="t-sans t-ink" style={{ fontSize: 16 }}>Rain signal ahead</text>
+        <text x="48" y="360" className="t-sans" style={{ fontSize: 14 }}>Check the low-lying part of the field.</text>
       </g>
       <Pill x="32" y="440" w="326" text="Early access" tone="fill-signal-soft" d={1.6} />
       <text x="32" y="520" className="sc-in" style={D(2)}>An alert never prescribes a chemical.</text>
@@ -316,10 +316,10 @@ function Growth() {
           <text x={72 + i * 80} y="285" textAnchor="middle">{["wk 2", "wk 4", "wk 6", "wk 8"][i]}</text>
         </g>
       ))}
-      <Pill x="32" y="330" w="326" text="Photo · 24 Sep · tillering confirmed" tone="fill-field-soft" d={1.6} />
-      <Pill x="32" y="380" w="326" text="Field reading · plant height 38 cm" d={1.9} />
-      <Pill x="32" y="430" w="326" text="Schedule adjusted to actual stage" d={2.2} />
-      <text x="32" y="520" className="sc-in" style={D(2.6)}>your readings keep the schedule honest</text>
+      <Pill x="32" y="330" w="326" text="Photo observation · stage confirmed" tone="fill-field-soft" d={1.6} />
+      <Pill x="32" y="380" w="326" text="Field reading · example measurement" d={1.9} />
+      <Pill x="32" y="430" w="326" text="Schedule adjusted to observed stage" d={2.2} />
+      <text x="32" y="520" className="sc-in" style={D(2.6)}>your readings keep the schedule grounded</text>
     </svg>
   );
 }

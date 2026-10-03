@@ -80,6 +80,17 @@ export function TechMark({ tech, name, house = true, size = "md", className }: {
   );
 }
 
+export function TechIcon({ src, name, size = "md", className }: { src: string; name: string; size?: "sm" | "md" | "lg"; className?: string }) {
+  const box = size === "lg" ? "h-20 w-20" : size === "sm" ? "h-12 w-12" : "h-16 w-16";
+  const pad = size === "lg" ? "p-3" : "p-2.5";
+  return (
+    <span className={cn("inline-flex shrink-0 items-center justify-center rounded-ks-md border border-ks-line bg-ks-paper", box, pad, className)}>
+      <img src={src} alt="" aria-hidden="true" className="block h-full w-full object-contain" />
+      <span className="sr-only">{name} icon</span>
+    </span>
+  );
+}
+
 export function MaturityBadge({ maturity, className }: { maturity: Maturity; className?: string }) {
   const { content } = useLocale();
   const tone =

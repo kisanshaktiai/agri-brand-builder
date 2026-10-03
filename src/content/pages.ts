@@ -8,26 +8,26 @@
  */
 export const HOME = {
   seo: {
-    title: "KisanShakti AI — A complete digital companion for every farmer and every land",
-    description: "Understand what nature is doing on your land, know what is changing, talk to your land in your language, and follow a crop plan that adapts. Partners run it for their farmer networks under their own brand.",
+    title: "KisanShakti AI — AI-powered agricultural intelligence built around every land",
+    description: "AI-powered agricultural intelligence built around each land, helping farmers understand changing field conditions, ask questions in their language, follow an adaptive crop plan and make informed decisions. Partners can bring the experience to their farmer networks under their own brand.",
   },
   hero: {
     eyebrow: "For every farmer. For every land.",
-    title: "A complete digital companion for every farmer and every land.",
-    lead: "KisanShakti AI understands what nature is doing on your land, tells you what is changing while you are away, talks with you in your language about each field, and keeps a crop plan that adapts to the season. Partner organisations run it for their own farmer networks under their own brand.",
+    title: "AI that understands every land. A companion for the whole season.",
+    lead: "KisanShakti AI brings agricultural intelligence to every land—helping you understand what is happening in the field, notice what is changing while you are away, ask questions in your language and follow a crop plan that adapts with the season. Partner organisations can bring the same AI-powered experience to their farmer networks under their own brand.",
   },
   thesis: {
     eyebrow: "What it is",
-    title: "Not an AI product. A companion for the whole season.",
-    body: "From the first signal nature gives to the last rupee counted, one app stays with the farmer and with each of their lands: observing, alerting, seeing, understanding, planning, informing, connecting and accounting. FPOs, dealers, agri-input companies and agricultural enterprises bring that same companion to their farmers under their own name.",
-    fact: "app.companion",
+    title: "Not just another AI chatbot. Agricultural intelligence built around every land.",
+    body: "KisanShakti AI brings together conversation, field intelligence, agricultural knowledge and land context in one experience. It observes what is happening, notices what is changing, helps the farmer see and understand the crop, keeps the season's plan aligned, brings market and support information closer, and helps make each step easier to act on. Partner organisations can bring the same AI-powered agricultural experience to their farmer networks under their own name and context.",
+    fact: "platform.ai-intelligence",
   },
   living: {
     eyebrow: "One farmer. One land. One season.",
     title: "Start with the land. Let the companion follow the season.",
     steps: [
       { key: "land", arc: "Begin", feature: "Land setup", screen: "land", title: "Start with your land.", body: "Map each land once, record the crop and season, and give the companion the field it needs to follow. Everything that comes next is tied to this land.", fact: "app.land" },
-      { key: "observe", arc: "Observe", tech: "tatva", screen: "weather", title: "TATVA understands what nature is doing.", body: "Sky, soil, water, temperature and weather, read for this land: the satellite's view of the field, hourly weather, rainfall and the heat the crop has gathered.", fact: "tatva.weather" },
+      { key: "observe", arc: "Observe", tech: "tatva", screen: "weather", title: "TATVA understands what nature is doing.", body: "Panch Tatva — Sky, Soil, Water, Temperature and Weather, read for this land: the satellite's view of the field, hourly weather, rainfall and the heat the crop has gathered.", fact: "tatva.weather" },
       { key: "alert", arc: "Anticipate", tech: "pahra", screen: "alerts", title: "PAHRA says what is changing, even when you are away.", body: "As conditions shift, a land-specific alert tells you what changed and what deserves a look. Early access.", fact: "pahra.daily-risk" },
       { key: "see", arc: "See", feature: "Photo Scan", screen: "photo-scan", title: "Photo Scan helps you see the crop.", body: "Capture a leaf, a pest or a patch of field. The photo is read in the context of this land, so the observation means something.", fact: "app.photo-scan" },
       { key: "understand", arc: "Understand", tech: "tarka", screen: "chat-marathi", title: "TARKA understands and guides.", body: "Talk to your land, in your language. Each field has its own conversation that already knows the crop and the season, and answers with practical guidance and the reason why.", fact: "tarka.land-space" },
@@ -41,13 +41,13 @@ export const HOME = {
   },
   family: {
     eyebrow: "The Technology Family",
-    title: "Five technologies behind one companion.",
-    body: "These five named technologies power the intelligence layer. The Farmer App adds practical features—Photo Scan, government schemes, agri services, community and farm economics—around them.",
+    title: "Five intelligence technologies behind one AI companion.",
+    body: "Five named intelligence technologies work together across the season. Around them, the Farmer App brings practical features such as Photo Scan, government schemes, agri services, community and farm economics into one farmer experience.",
   },
   separation: {
     eyebrow: "Why it can be trusted",
-    title: "AI explains. Expert-approved guidance decides.",
-    body: "The AI understands your question and explains the answer in your language. What to apply, how much and when come only from expert-approved guidance that has been checked against your field and your crop's stage. The AI never invents a dose.",
+    title: "AI understands. Governed agricultural guidance decides.",
+    body: "The AI understands the farmer's question and explains the answer in the farmer's language. What to apply, how much and when come only from governed, expert-approved agricultural guidance checked for the field and crop stage. The AI does not invent a dose.",
     fact: "platform.separation",
   },
   evidence: {
@@ -61,15 +61,15 @@ export const HOME = {
     title: "From one farmer to the whole ecosystem.",
     steps: [
       { title: "A farmer and their lands", body: "One companion in their language, working offline, synced when the network returns." },
-      { title: "A partner's network", body: "The organisation that serves this farmer runs the companion for its whole network under its own brand." },
-      { title: "Many partner ecosystems", body: "FPOs, dealers, agri-input companies and enterprises, each with its own farmers and branding." },
+      { title: "A partner's network", body: "The organisation that serves these farmers runs the companion for its network, with its enabled portal capabilities and its own brand." },
+      { title: "Many partner ecosystems", body: "Government programmes, sugar factories, co-operatives, FPOs, agri companies, dealers and retailers, NGOs, banks, insurers and other farmer-serving organisations, each with its own context and branding." },
       { title: "One shared platform", body: "The same governed intelligence and knowledge underneath them all." },
     ],
   },
   enterprise: {
     eyebrow: "For partner organisations",
     title: "Bring the companion to your farmers, under your name.",
-    body: "Onboard your organisation, bring your farmers and their lands, set your brand, and follow farmer activity from the Partner Portal. KisanShakti AI is sold to organisations, never directly to farmers.",
+    body: "Onboard your organisation, bring your farmers and their lands, configure the capabilities your organisation needs, set your brand, and operate your farmer ecosystem from the Partner Portal. KisanShakti AI is sold to organisations, never directly to farmers.",
     fact: "tenant.portal",
   },
   final: {
@@ -87,12 +87,12 @@ export const TECHNOLOGY_PAGE = {
   },
   hero: {
     eyebrow: "Technology",
-    title: "The Technology Family.",
-    lead: "Five named technologies form the intelligence layer: TATVA observes, PAHRA alerts, TARKA lets you talk with your land, RIITU adapts the crop plan, and RUKH brings market intelligence around your crop.",
+    title: "Agricultural intelligence for the whole season.",
+    lead: "Five named intelligence technologies work together to help the farmer understand the land, notice change, ask questions, adapt the crop plan and bring market context into everyday decisions.",
   },
   hierarchy: {
     eyebrow: "How it fits together",
-    title: "KisanShakti AI, then the family, then everyone it serves.",
+    title: "KisanShakti AI, its intelligence family, and everyone it serves.",
   },
 };
 
@@ -103,21 +103,21 @@ export const PLATFORM_PAGE = {
   },
   hero: {
     eyebrow: "Platform",
-    title: "One companion. Your farmer ecosystem.",
-    lead: "Two connected surfaces on one shared, centrally governed foundation. The Farmer App is the farmer's daily companion. The Partner Portal is where a partner organisation runs its own farmer network under its own brand.",
+    title: "One AI companion. Your farmer ecosystem.",
+    lead: "Two connected surfaces on one shared, centrally governed agricultural intelligence foundation. The Farmer App is the farmer's daily companion. The Partner Portal is where a partner organisation brings that AI-powered experience to its own farmer network under its own brand.",
     fact: "platform.surfaces",
   },
   transform: {
     eyebrow: "White-label, for partners",
-    title: "Your brand on top. The same companion underneath.",
-    body: "A partner runs the farmer experience under its own name, colours and context. The guidance, crop plans and safety checks are shared and governed centrally. Partners configure their ecosystem; they do not receive or fork the platform's code.",
-    fact: "platform.multi-tenant",
-    layers: ["Partner brand and context", "Farmer App experience", "Shared governed intelligence", "Platform administration"],
+    title: "Your brand. Your farmer network. The same agricultural intelligence underneath.",
+    body: "A partner runs the farmer experience under its own name, colours and context. The agricultural intelligence, crop guidance and safety controls are governed centrally, while the partner configures the farmer ecosystem around its needs. Partners receive the service, not the underlying source code.",
+    fact: "platform.core",
+    layers: ["Partner brand and context", "Farmer App experience", "Shared Agricultural Intelligence", "Platform administration"],
   },
   architecture: {
     eyebrow: "Architecture",
     title: "How the companion fits together.",
-    hint: "Explore the Farmer App, the Partner Portal and the five named technologies.",
+    hint: "Explore the Farmer App, the Partner Portal and the shared agricultural intelligence foundation behind the five named technologies.",
   },
   days: {
     eyebrow: "Two days, side by side",
@@ -154,12 +154,12 @@ export const FARMER_APP_PAGE = {
   },
   hero: {
     eyebrow: "Farmer App · Live",
-    title: "One companion for every land you farm.",
-    lead: "In 14 Indian languages, voice-first and offline-first, with mobile number and PIN login. It works on weak networks and syncs when the network returns.",
+    title: "AI-powered intelligence for every land you farm.",
+    lead: "An AI-powered farmer experience in 14 Indian languages, voice-first and offline-first, with mobile number and PIN login. It works on weak networks and syncs when the network returns.",
   },
   sections: [
     { id: "land", title: "Start with the land.", body: "Map the boundary and get the area automatically. Record season, crop, variety, sowing date and how the crop is grown. Each land carries a satellite thumbnail and a land health score, and from then on the companion knows this field.", screen: "land", fact: "app.land" },
-    { id: "nature", title: "Understand what nature is doing.", body: "KisanShakti TATVA reads the five natural elements for each land: Sky, Soil, Water, Temperature and Weather. The satellite's daily view of the field, hourly weather and a 7-day outlook, rainfall and water, the heat the crop has gathered, and a soil picture from your own soil test.", screen: "ndvi", fact: "tatva.ndvi" },
+    { id: "nature", title: "Understand what nature is doing.", body: "KisanShakti TATVA reads Panch Tatva for each land — Sky, Soil, Water, Temperature and Weather. The satellite's daily view of the field, hourly weather and a 7-day outlook, rainfall and water, the heat the crop has gathered, and a soil picture from your own soil test.", screen: "ndvi", fact: "tatva.ndvi" },
     { id: "alerts", title: "Know what is changing, even when you are away.", body: "KisanShakti PAHRA sends land-specific alerts as farm and weather conditions change, so you notice what matters and know when a field needs attention. Early access.", screen: "alerts", fact: "pahra.daily-risk" },
     { id: "scan", title: "See and understand the crop.", body: "Photo Scan: capture or upload a photo of the crop or field for AI-assisted observation. It helps identify visible crop, pest, disease, deficiency or field issues, and connects what it sees with this land's context.", screen: "photo-scan", fact: "app.photo-scan" },
     { id: "ask", title: "Talk to your land.", body: "KisanShakti TARKA is a multilingual AI assistant developed in India, and it is not a generic chatbot. Every land has its own conversation, which already knows your crop and your field. Ask by voice or text, add a photo, and get practical guidance with the reason why. Many Indian languages, and you can ask in one and share in another.", screen: "chat-marathi", fact: "tarka.land-space" },
@@ -183,12 +183,24 @@ export const FARMER_APP_PAGE = {
 export const ENTERPRISES_PAGE = {
   seo: {
     title: "For Partners — Bring the companion to your farmers",
-    description: "For FPOs, dealers, agri-input companies and agricultural enterprises: run a branded farmer ecosystem on one shared, governed companion.",
+    description: "For organisations that serve farmers: run a branded farmer ecosystem with farmer and land operations, field intelligence, engagement, analytics and enabled commercial workflows on one shared, governed platform.",
   },
   hero: {
     eyebrow: "For partner organisations",
-    title: "Your farmers. Your brand. One companion underneath.",
-    lead: "KisanShakti AI is sold to organisations, not directly to farmers. An FPO, a dealer network, an agri-input company or an agricultural enterprise becomes a partner and brings the companion to its own farmer network.",
+    title: "Your farmers. Your brand. AI-powered agricultural intelligence.",
+    lead: "KisanShakti AI is sold to organisations, not directly to farmers. Government programmes, sugar factories, co-operative societies, FPOs, agri companies, dealers and retailers, NGOs, banks, insurers and other farmer-serving organisations can bring the AI-powered agricultural experience to their own farmer network under their own brand.",
+  },
+  capabilities: {
+    eyebrow: "The Partner Portal",
+    title: "More than farmer management.",
+    body: "The Partner Portal is the operating surface for an organisation's farmer ecosystem. It brings farmer and land operations, field intelligence, engagement, analytics and enabled commercial workflows into one place; availability and maturity vary by partner configuration.",
+    groups: [
+      { title: "Farmer & field operations", items: ["Farmer management", "Land management", "Crop monitoring", "NDVI / vegetation intelligence", "Soil analysis", "Proactive alerts"] },
+      { title: "Products & commercial operations", items: ["Product catalog", "Dealer network management", "Sales dashboard", "Order management", "Cart and order workflows", "Sales analytics and predictive sales views"] },
+      { title: "Farmer engagement", items: ["Campaigns", "Notifications", "Messages", "Community / forum surfaces"] },
+      { title: "Intelligence & reporting", items: ["Analytics", "Reports and performance views", "Network activity and engagement insights"] },
+      { title: "Organisation & white-label", items: ["Organisation management", "Users, roles and permissions", "White-label branding", "Appearance", "Localization", "Integrations", "Security and data-privacy settings", "API keys and subscription settings"] },
+    ],
   },
   journey: {
     eyebrow: "The partner journey",
@@ -202,19 +214,22 @@ export const ENTERPRISES_PAGE = {
     ],
   },
   fit: {
-    eyebrow: "Who it is for",
-    title: "Four kinds of partner.",
+    eyebrow: "Who can be a partner",
+    title: "Built for organisations that serve farmers.",
     types: [
-      { title: "Farmer producer organisations", body: "Serve member farmers with one companion that carries the FPO's name." },
-      { title: "Dealer networks", body: "Stay present in the farmer's day between visits, under your own brand." },
-      { title: "Agri-input companies", body: "Reach the farmers who use your products with practical, expert-reviewed guidance." },
-      { title: "Agricultural enterprises", body: "Run a farmer network with land records, activity and branding in one portal." },
+      { title: "Government & development programmes", body: "Bring structured farmer support, field context and programme-specific services to a defined farmer network." },
+      { title: "Sugar factories & co-operative societies", body: "Support grower networks with land, crop, activity and engagement context under the organisation's identity." },
+      { title: "FPOs, agri companies & service providers", body: "Serve members or customers with a branded farmer ecosystem and the portal capabilities your organisation enables." },
+      { title: "Dealers, distributors & retailers", body: "Manage farmer relationships, products, dealer networks, engagement and enabled sales workflows from one portal." },
+      { title: "NGOs & farmer-support organisations", body: "Run farmer programmes with organisation-level management, communication, monitoring and reporting surfaces." },
+      { title: "Banks & insurance companies", body: "Use the farmer ecosystem as a digital service and engagement layer; financial underwriting, policy administration and regulated workflows remain separate unless implemented." },
+      { title: "Other farmer-serving organisations", body: "Agritech, advisory, machinery, input, supply-chain and other organisations can partner where the platform fits their farmer-service model." },
     ],
   },
   honest: {
     eyebrow: "What you get, and what you do not",
-    title: "The Partner Portal is an operating layer, not a back office.",
-    body: "It covers partner onboarding, farmer management, land management, partner branding and farmer activity. It is not a CRM, ERP, accounting or sales-force system, and we do not claim it is.",
+    title: "A complete partner operating layer for an AI-powered farmer ecosystem.",
+    body: "The portal brings together farmer and land operations, field intelligence, products and dealer workflows, campaigns, communications, analytics, alerts, organisation controls and white-label configuration. Capabilities are enabled according to partner configuration and release maturity. It is not claimed as a generic CRM, ERP or accounting replacement, and industry-specific banking, insurance or government workflows are not implied unless separately implemented.",
     fact: "tenant.portal",
   },
 };
@@ -246,7 +261,7 @@ export const SECURITY_PAGE = {
 export const COMPANY_PAGE = {
   seo: {
     title: "Company — KisanShakti AI",
-    description: "An early-stage, bootstrapped agricultural technology company based in Maharashtra, India, building a complete digital companion for every farmer and every land.",
+    description: "An early-stage, bootstrapped AI company based in Maharashtra, India, building agricultural intelligence and a digital companion around every farmer and every land.",
   },
   hero: {
     eyebrow: "Company",
@@ -281,7 +296,7 @@ export const INVESTORS_PAGE = {
   hero: {
     eyebrow: "Investors & Press",
     title: "Early-stage, bootstrapped, pre-revenue.",
-    lead: "We publish no customer logos, revenue, accuracy figures or certifications because we have none to publish yet. What we can show is a working companion, a governed knowledge base, and a clear thesis.",
+    lead: "We publish no customer logos, revenue, accuracy figures or certifications because we have none to publish yet. What we can show is working AI-powered agricultural intelligence, a governed knowledge base, and a clear product thesis.",
     fact: "company.stage",
   },
   thesis: [
@@ -308,11 +323,17 @@ export const CONTACT_PAGE = {
     phone: "Phone",
     orgType: "Organisation type",
     orgTypes: [
-      { value: "fpo", label: "Farmer producer organisation" },
-      { value: "dealer", label: "Dealer or distributor network" },
-      { value: "input", label: "Agri-input company" },
-      { value: "enterprise", label: "Agricultural enterprise" },
-      { value: "other", label: "Other" },
+      { value: "government", label: "Government or development programme" },
+      { value: "sugar_factory", label: "Sugar factory" },
+      { value: "cooperative", label: "Co-operative society" },
+      { value: "fpo", label: "FPO / farmer producer company" },
+      { value: "agri_company", label: "Agri company or service provider" },
+      { value: "dealer", label: "Agri dealer, distributor or retailer" },
+      { value: "ngo", label: "NGO or farmer-support organisation" },
+      { value: "bank", label: "Bank or financial institution" },
+      { value: "insurance", label: "Insurance company" },
+      { value: "enterprise", label: "Other agricultural enterprise" },
+      { value: "other", label: "Other farmer-serving organisation" },
     ],
     networkSize: "Network size (farmers)",
     networkSizes: [

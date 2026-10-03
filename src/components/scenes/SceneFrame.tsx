@@ -32,7 +32,7 @@ export function SceneFrame({ children, className, label }: { children: React.Rea
   }, []);
   return (
     <div ref={ref} className={cn("ks-scene-wrap h-full w-full", live && "is-live", className)} role="img" aria-label={label}>
-      <div key={gen} className="h-full w-full">
+      <div key={gen} className={cn("h-full w-full", !live && "scene-static")}>
         {children}
       </div>
     </div>

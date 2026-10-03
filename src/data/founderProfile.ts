@@ -98,7 +98,7 @@ export const founderProfile: FounderProfile = {
       key: "kisanshakti",
       name: "KisanShakti AI",
       tagline: "Intelligent AI guru for farmers",
-      description: "Agricultural intelligence platform for farmers.",
+      description: "AI-powered agricultural intelligence for farmers.",
       url: "https://www.kisanshaktiai.in",
       urlLabel: "kisanshaktiai.in",
       logo: "/brands/kisanshakti.png",
@@ -143,32 +143,32 @@ export const founderProfile: FounderProfile = {
   socials: [],
   techFamily: {
     heading: "The KisanShakti AI technology family",
-    intro: "Five intelligence layers behind the farmer app.",
+    intro: "Five intelligence technologies behind the farmer experience.",
     modules: [
       {
         acronym: "TARKA",
         expansion: "Trusted Agricultural Reasoning & Knowledge Architecture",
-        category: "Neuro-symbolic AI reasoning",
+        category: "Agricultural intelligence",
       },
       {
         acronym: "TATVA",
         expansion: "Terrain, Atmosphere, Thermal & Vegetation Analytics",
-        category: "Multimodal AI land-state intelligence",
+        category: "Land and environmental intelligence",
       },
       {
         acronym: "RIITU",
         expansion: "Responsive Intelligence for Integrated Temporal Agriculture",
-        category: "Adaptive AI prescription",
+        category: "Adaptive crop intelligence",
       },
       {
         acronym: "PAHRA",
         expansion: "Proactive Agricultural Hazard & Risk Assessment",
-        category: "Predictive AI risk intelligence",
+        category: "Proactive farm risk intelligence",
       },
       {
         acronym: "RUKH",
         expansion: "Regional Understanding, Knowledge & Harvest",
-        category: "Predictive AI market intelligence",
+        category: "Crop and market intelligence",
       },
     ],
   },

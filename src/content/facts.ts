@@ -16,10 +16,14 @@ export interface Fact {
 
 export const FACTS: Fact[] = [
   // Platform
-  { id: "platform.surfaces", area: "Platform", maturity: "live", statement: "Two connected surfaces on one shared, centrally governed foundation: the Farmer App and the Partner Portal." },
-  { id: "platform.separation", area: "Platform", maturity: "live", statement: "The AI that talks with the farmer and the guidance that decides what to do are separate. AI understands and explains; doses, quantities and timing come only from expert-approved guidance." },
+  { id: "platform.surfaces", area: "Platform", maturity: "live", statement: "The platform connects the Farmer App and Partner Portal through one shared, centrally governed foundation." },
+  { id: "platform.core", area: "Platform", maturity: "live", statement: "The shared agricultural intelligence foundation connects land context, agricultural knowledge and partner context beneath the Farmer App and Partner Portal." },
+  { id: "platform.separation", area: "Platform", maturity: "live", statement: "AI understands the farmer's question and explains it in the farmer's language; governed, expert-approved agricultural guidance determines what can be recommended for the field and crop stage." },
   { id: "platform.multi-tenant", area: "Platform", maturity: "live-limited", statement: "White-label platform: shared governed intelligence underneath; partner organisations run their own branded farmer ecosystems on top.", limits: ["Partners run under their own context and brand. They do not receive or fork source code."] },
   { id: "platform.commercial", area: "Commercial", maturity: "live", statement: "Sold to organisations, not directly to farmers. No farmer plans or prices are shown.", forbidden: ["per farmer", "₹/month"] },
+
+  // Platform positioning
+  { id: "platform.ai-intelligence", area: "Platform", maturity: "live", statement: "KisanShakti AI is an AI-powered agricultural intelligence platform built around each land, combining farmer conversations, changing field conditions and governed agricultural knowledge into clear, traceable guidance." },
 
   // Farmer App
   { id: "app.languages", area: "Farmer App", maturity: "live", statement: "14 Indian languages, with cross-language communication." },
@@ -64,7 +68,7 @@ export const FACTS: Fact[] = [
   { id: "rukh.analytics", area: "RUKH", maturity: "live-limited", statement: "Market data feeds Farm Analytics." },
 
   // Partner portal
-  { id: "tenant.portal", area: "Partner Portal", maturity: "live-limited", statement: "Partner onboarding, farmer management, land management, partner branding, farmer activity, and running under the organisation's own context and brand.", limits: ["No CRM, ERP, accounting or sales-force modules are claimed."], forbidden: ["CRM", "ERP", "accounting", "sales force"] },
+  { id: "tenant.portal", area: "Partner Portal", maturity: "live-limited", statement: "A multi-tenant operating portal for organisations that serve farmers: partner onboarding; farmer and land management; crop and vegetation monitoring; soil analysis; product catalog and dealer management; campaigns and farmer communications; sales and order workflows; analytics and reports; proactive alerts; integrations; organisation users, roles and permissions; white-label branding; localization; notifications; and subscription settings.", limits: ["Portal capabilities are delivered according to the partner's enabled configuration and release maturity. Some modules are early access or under active development. The portal is not claimed as a generic CRM, ERP or accounting system, and industry-specific banking, insurance or government workflows are not claimed unless separately implemented."], forbidden: ["guaranteed sales", "CRM replacement", "ERP replacement", "accounting system"] },
 
   // Admin portal
   { id: "admin.portal", area: "Admin Portal", maturity: "live", statement: "Partner and user management; agronomy masters (crops, varieties, companies, products); governance of the advisory knowledge base; monitoring. The governance layer, not another farmer app." },
