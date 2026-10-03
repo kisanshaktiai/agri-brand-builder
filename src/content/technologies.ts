@@ -37,7 +37,7 @@ export const TECHNOLOGIES: Technology[] = [
   {
     key: "tatva",
     name: "TATVA",
-    fullForm: "Sky · Soil · Water · Temperature · Weather",
+    fullForm: "Terrain, Atmosphere, Thermal & Vegetation Assessment",
     positioning: "Five-Element Land Intelligence",
     maturity: "live",
     arc: ["Observe", "Understand"],
@@ -59,7 +59,7 @@ export const TECHNOLOGIES: Technology[] = [
   {
     key: "pahra",
     name: "PAHRA",
-    fullForm: "Land-specific proactive farm alerts",
+    fullForm: "Proactive Agricultural Hazard & Risk Assessment",
     positioning: "Proactive Farm Alerts",
     maturity: "beta",
     arc: ["Anticipate"],
@@ -78,7 +78,7 @@ export const TECHNOLOGIES: Technology[] = [
   {
     key: "tarka",
     name: "TARKA",
-    fullForm: "A multilingual conversation for each land",
+    fullForm: "Trusted Agricultural Reasoning & Knowledge Architecture",
     positioning: "Land-Specific Multilingual AI",
     maturity: "live-limited",
     arc: ["Reason", "Decide"],
@@ -98,7 +98,7 @@ export const TECHNOLOGIES: Technology[] = [
   {
     key: "riitu",
     name: "RIITU",
-    fullForm: "Dynamic stage-wise crop scheduling",
+    fullForm: "Responsive Intelligence for Integrated Temporal Agriculture",
     positioning: "Dynamic Crop Scheduling & Guidance",
     maturity: "live-limited",
     arc: ["Act"],
@@ -118,7 +118,7 @@ export const TECHNOLOGIES: Technology[] = [
   {
     key: "rukh",
     name: "RUKH",
-    fullForm: "Market intelligence around your crop",
+    fullForm: "Real-time Unified Knowledge for Market Horizons",
     positioning: "Crop & Market Intelligence",
     maturity: "live-limited",
     arc: ["Predict"],
