@@ -19,7 +19,7 @@ export const HOME = {
   thesis: {
     eyebrow: "What it is",
     title: "Not an AI product. A companion for the whole season.",
-    body: "From the first signal nature gives to the last rupee counted, one app stays with the farmer and with each of their lands: observing, alerting, seeing, understanding, planning, informing, connecting and accounting. FPOs, dealers, agri-input companies and agricultural enterprises bring that same companion to their farmers under their own name.",
+    body: "From the first signal nature gives to the last rupee counted, one app stays with the farmer and with each of their lands: observing, alerting, seeing, understanding, planning, informing, connecting and accounting. Government programmes, sugar factories, co-operative societies, FPOs, agri-input companies, dealers and retailers, agribusinesses, NGOs, development organisations, banks, insurers and other farmer-serving organisations can bring that same companion to their farmer networks under their own name.",
     fact: "app.companion",
   },
   living: {
@@ -61,15 +61,15 @@ export const HOME = {
     title: "From one farmer to the whole ecosystem.",
     steps: [
       { title: "A farmer and their lands", body: "One companion in their language, working offline, synced when the network returns." },
-      { title: "A partner's network", body: "The organisation that serves this farmer runs the companion for its whole network under its own brand." },
-      { title: "Many partner ecosystems", body: "FPOs, dealers, agri-input companies and enterprises, each with its own farmers and branding." },
+      { title: "A partner's network", body: "The organisation that serves these farmers runs the companion for its network, with its enabled portal capabilities and its own brand." },
+      { title: "Many partner ecosystems", body: "Government programmes, sugar factories, co-operatives, FPOs, agri companies, dealers and retailers, NGOs, banks, insurers and other farmer-serving organisations, each with its own context and branding." },
       { title: "One shared platform", body: "The same governed intelligence and knowledge underneath them all." },
     ],
   },
   enterprise: {
     eyebrow: "For partner organisations",
     title: "Bring the companion to your farmers, under your name.",
-    body: "Onboard your organisation, bring your farmers and their lands, set your brand, and follow farmer activity from the Partner Portal. KisanShakti AI is sold to organisations, never directly to farmers.",
+    body: "Onboard your organisation, bring your farmers and their lands, configure the capabilities your organisation needs, set your brand, and operate your farmer ecosystem from the Partner Portal. KisanShakti AI is sold to organisations, never directly to farmers.",
     fact: "tenant.portal",
   },
   final: {
@@ -187,8 +187,20 @@ export const ENTERPRISES_PAGE = {
   },
   hero: {
     eyebrow: "For partner organisations",
-    title: "Your farmers. Your brand. One companion underneath.",
+    title: "Your farmers. Your brand. A full partner operating layer.",
     lead: "KisanShakti AI is sold to organisations, not directly to farmers. An FPO, a dealer network, an agri-input company or an agricultural enterprise becomes a partner and brings the companion to its own farmer network.",
+  },
+  capabilities: {
+    eyebrow: "The Partner Portal",
+    title: "More than farmer management.",
+    body: "The Partner Portal is the operational surface for a partner's farmer ecosystem. Its current codebase contains these capability areas; availability and maturity can vary by partner configuration.",
+    groups: [
+      { title: "Farmer & field operations", items: ["Farmer management", "Land management", "Crop monitoring", "NDVI / vegetation intelligence", "Soil analysis", "Proactive alerts"] },
+      { title: "Products & commercial operations", items: ["Product catalog", "Dealer network management", "Sales dashboard", "Order management", "Cart and order workflows", "Sales analytics and predictive sales views"] },
+      { title: "Farmer engagement", items: ["Campaigns", "Notifications", "Messages", "Community / forum surfaces"] },
+      { title: "Intelligence & reporting", items: ["Analytics", "Reports and performance views", "Network activity and engagement insights"] },
+      { title: "Organisation & white-label", items: ["Organisation management", "Users, roles and permissions", "White-label branding", "Appearance", "Localization", "Integrations", "Security and data-privacy settings", "API keys and subscription settings"] },
+    ],
   },
   journey: {
     eyebrow: "The partner journey",
@@ -202,19 +214,22 @@ export const ENTERPRISES_PAGE = {
     ],
   },
   fit: {
-    eyebrow: "Who it is for",
-    title: "Four kinds of partner.",
+    eyebrow: "Who can be a partner",
+    title: "Built for organisations that serve farmers.",
     types: [
-      { title: "Farmer producer organisations", body: "Serve member farmers with one companion that carries the FPO's name." },
-      { title: "Dealer networks", body: "Stay present in the farmer's day between visits, under your own brand." },
-      { title: "Agri-input companies", body: "Reach the farmers who use your products with practical, expert-reviewed guidance." },
-      { title: "Agricultural enterprises", body: "Run a farmer network with land records, activity and branding in one portal." },
+      { title: "Government & development programmes", body: "Bring structured farmer support, field context and programme-specific services to a defined farmer network." },
+      { title: "Sugar factories & co-operative societies", body: "Support grower networks with land, crop, activity and engagement context under the organisation's identity." },
+      { title: "FPOs, agri companies & service providers", body: "Serve members or customers with a branded farmer ecosystem and the portal capabilities your organisation enables." },
+      { title: "Dealers, distributors & retailers", body: "Manage farmer relationships, products, dealer networks, engagement and enabled sales workflows from one portal." },
+      { title: "NGOs & farmer-support organisations", body: "Run farmer programmes with organisation-level management, communication, monitoring and reporting surfaces." },
+      { title: "Banks & insurance companies", body: "Use the farmer ecosystem as a digital service and engagement layer; financial underwriting, policy administration and regulated workflows remain separate unless implemented." },
+      { title: "Other farmer-serving organisations", body: "Agritech, advisory, machinery, input, supply-chain and other organisations can partner where the platform fits their farmer-service model." },
     ],
   },
   honest: {
     eyebrow: "What you get, and what you do not",
-    title: "The Partner Portal is an operating layer, not a back office.",
-    body: "It covers partner onboarding, farmer management, land management, partner branding and farmer activity. It is not a CRM, ERP, accounting or sales-force system, and we do not claim it is.",
+    title: "A broad partner operating layer, with clear boundaries.",
+    body: "The portal goes well beyond basic farmer management: it includes field intelligence, products and dealer workflows, campaigns, communications, analytics, alerts, organisation controls and white-label configuration. Capabilities are enabled according to partner configuration and release maturity. It is not claimed as a generic CRM, ERP or accounting replacement, and industry-specific banking, insurance or government workflows are not implied unless separately implemented.",
     fact: "tenant.portal",
   },
 };
@@ -308,11 +323,17 @@ export const CONTACT_PAGE = {
     phone: "Phone",
     orgType: "Organisation type",
     orgTypes: [
-      { value: "fpo", label: "Farmer producer organisation" },
-      { value: "dealer", label: "Dealer or distributor network" },
-      { value: "input", label: "Agri-input company" },
-      { value: "enterprise", label: "Agricultural enterprise" },
-      { value: "other", label: "Other" },
+      { value: "government", label: "Government or development programme" },
+      { value: "sugar_factory", label: "Sugar factory" },
+      { value: "cooperative", label: "Co-operative society" },
+      { value: "fpo", label: "FPO / farmer producer company" },
+      { value: "agri_company", label: "Agri company or service provider" },
+      { value: "dealer", label: "Agri dealer, distributor or retailer" },
+      { value: "ngo", label: "NGO or farmer-support organisation" },
+      { value: "bank", label: "Bank or financial institution" },
+      { value: "insurance", label: "Insurance company" },
+      { value: "enterprise", label: "Other agricultural enterprise" },
+      { value: "other", label: "Other farmer-serving organisation" },
     ],
     networkSize: "Network size (farmers)",
     networkSizes: [
