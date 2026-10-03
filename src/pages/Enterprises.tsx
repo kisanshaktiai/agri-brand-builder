@@ -42,6 +42,28 @@ export default function Enterprises() {
           </ol>
         </Container>
       </Section>
+      <Section band>
+        <Container>
+          <Eyebrow>{p.capabilities.eyebrow}</Eyebrow>
+          <Heading>{p.capabilities.title}</Heading>
+          <Body className="mt-5 max-w-3xl">{p.capabilities.body}</Body>
+          <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {p.capabilities.groups.map((group) => (
+              <Reveal key={group.title} className="rounded-ks-md border border-ks-line bg-ks-white p-6">
+                <h3 className="ks-h3 text-[1.0625rem]">{group.title}</h3>
+                <ul className="mt-4 space-y-2">
+                  {group.items.map((item) => (
+                    <li key={item} className="flex gap-2 text-sm text-ks-ink-2">
+                      <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-ks-ink-3" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </Section>
       <Section>
         <Container>
           <Eyebrow>{p.fit.eyebrow}</Eyebrow>
