@@ -103,7 +103,7 @@ export function LivingPhone({ eyebrow, title, steps }: { eyebrow: string; title:
 
   return (
     <div className="ks-container">
-      <div className="mb-10 lg:mb-16">
+      <div className="mb-10 text-center lg:mb-16">
         <Eyebrow>{eyebrow}</Eyebrow>
         <Heading>{title}</Heading>
       </div>

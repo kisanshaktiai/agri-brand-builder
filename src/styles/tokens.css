@@ -250,16 +250,16 @@ body {
 /* ── Dark canvas: buttons and marks on the hero ───────────────────── */
 .ks-on-dark [data-variant="primary"] { background: hsl(var(--ks-leaf)); color: hsl(var(--ks-ink)); }
 .ks-on-dark [data-variant="primary"]:hover { background: hsl(var(--ks-lime)); }
-.ks-on-dark [data-variant="secondary"] { border-color: hsl(var(--ks-paper) / 0.3); color: hsl(var(--ks-paper)); }
-.ks-on-dark [data-variant="secondary"]:hover { border-color: hsl(var(--ks-lime)); }
+.ks-on-dark [data-variant="secondary"] { border-color: hsl(var(--ks-leaf)); color: hsl(var(--ks-leaf)); }
+.ks-on-dark [data-variant="secondary"]:hover { border-color: hsl(var(--ks-lime)); color: hsl(var(--ks-lime)); }
 .ks-on-dark .ks-mark, .ks-on-dark .ks-label { color: hsl(var(--ks-paper) / 0.75); }
 
 /* ── Home hero ───────────────────────────────────────────────────── */
 .ks-hero-glow {
-  position: absolute; inset: -20% -10% auto -10%; height: 90%;
+  position: absolute; inset: 0;
   background:
-    radial-gradient(60% 50% at 78% 55%, hsl(var(--ks-leaf) / 0.22), transparent 70%),
-    radial-gradient(40% 40% at 10% 10%, hsl(var(--ks-lime) / 0.08), transparent 70%);
+    radial-gradient(55% 45% at 50% 78%, hsl(var(--ks-leaf) / 0.24), transparent 70%),
+    radial-gradient(45% 35% at 50% 8%, hsl(var(--ks-lime) / 0.07), transparent 70%);
   pointer-events: none;
 }
 .ks-hero .ks-phone { box-shadow: 0 0 0 1px hsl(var(--ks-lime) / 0.25), 0 60px 120px -40px hsl(var(--ks-lime) / 0.35), 0 40px 80px -32px rgb(0 0 0 / 0.6); }

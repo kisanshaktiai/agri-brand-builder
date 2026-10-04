@@ -38,19 +38,19 @@ export function Nav() {
   }, []);
 
   const linkCls = ({ isActive }: { isActive: boolean }) =>
-    cn("whitespace-nowrap text-sm transition-colors duration-200 hover:text-ks-ink", isActive ? "text-ks-ink" : "text-ks-ink-2");
+    cn("whitespace-nowrap text-[0.8125rem] transition-colors duration-200 hover:text-ks-ink", isActive ? "text-ks-ink" : "text-ks-ink-2");
 
   return (
     <header className={cn("sticky top-0 z-40 border-b transition-colors duration-300", scrolled ? "border-ks-line bg-ks-paper/85 backdrop-blur-md" : "border-transparent bg-transparent")}>
       <a href="#main" className="ks-skip">
         {UI.skip}
       </a>
-      <div className="ks-container flex h-[68px] items-center justify-between gap-6">
+      <div className="ks-container flex h-[56px] items-center justify-between gap-6">
         <Link to={href("/")} className="flex items-center gap-2.5 text-ks-ink" aria-label={`${BRAND} ${UI.home}`}>
-          <Wordmark height={40} />
+          <Wordmark height={34} />
         </Link>
 
-        <nav aria-label="Primary" className="hidden lg:flex items-center gap-5 xl:gap-7">
+        <nav aria-label="Primary" className="hidden flex-1 items-center justify-center gap-5 lg:flex xl:gap-8">
           {NAV.map((n) => (
             <NavLink key={n.to} to={href(n.to)} className={linkCls}>
               {n.label}

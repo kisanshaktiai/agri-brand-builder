@@ -32,10 +32,10 @@ export function FamilyEmerge({ eyebrow, title, body, linkTo = "/technology" }: {
 
   return (
     <div className="ks-container" ref={ref}>
-      <div className="max-w-3xl">
+      <div className="mx-auto max-w-3xl text-center">
         <Eyebrow>{eyebrow}</Eyebrow>
         <Heading>{title}</Heading>
-        {body && <Body className="mt-6">{body}</Body>}
+        {body && <Body className="mx-auto mt-6">{body}</Body>}
       </div>
 
       <div className="relative mt-14 overflow-x-clip md:mt-20">
