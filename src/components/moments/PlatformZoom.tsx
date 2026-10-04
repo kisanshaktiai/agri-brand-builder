@@ -51,7 +51,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=250%",
+          end: "+=180%",
           scrub: 0.8,
           pin: true,
           anticipatePin: 1,

@@ -38,7 +38,7 @@ export interface Technology {
 export const TECHNOLOGIES: Technology[] = [
   {
     key: "tatva",
-    icon: "/technology-icons/tatva.svg",
+    icon: "/technology-icons/tatva.png",
     name: "TATVA",
     fullForm: "Terrain, Atmosphere, Thermal & Vegetation Assessment",
     positioning: "AI Land Intelligence",
@@ -61,7 +61,7 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "pahra",
-    icon: "/technology-icons/pahra.svg",
+    icon: "/technology-icons/pahra.png",
     name: "PAHRA",
     fullForm: "Proactive Agricultural Hazard & Risk Assessment",
     positioning: "Proactive Farm Intelligence",
@@ -81,7 +81,7 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "tarka",
-    icon: "/technology-icons/tarka.svg",
+    icon: "/technology-icons/tarka.png",
     name: "TARKA",
     fullForm: "Trusted Agricultural Reasoning & Knowledge Architecture",
     positioning: "Land-Specific Multilingual AI",
@@ -102,7 +102,7 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "riitu",
-    icon: "/technology-icons/riitu.svg",
+    icon: "/technology-icons/riitu.png",
     name: "RIITU",
     fullForm: "Responsive Intelligence for Integrated Temporal Agriculture",
     positioning: "Adaptive Crop Intelligence",
@@ -123,7 +123,7 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "rukh",
-    icon: "/technology-icons/rukh.svg",
+    icon: "/technology-icons/rukh.png",
     name: "RUKH",
     fullForm: "Regional Understanding, Knowledge & Harvest",
     positioning: "Crop & Market Intelligence",

@@ -44,7 +44,7 @@ export default function Platform() {
               </div>
               <p className="ks-label mb-2">{UI.answers}</p>
               <p className="font-medium text-ks-ink">“{s.question}”</p>
-              <p className="ks-body mt-3 text-sm">{s.description}</p>
+              <p className="ks-body mt-3">{s.description}</p>
               {s.limits && <p className="ks-small mt-4">{s.limits.join(" ")}</p>}
             </Reveal>
           ))}

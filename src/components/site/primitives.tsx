@@ -80,11 +80,12 @@ export function TechMark({ tech, name, house = true, size = "md", className }: {
   );
 }
 
+/** Technology icon, as on the brand card: the mark alone on a soft field tint, no box line. */
 export function TechIcon({ src, name, size = "md", className }: { src: string; name: string; size?: "sm" | "md" | "lg"; className?: string }) {
-  const box = size === "lg" ? "h-20 w-20" : size === "sm" ? "h-12 w-12" : "h-16 w-16";
-  const pad = size === "lg" ? "p-3" : "p-2.5";
+  const box = size === "lg" ? "h-24 w-24" : size === "sm" ? "h-12 w-12" : "h-16 w-16";
+  const pad = size === "lg" ? "p-3.5" : "p-2.5";
   return (
-    <span className={cn("inline-flex shrink-0 items-center justify-center rounded-ks-md border border-ks-line bg-ks-paper", box, pad, className)}>
+    <span className={cn("inline-flex shrink-0 items-center justify-center rounded-full bg-ks-field-soft", box, pad, className)}>
       <img src={src} alt="" aria-hidden="true" className="block h-full w-full object-contain" />
       <span className="sr-only">{name} icon</span>
     </span>

@@ -29,11 +29,11 @@ export default function Technology() {
             <Eyebrow>{TECHNOLOGY_PAGE.hierarchy.eyebrow}</Eyebrow>
             <Heading>{TECHNOLOGY_PAGE.hierarchy.title}</Heading>
           </Reveal>
-          <ol className="mt-10 grid gap-2 sm:grid-cols-3 lg:grid-cols-6">
+          <ol className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {HIERARCHY.map((h, i) => (
               <Reveal key={h} as="li" delay={i * 0.06} className="rounded-ks-md border border-ks-line bg-ks-white p-4">
                 <p className="ks-mono text-xs text-ks-ink-4">{String(i + 1).padStart(2, "0")}</p>
-                <p className="mt-2 text-sm font-medium text-ks-ink">{h}</p>
+                <p className="mt-2 text-base font-medium text-ks-ink">{h}</p>
               </Reveal>
             ))}
           </ol>
@@ -72,7 +72,7 @@ export default function Technology() {
                   </Reveal>
                   <Reveal delay={0.15} className="mt-8">
                     <p className="ks-label mb-3">{t.maturity === "beta" ? UI.earlyAccess : UI.statedLimits}</p>
-                    <ul className="ks-body list-disc space-y-1 pl-5 text-sm">
+                    <ul className="ks-body list-disc space-y-2 pl-5">
                       {t.limits.map((l) => (
                         <li key={l}>{l}</li>
                       ))}

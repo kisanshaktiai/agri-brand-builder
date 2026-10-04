@@ -38,7 +38,7 @@ export function FinalStatement({ lines }: { lines: string[] }) {
         scrollTrigger: {
           trigger: ref.current,
           start: "top top",
-          end: "+=175%",
+          end: "+=120%",
           scrub: 1,
           pin: true,
           anticipatePin: 1,
