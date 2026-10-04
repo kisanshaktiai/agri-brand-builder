@@ -11,12 +11,13 @@ import { useT } from "@/i18n";
 const D = (d: number) => ({ "--d": `${d}s` }) as React.CSSProperties;
 
 function TatvaScene() {
+  const S = useT().SCENE;
   const elements = [
-    { x: 240, y: 46, label: "Sky", detail: "above the field" },
-    { x: 92, y: 112, label: "Weather", detail: "what changes next" },
-    { x: 388, y: 112, label: "Temperature", detail: "heat the crop receives" },
-    { x: 108, y: 250, label: "Water", detail: "rain · balance" },
-    { x: 372, y: 250, label: "Soil", detail: "your soil test" },
+    { x: 240, y: 46, label: S[167], detail: S[183] },
+    { x: 92, y: 112, label: S[168], detail: S[184] },
+    { x: 388, y: 112, label: S[169], detail: S[185] },
+    { x: 108, y: 250, label: S[170], detail: S[186] },
+    { x: 372, y: 250, label: S[171], detail: S[187] },
   ];
 
   return (
@@ -25,7 +26,7 @@ function TatvaScene() {
         <circle cx="240" cy="157" r="48" className="fill-field-soft" />
         <polygon points="210,142 270,136 282,182 220,191" className="fill-white" stroke="hsl(var(--ks-ink))" strokeWidth="1.5" />
         <polyline points="220,191 210,142 270,136 282,182" className="field sc-draw" style={{ "--len": "170", "--dur": "1.1s" } as React.CSSProperties} />
-        <text x="246" y="163" textAnchor="middle" className="t-sans t-ink" style={{ fontSize: 12 }}>THIS LAND</text>
+        <text x="246" y="163" textAnchor="middle" className="t-sans t-ink" style={{ fontSize: 12 }}>{S[146]}</text>
       </g>
 
       <g className="sc-sweep" style={D(0.5)}>
@@ -53,24 +54,23 @@ function TatvaScene() {
 
       <g className="sc-rise" style={D(2.3)}>
         <rect x="177" y="215" width="126" height="28" rx="14" className="fill-field-soft" />
-        <text x="240" y="233" textAnchor="middle" className="t-sans" style={{ fill: "hsl(var(--ks-field-deep))", fontSize: 12 }}>
-          one land · five elements
-        </text>
+        <text x="240" y="233" textAnchor="middle" className="t-sans" style={{ fill: "hsl(var(--ks-field-deep))", fontSize: 12 }}>{S[147]}</text>
       </g>
 
       <g className="sc-rise" style={D(2.8)}>
-        <text x="48" y="298">satellite · weather · rainfall · thermal · soil</text>
-        <text x="432" y="298" textAnchor="end">land-specific view</text>
+        <text x="48" y="298">{S[148]}</text>
+        <text x="432" y="298" textAnchor="end">{S[149]}</text>
       </g>
     </svg>
   );
 }
 
 function TarkaScene() {
+  const S = useT().SCENE;
   const steps = [
-    { y: 92, label: "your field's state" },
-    { y: 150, label: "your crop's stage" },
-    { y: 208, label: "expert-approved guidance" },
+    { y: 92, label: 172 },
+    { y: 150, label: 173 },
+    { y: 208, label: 174 },
   ];
   return (
     <svg className="ks-scene" viewBox="0 0 480 320" aria-hidden>
@@ -79,7 +79,7 @@ function TarkaScene() {
         <rect x="32" y="40" width="150" height="54" rx="14" className="fill-white" stroke="hsl(var(--ks-ink))" strokeWidth="1.5" />
         <path d="M60 94l-8 14 20-14z" className="fill-white" stroke="hsl(var(--ks-ink))" strokeWidth="1.5" />
         <text x="48" y="62" className="t-ink t-sans" style={{ fontSize: 13 }}>पाने पिवळी पडत आहेत</text>
-        <text x="48" y="80" className="t-sans">leaves turning yellow?</text>
+        <text x="48" y="80" className="t-sans">{S[150]}</text>
       </g>
       {/* path to checks */}
       <path d="M182 68 H 230 V 230" className="ln sc-draw" style={{ "--len": "260", "--d": "0.8s", "--dur": "1s" } as React.CSSProperties} />
@@ -94,21 +94,22 @@ function TarkaScene() {
       {/* gate */}
       <g className="sc-rise" style={D(3.1)}>
         <rect x="262" y="246" width="178" height="26" rx="13" className="fill-field-soft" />
-        <text x="351" y="263" textAnchor="middle" className="t-sans" style={{ fill: "hsl(var(--ks-field-deep))" }}>safety check passed</text>
+        <text x="351" y="263" textAnchor="middle" className="t-sans" style={{ fill: "hsl(var(--ks-field-deep))" }}>{S[151]}</text>
       </g>
       {/* answer bubble */}
       <g className="sc-rise" style={D(3.6)}>
         <rect x="32" y="206" width="170" height="66" rx="14" className="fill-field" />
-        <text x="48" y="230" className="t-sans" style={{ fill: "hsl(var(--ks-field-ink))", fontSize: 13 }}>Explained in Marathi</text>
-        <text x="48" y="248" className="t-sans" style={{ fill: "hsl(var(--ks-field-ink))", opacity: 0.8 }}>what to do, how much,</text>
-        <text x="48" y="262" className="t-sans" style={{ fill: "hsl(var(--ks-field-ink))", opacity: 0.8 }}>when, and why</text>
+        <text x="48" y="230" className="t-sans" style={{ fill: "hsl(var(--ks-field-ink))", fontSize: 13 }}>{S[152]}</text>
+        <text x="48" y="248" className="t-sans" style={{ fill: "hsl(var(--ks-field-ink))", opacity: 0.8 }}>{S[153]}</text>
+        <text x="48" y="262" className="t-sans" style={{ fill: "hsl(var(--ks-field-ink))", opacity: 0.8 }}>{S[154]}</text>
       </g>
-      <text x="240" y="304" textAnchor="middle" className="sc-in" style={D(4)}>AI explains · governed guidance decides</text>
+      <text x="240" y="304" textAnchor="middle" className="sc-in" style={D(4)}>{S[155]}</text>
     </svg>
   );
 }
 
 function RiituScene() {
+  const S = useT().SCENE;
   const stages = ["sowing", "tillering", "panicle", "flowering", "ripening"];
   return (
     <svg className="ks-scene" viewBox="0 0 480 320" aria-hidden>
@@ -126,60 +127,62 @@ function RiituScene() {
       <g className="sc-slide" style={{ "--sc-dx": "95px", "--dur": "6s", "--d": "2s" } as React.CSSProperties}>
         <line x1="250" y1="60" x2="250" y2="200" className="ink" strokeDasharray="3 4" />
         <rect x="222" y="40" width="56" height="20" rx="10" className="fill-ink" />
-        <text x="250" y="54" textAnchor="middle" style={{ fill: "hsl(var(--ks-paper))" }}>today</text>
+        <text x="250" y="54" textAnchor="middle" style={{ fill: "hsl(var(--ks-paper))" }}>{S[156]}</text>
       </g>
       {/* decisions for today */}
       {[
-        { x: 60, label: "Due · top-dress nitrogen", tone: "fill-field-soft", d: 2.6 },
-        { x: 230, label: "Watch · leaf colour", tone: "fill-signal-soft", d: 3.1 },
-        { x: 300, label: "Blocked · rain expected", tone: "fill-soft", d: 3.6 },
+        { x: 60, label: S[175], tone: "fill-field-soft", d: 2.6 },
+        { x: 230, label: S[176], tone: "fill-signal-soft", d: 3.1 },
+        { x: 300, label: S[177], tone: "fill-soft", d: 3.6 },
       ].map((c) => (
         <g key={c.label} className="sc-rise" style={D(c.d)}>
           <rect x={c.x} y={c.x === 60 ? 214 : c.x === 230 ? 244 : 274} width="170" height="24" rx="12" className={c.tone} />
           <text x={c.x + 12} y={(c.x === 60 ? 214 : c.x === 230 ? 244 : 274) + 16} className="t-sans t-ink">{c.label}</text>
         </g>
       ))}
-      <text x="440" y="304" textAnchor="end" className="sc-in" style={D(4)}>adapts to your field's actual stage</text>
+      <text x="440" y="304" textAnchor="end" className="sc-in" style={D(4)}>{S[157]}</text>
     </svg>
   );
 }
 
 function PahraScene() {
+  const S = useT().SCENE;
   return (
     <svg className="ks-scene" viewBox="0 0 480 320" aria-hidden>
       <polygon points="70,120 300,100 340,230 110,250" className="fill-field-soft sc-in" style={D(0.2)} stroke="hsl(var(--ks-ink))" strokeWidth="1.5" />
       {/* weather trigger */}
       <g className="sc-rise" style={D(0.6)}>
         <path d="M336 58c8-18 34-20 44-6 10-10 30-6 32 10 14 0 18 18 4 20h-80c-12 0-14-20 0-24z" className="fill-soft" stroke="hsl(var(--ks-ink-3))" />
-        <text x="378" y="98" textAnchor="middle">humid · 28°C</text>
+        <text x="378" y="98" textAnchor="middle">{S[158]}</text>
       </g>
       {/* risk marker pulses on the north plot */}
       <g className="sc-rise" style={D(1.2)}>
         <circle cx="250" cy="150" r="9" className="fill-signal" />
         <circle cx="250" cy="150" r="9" className="sc-pulse" fill="none" stroke="hsl(var(--ks-signal))" strokeWidth="2" style={D(1.4)} />
-        <text x="250" y="132" textAnchor="middle" className="t-ink">risk rising</text>
+        <text x="250" y="132" textAnchor="middle" className="t-ink">{S[159]}</text>
       </g>
       {/* footpath: go and scout */}
       <path d="M120 240 C 160 210, 200 200, 240 160" className="ink sc-draw" strokeDasharray="4 6" style={{ "--len": "160", "--d": "2s", "--dur": "1.4s", strokeDasharray: "4 6" } as React.CSSProperties} />
       <g className="sc-rise" style={D(2.2)}>
         <circle cx="120" cy="240" r="7" className="fill-ink" />
-        <text x="120" y="268" textAnchor="middle">scout</text>
+        <text x="120" y="268" textAnchor="middle">{S[160]}</text>
       </g>
       {/* confirm with a photo, then decide */}
       <g className="sc-rise" style={D(3.4)}>
         <rect x="286" y="168" width="54" height="40" rx="6" className="fill-white" stroke="hsl(var(--ks-ink))" strokeWidth="1.5" />
         <circle cx="313" cy="188" r="9" className="ink" />
-        <text x="313" y="226" textAnchor="middle">confirm</text>
+        <text x="313" y="226" textAnchor="middle">{S[161]}</text>
       </g>
       <g className="sc-rise" style={D(4)}>
         <rect x="60" y="284" width="360" height="24" rx="12" className="fill-white" stroke="hsl(var(--ks-line-strong))" />
-        <text x="240" y="300" textAnchor="middle" className="t-sans t-ink">An alert asks you to look. It never prescribes a chemical.</text>
+        <text x="240" y="300" textAnchor="middle" className="t-sans t-ink">{S[162]}</text>
       </g>
     </svg>
   );
 }
 
 function RukhScene() {
+  const S = useT().SCENE;
   const pts = [
     [60, 220], [110, 200], [160, 212], [210, 180], [260, 170], [310, 150], [360, 162], [410, 140],
   ];
@@ -204,30 +207,32 @@ function RukhScene() {
       {/* selling advisor window */}
       <g className="sc-rise" style={D(3.6)}>
         <rect x="60" y="248" width="196" height="40" rx="10" className="fill-white" stroke="hsl(var(--ks-ink))" strokeWidth="1.5" />
-        <text x="76" y="266" className="t-sans t-ink">Selling advisor</text>
-        <text x="76" y="281" className="t-sans">nearby market pays more this week</text>
+        <text x="76" y="266" className="t-sans t-ink">{S[163]}</text>
+        <text x="76" y="281" className="t-sans">{S[164]}</text>
       </g>
-      <text x="60" y="100" className="sc-in" style={D(1)}>price, last 8 weeks</text>
-      <text x="420" y="304" textAnchor="end" className="sc-in" style={D(4)}>market insight, not a guarantee</text>
+      <text x="60" y="100" className="sc-in" style={D(1)}>{S[165]}</text>
+      <text x="420" y="304" textAnchor="end" className="sc-in" style={D(4)}>{S[166]}</text>
     </svg>
   );
 }
 
-const SCENES: Record<TechKey, { C: React.FC; label: string }> = {
-  tatva: { C: TatvaScene, label: "Animated diagram: weather, satellite pass and water balance scored for one field" },
-  tarka: { C: TarkaScene, label: "Animated diagram: a farmer's question checked against field state, crop stage and expert-approved guidance, then explained in Marathi" },
-  riitu: { C: RiituScene, label: "Animated diagram: crop stages on a timeline with today's due, watch and blocked decisions" },
-  pahra: { C: PahraScene, label: "Animated diagram: a rising risk on a plot, a scouting path, a photo to confirm, then a decision" },
-  rukh: { C: RukhScene, label: "Animated diagram: price trend, comparison across markets and a selling advisor" },
+const SCENES: Record<TechKey, { C: React.FC; label: number }> = {
+  tatva: { C: TatvaScene, label: 178 },
+  tarka: { C: TarkaScene, label: 179 },
+  riitu: { C: RiituScene, label: 180 },
+  pahra: { C: PahraScene, label: 181 },
+  rukh: { C: RukhScene, label: 182 },
 };
 
 export function TechScene({ tech, className }: { tech: TechKey; className?: string }) {
+  const S = useT().SCENE;
   const { C, label } = SCENES[tech];
   const UI = useT();
+  const sceneLabel = S[label];
   return (
     <div className={className}>
       <div className="aspect-[3/2] w-full overflow-hidden rounded-ks-lg border border-ks-line bg-ks-white shadow-ks-1">
-        <SceneFrame label={label}>
+        <SceneFrame label={sceneLabel}>
           <C />
         </SceneFrame>
       </div>
