@@ -15,19 +15,30 @@ export function Reveal({ children, delay = 0, className, as = "div" }: { childre
     if (!el || typeof IntersectionObserver === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const r = el.getBoundingClientRect();
-    if (r.top < window.innerHeight && r.bottom > 0) return; // already on screen: leave visible
+    if (r.top < window.innerHeight) return; // on screen or already scrolled past: leave visible
     setState("hidden");
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setState("in");
-          io.disconnect();
-        }
-      },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
-    );
+    let raf = 0;
+    const done = () => {
+      setState("in");
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+    const io = new IntersectionObserver((entries) => entries.some((e) => e.isIntersecting) && done(), { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+    // A jump past the element (anchor link, restored scroll) never intersects it; reveal it anyway.
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        if (el.getBoundingClientRect().bottom < 0) done();
+      });
+    };
     io.observe(el);
-    return () => io.disconnect();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
   const Tag = as as React.ElementType;
   return (

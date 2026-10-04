@@ -30,7 +30,7 @@ export function PartnerPortalSimulation({ tenantIndex = 0 }: { tenantIndex?: num
       aria-label="Illustrative Partner Portal simulation"
     >
       <div className="flex min-h-[520px] text-left">
-        <aside className="hidden w-[170px] shrink-0 border-r border-ks-line bg-white p-3 md:block">
+        <div className="hidden w-[170px] shrink-0 border-r border-ks-line bg-white p-3 md:block">
           <div className="flex items-center gap-2 border-b border-ks-line pb-3">
             <span className="grid h-7 w-7 place-items-center rounded-md text-xs font-semibold text-white" style={{ background: "var(--portal-brand)" }}>{tenant.initials}</span>
             <div className="min-w-0">
@@ -39,7 +39,7 @@ export function PartnerPortalSimulation({ tenantIndex = 0 }: { tenantIndex?: num
             </div>
           </div>
           <p className="ks-label mt-5 px-2 text-[9px]">Workspace</p>
-          <nav className="mt-2 space-y-1">
+          <div className="mt-2 space-y-1">
             {nav.map((item, i) => (
               <div key={item} className={cn("flex items-center gap-2 rounded-md px-2 py-2 text-[10px]", i === 0 ? "font-medium text-ks-ink" : "text-ks-ink-3")} style={i === 0 ? { background: "var(--portal-soft)", color: "var(--portal-accent)" } : undefined}>
                 <span className="h-1.5 w-1.5 rounded-full" style={{ background: i === 0 ? "var(--portal-brand)" : "hsl(var(--ks-line-strong))" }} />
@@ -47,11 +47,11 @@ export function PartnerPortalSimulation({ tenantIndex = 0 }: { tenantIndex?: num
                 {(item === "Products" || item === "NDVI") && <span className="ml-auto rounded-full px-1.5 py-0.5 text-[8px]" style={{ background: "var(--portal-soft)", color: "var(--portal-accent)" }}>NEW</span>}
               </div>
             ))}
-          </nav>
-        </aside>
+          </div>
+        </div>
 
-        <main className="min-w-0 flex-1">
-          <header className="flex items-center justify-between border-b border-ks-line bg-white px-4 py-3 md:px-5">
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between border-b border-ks-line bg-white px-4 py-3 md:px-5">
             <div>
               <p className="text-[11px] font-semibold text-ks-ink">{tenant.name}</p>
               <p className="text-[9px] text-ks-ink-4">{tenant.type}</p>
@@ -60,13 +60,13 @@ export function PartnerPortalSimulation({ tenantIndex = 0 }: { tenantIndex?: num
               <span className="rounded-full border border-ks-line px-2 py-1 text-[9px] text-ks-ink-3">Illustrative</span>
               <span className="h-6 w-6 rounded-full" style={{ background: "var(--portal-soft)", border: "1px solid color-mix(in srgb, var(--portal-brand) 20%, transparent)" }} />
             </div>
-          </header>
+          </div>
 
           <div className="p-4 md:p-6">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
                 <p className="ks-label text-[9px]" style={{ color: "var(--portal-accent)" }}>Partner dashboard</p>
-                <h3 className="mt-1 text-lg font-semibold tracking-tight text-ks-ink md:text-xl">Your farmer network</h3>
+                <p className="mt-1 text-lg font-semibold tracking-tight text-ks-ink md:text-xl">Your farmer network</p>
                 <p className="mt-1 text-[10px] text-ks-ink-3">A simulated view of the organisation workspace — not a live product screen.</p>
               </div>
               <span className="rounded-md px-3 py-2 text-[9px] font-medium text-white" style={{ background: "var(--portal-brand)" }}>Add farmer</span>
@@ -132,7 +132,7 @@ export function PartnerPortalSimulation({ tenantIndex = 0 }: { tenantIndex?: num
               Simulation only · example interface · no live partner data
             </div>
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );

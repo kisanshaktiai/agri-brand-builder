@@ -33,7 +33,7 @@ export const CTA = {
 } as const;
 
 export const FOOTER = {
-  statement: "AI-powered agricultural intelligence for every farmer and every land. One companion for the whole season.",
+  statement: "AI-powered agricultural intelligence for each land, brought to farmers by the organisations that serve them.",
   columns: [
     {
       title: "Product",

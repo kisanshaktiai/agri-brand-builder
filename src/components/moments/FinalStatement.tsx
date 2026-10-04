@@ -29,8 +29,8 @@ export function FinalStatement({ lines }: { lines: string[] }) {
       const mark = ref.current?.querySelector<HTMLElement>(".fs-mark");
 
       // Non-blank starting state. The first line leads; the later lines and
-      // mark are visible-but-quiet until the visitor scrolls through the pin.
-      gsap.set(lineEls, { opacity: 0.18, y: 18 });
+      // mark are visible-but-quiet (still 3:1 contrast) until the visitor scrolls through the pin.
+      gsap.set(lineEls, { opacity: 0.62, y: 18 });
       if (lineEls[0]) gsap.set(lineEls[0], { opacity: 1, y: 8 });
       if (mark) gsap.set(mark, { opacity: 0.22, scale: 0.96 });
 

@@ -29,10 +29,10 @@ export function Footer() {
           {FOOTER.columns.map((col) => (
             <nav key={col.title} aria-label={col.title}>
               <p className="ks-label mb-4">{col.title}</p>
-              <ul className="space-y-0 md:space-y-2.5">
+              <ul className="space-y-0">
                 {col.links.map((l) => (
                   <li key={l.to}>
-                    <Link to={href(l.to)} className="inline-flex min-h-[44px] items-center text-sm text-ks-ink-2 transition-colors hover:text-ks-ink md:min-h-0">
+                    <Link to={href(l.to)} className="inline-flex min-h-[44px] items-center text-sm text-ks-ink-2 transition-colors hover:text-ks-ink [@media(pointer:fine)]:min-h-[32px]">
                       {l.label}
                     </Link>
                   </li>

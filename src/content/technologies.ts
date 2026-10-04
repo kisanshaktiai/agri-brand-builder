@@ -90,11 +90,11 @@ export const TECHNOLOGIES: Technology[] = [
     question: "Can I just ask my land what it needs?",
     tagline: "Talk to your land.",
     summary:
-      "KisanShakti TARKA is a multilingual agricultural AI companion developed in India. Every land you own has its own conversation, which already knows your crop, your field and your season. Ask in your language, add a photo, and get practical guidance that fits this field, explained with the reason why.",
+      "KisanShakti TARKA is a multilingual agricultural AI assistant developed in India. Every land you own has its own conversation, which already knows your crop, your field and your season. Ask in your language, add a photo, and get practical guidance that fits this field, explained with the reason why.",
     capabilities: [
       { text: "A separate conversation for each land, carrying that land's crop, stage and conditions into every answer.", fact: "tarka.land-space" },
       { text: "Understands questions by voice or text, photos of the crop, and the context of your field.", fact: "tarka.chain" },
-      { text: "Answers in your language. Many Indian languages are supported, and you can ask in one language and share in another.", fact: "app.languages" },
+      { text: "Answers in your language, in any of 14 Indian languages. You can ask in one language and share the answer in another.", fact: "app.languages" },
       { text: "Practical guidance checked against your field and expert-reviewed agricultural knowledge, never invented on the spot.", fact: "tarka.knowledge" },
     ],
     limits: ["Guidance is deepest for rice and growing for sugarcane, soybean, cotton, chickpea, onion and jowar.", "Where something needs a specialist's eye, it says so."],
@@ -111,7 +111,7 @@ export const TECHNOLOGIES: Technology[] = [
     question: "What should I do on this land today?",
     tagline: "A crop plan that adapts to nature.",
     summary:
-      "KisanShakti RIITU turns your crop's biology into a practical, stage-wise plan for each land: what to do, when, and in what order. When TATVA sees the field or the weather change, the plan changes with it, so Farm Today always reflects your field's actual stage.",
+      "KisanShakti RIITU turns your crop's biology into a practical, stage-wise plan for each land: what to do, when, and in what order. When TATVA sees the field or the weather change, the plan changes with it. Every night it is checked against your field's actual stage, so Farm Today stays in step with the crop.",
     capabilities: [
       { text: "A stage-wise crop plan for each land and the way the crop is grown, Maharashtra first.", fact: "riitu.stage-graph" },
       { text: "Farm Today: what is Due, what to Watch, what is Blocked by conditions, and what is simply good to know.", fact: "riitu.farm-today" },
@@ -132,11 +132,11 @@ export const TECHNOLOGIES: Technology[] = [
     question: "What is the market doing around my crop?",
     tagline: "Know the market around your crop.",
     summary:
-      "KisanShakti RUKH brings the market to your crop: today's prices at mandis near you, how they compare across the state and over time, and a selling advisor that puts it in plain words, so selling decisions are made with information, not guesswork.",
+      "KisanShakti RUKH brings the market to your crop: today's prices at mandis near you, how they compare across the state and over time, and a selling advisor that puts it in plain words. You decide when and where to sell with information, not guesswork.",
     capabilities: [
       { text: "Current mandi prices, nearby markets, comparison across the state and over time.", fact: "rukh.prices" },
       { text: "A selling advisor that explains what the numbers mean for your crop.", fact: "rukh.prices" },
-      { text: "The same market view feeds your farm economics.", fact: "rukh.analytics" },
+      { text: "The same market view feeds your Farm Analytics.", fact: "rukh.analytics" },
     ],
     limits: ["Market insight, never a guaranteed price.", "The marketplace is early access."],
     screens: ["market"],
