@@ -42,6 +42,7 @@ export function Nav() {
 
   return (
     <header className={cn("sticky top-0 z-40 border-b transition-colors duration-300", scrolled ? "border-ks-line bg-ks-paper/85 backdrop-blur-md" : "border-transparent bg-transparent")}>
+      <span aria-hidden className="ks-progress" />
       <a href="#main" className="ks-skip">
         {UI.skip}
       </a>

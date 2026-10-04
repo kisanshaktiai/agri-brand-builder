@@ -26,7 +26,7 @@ Never write hex, rgb or hsl in a component, and never `bg-[#...]`. If a colour i
 - Lines: `border-ks-line` hairline, `border-ks-line-strong`.
 - Accent (buttons, links, focus): `ks-field`, `ks-field-deep`; tint `bg-ks-field-soft`; text on accent `text-ks-field-ink`.
 - Logo greens: `ks-leaf` for marks and highlights, `ks-lime` for accent lines — mainly on the dark hero.
-- Dark hero canvas: `bg-ks-night` / `bg-ks-night-2`, with the content inside `.ks-on-dark`.
+- Hero canvas (Home hero and every `PageHero`): `.ks-hero-canvas` — the logo shade zone, leaf-black falling into field green — with `.ks-aurora` (drifting leaf/lime light), `.ks-fieldgrid` (crop rows flowing toward the visitor) and `.ks-spot` (cursor light, driven by `usePointerGlow` in `src/lib/motion.ts`). Content sits inside `.ks-on-dark`: primary buttons are lime with ink text, secondary are lime outlines. Gradients and transforms only, no blur filters (low-end phones).
 - `ks-signal` / `ks-signal-soft` only for early access and beta; `ks-danger` for errors.
 - `ks-tatva`, `ks-tarka`, `ks-riitu`, `ks-pahra`, `ks-rukh` only inside the technology mark badge (`TechMark`).
 - shadcn classes (`bg-primary`, `bg-card`, `text-muted-foreground`, `border-input`, `bg-destructive`) belong to `src/components/ui` and the lead form; they already resolve to brand colours. Site sections use the `ks-*` classes.
@@ -54,7 +54,9 @@ Never write hex, rgb or hsl in a component, and never `bg-[#...]`. If a colour i
 - Easing `ease-ks-out`, `ease-ks-in-out`; durations `--ks-dur-1` to `--ks-dur-4` (160, 240, 420, 720 ms).
 - Reveal: `.ks-reveal` + `.is-in`, through `src/components/site/Reveal.tsx`, `src/lib/useInView.ts` and `src/lib/motion.ts` (`useReducedMotion`). Reuse these; do not write new observers.
 - Every animation needs a `prefers-reduced-motion` fallback that shows the finished state. Motion must never be what makes content visible.
-- Animated SVG explainers: `.ks-scene` inside `.ks-scene-wrap`, styled by `scenes.css` (see `src/components/scenes/`).
+- Animated SVG explainers: `.ks-scene` inside `.ks-scene-wrap`, styled by `scenes.css` (see `src/components/scenes/`). Delays are authored with `--d` and compressed by `--sc-tempo` so a scene is built within about a second; keep new delays inside that budget.
+- GSAP pins (`FinalStatement`, `PlatformZoom`, `WhyTrust`) use position:fixed. Never leave a transform, filter, perspective or will-change:transform on any ancestor (`<main>`, layout wrappers): animations on wrappers use fill-mode `backwards`, never `both` or `forwards`, or every pin on the page breaks.
+- Engagement layer: floating signal chips around the hero phone (`.ks-chip`, desktop only) and the scroll-progress line under the nav (`.ks-progress`, CSS scroll timeline). Both are decorative and off under reduced motion.
 
 ## Founder page only
 `/founder` (`src/pages/Founder.tsx`, `src/components/founder/`) has its own palette and fonts: `founder-*` colours, `font-founder` (Manrope), `font-founder-display` (Sora), `founder-*` motion classes. Never use them anywhere else, and never use `ks-*` styling to restyle the founder page.

@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Phone, ScreenImage } from "@/components/site/Device";
 import { ButtonLink, Eyebrow } from "@/components/site/primitives";
 import { useContent } from "@/i18n";
 import { track } from "@/lib/analytics";
+import { usePointerGlow } from "@/lib/motion";
 
 /**
- * Home hero, composed like a product launch page: a deep leaf-green canvas in
- * the logo's palette, eyebrow, headline, lead and the two calls to action
- * centred, and the farmer's phone below as the product. Five signal lines
- * (sky, soil, water, temperature, weather) draw in from both sides and
- * converge on the phone. The headline rises word by word. CSS only, visible
- * at rest, still under reduced motion.
+ * Home hero, composed like a product launch page on a canvas in the logo's
+ * shade zone (leaf-black falling into field green), with drifting leaf and
+ * lime light, a data field of crop rows flowing toward the visitor and a glow
+ * that follows the cursor. Eyebrow, headline, lead and the two calls to
+ * action are centred; the farmer's phone sits below as the product. Five
+ * signal lines (sky, soil, water, temperature, weather) draw in from both
+ * sides and converge on the phone, and on desktop the five signals float
+ * around it. Visible at rest, still under reduced motion.
  */
 const SIGNALS = [
   { key: "sky", label: "Sky", d: "M0 60 C 220 60, 420 140, 640 170" },
@@ -18,6 +21,15 @@ const SIGNALS = [
   { key: "water", label: "Water", d: "M0 180 C 240 180, 440 186, 640 190" },
   { key: "temp", label: "Temperature", d: "M0 240 C 240 240, 440 212, 640 200" },
   { key: "weather", label: "Weather", d: "M0 300 C 220 300, 420 236, 640 210" },
+];
+
+/** Where each floating signal sits around the phone, alternating sides. */
+const CHIP_POS = [
+  "-left-40 top-[14%]",
+  "-right-36 top-[24%]",
+  "-left-48 top-[46%]",
+  "-right-52 top-[58%]",
+  "-left-36 top-[76%]",
 ];
 
 export function Kinetic({ text, className }: { text: string; className?: string }) {
@@ -37,9 +49,13 @@ export function Kinetic({ text, className }: { text: string; className?: string 
 
 export function HeroSignals({ eyebrow, title, lead }: { eyebrow: string; title: string; lead: string }) {
   const { CTA, UI } = useContent();
+  const ref = useRef<HTMLElement>(null);
+  usePointerGlow(ref);
   return (
-    <section className="ks-hero ks-on-dark relative overflow-hidden bg-ks-night text-ks-paper" aria-labelledby="hero-h">
-      <div aria-hidden className="ks-hero-glow" />
+    <section ref={ref} className="ks-hero ks-on-dark ks-hero-canvas relative overflow-hidden text-ks-paper" aria-labelledby="hero-h">
+      <div aria-hidden className="ks-aurora" />
+      <div aria-hidden className="ks-fieldgrid" />
+      <div aria-hidden className="ks-spot" />
       <div className="ks-container relative pt-[calc(var(--ks-section)*0.55)] text-center">
         <Eyebrow className="text-ks-lime">{eyebrow}</Eyebrow>
         <h1 id="hero-h" className="ks-display-1 mx-auto max-w-5xl text-ks-paper">
@@ -56,7 +72,7 @@ export function HeroSignals({ eyebrow, title, lead }: { eyebrow: string; title: 
             {CTA.partner.label}
           </ButtonLink>
         </div>
-        <ul className="ks-word-block mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 ks-label" style={{ color: "hsl(var(--ks-paper) / 0.7)" }} aria-label={UI.signalsLabel}>
+        <ul className="ks-word-block mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 ks-label lg:sr-only" style={{ color: "hsl(var(--ks-paper) / 0.7)" }} aria-label={UI.signalsLabel}>
           {SIGNALS.map((s, i) => (
             <li key={s.key}>{UI.signals[i] ?? s.label}</li>
           ))}
@@ -82,6 +98,12 @@ export function HeroSignals({ eyebrow, title, lead }: { eyebrow: string; title: 
           ))}
           <div className="relative mx-auto w-[74%] max-w-[320px] text-left lg:w-[340px] lg:max-w-[340px]">
             <div className="ks-phone-halo" aria-hidden />
+            {/* The five signals float around the phone on desktop (the list above carries them for screen readers). */}
+            {SIGNALS.map((s, i) => (
+              <span key={s.key} aria-hidden className={"ks-chip ks-label z-10 " + CHIP_POS[i]} style={{ animationDelay: `${-i * 1.1}s` }}>
+                {UI.signals[i] ?? s.label}
+              </span>
+            ))}
             <Phone label={UI.heroPhoneLabel}>
               <ScreenImage screen="farm-today" priority />
             </Phone>

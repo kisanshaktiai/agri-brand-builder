@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useRef } from "react";
+import { usePointerGlow } from "@/lib/motion";
 import { Eyebrow } from "./primitives";
 import { Kinetic } from "@/components/moments/HeroSignals";
 
 /**
  * Page opener on every route except Home, in the Home hero's treatment:
- * the deep leaf-green canvas, lime eyebrow, kinetic headline, all centred
- * like a product page. Buttons placed inside take their dark-canvas styles
- * from `.ks-on-dark`.
+ * the canvas in the logo's shade zone with drifting light, the data field and
+ * the cursor glow; lime eyebrow and kinetic headline, all centred like a
+ * product page. Buttons placed inside take their dark-canvas styles from
+ * `.ks-on-dark`.
  */
 export function PageHero({ eyebrow, title, lead, children, size = "display-2" }: { eyebrow: string; title: string; lead?: string; children?: React.ReactNode; size?: "display-1" | "display-2" }) {
+  const ref = useRef<HTMLElement>(null);
+  usePointerGlow(ref);
   return (
-    <section className="ks-hero ks-on-dark relative overflow-hidden bg-ks-night text-ks-paper" aria-labelledby="page-h">
-      <div aria-hidden className="ks-hero-glow" />
+    <section ref={ref} className="ks-hero ks-on-dark ks-hero-canvas relative overflow-hidden text-ks-paper" aria-labelledby="page-h">
+      <div aria-hidden className="ks-aurora" />
+      <div aria-hidden className="ks-fieldgrid opacity-60" />
+      <div aria-hidden className="ks-spot" />
       <div className="ks-container relative pb-[calc(var(--ks-section)*0.55)] pt-[calc(var(--ks-section)*0.6)] text-center">
         <Eyebrow className="text-ks-lime">{eyebrow}</Eyebrow>
         <h1 id="page-h" className={(size === "display-1" ? "ks-display-1" : "ks-display-2") + " mx-auto max-w-5xl text-ks-paper"}>
