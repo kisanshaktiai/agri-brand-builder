@@ -42,7 +42,7 @@ export function LanguageSwitch({ size = "md", className, compact = false }: { si
           lang={l.code}
           aria-current={l.code === locale ? "true" : undefined}
           onClick={(e) => go(e, l.code)}
-          className={cn("relative z-10 flex items-center justify-center rounded-full font-medium transition-colors duration-300", compact ? "h-8 px-2" : "px-3", size === "lg" ? "h-11" : "h-8", l.code === locale ? "text-ks-paper" : "text-ks-ink-2 hover:text-ks-ink")}
+          className={cn("relative z-10 flex items-center justify-center rounded-full font-medium transition-colors duration-300", compact ? "h-11 min-w-[44px] px-2 [@media(pointer:fine)_and_(min-width:1024px)]:h-8 [@media(pointer:fine)_and_(min-width:1024px)]:min-w-0" : "px-3", size === "lg" ? "h-11" : compact ? "" : "h-11 [@media(pointer:fine)_and_(min-width:1024px)]:h-8", l.code === locale ? "text-ks-paper" : "text-ks-ink-2 hover:text-ks-ink")}
           title={l.native}
         >
           {compact ? l.short : l.native}

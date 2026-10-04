@@ -22,13 +22,13 @@ export const SURFACES: SurfaceDef[] = [
     maturity: "live",
     question: "What should I do on this land today?",
     description:
-      "A complete digital companion for every farmer and every land, in 14 Indian languages, voice-first and offline-first: land mapping, Farm Today, a conversation for each land, Photo Scan, weather and satellite, a crop plan that adapts, market intelligence, schemes, services, community and farm economics.",
+      "One companion for each land, in 14 Indian languages, voice-first and offline-first. It brings together land mapping, Farm Today, a conversation for each land, Photo Scan, weather and satellite, a crop plan that adapts, market prices, Government Schemes, Community and Farm Economics (early access).",
     screen: "farm-today",
     fact: "app.companion",
     capabilities: [
       { text: "14 Indian languages, voice onboarding and voice land capture.", fact: "app.languages" },
       { text: "Mobile number and PIN login.", fact: "app.login" },
-      { text: "Offline-first PWA plus Android and iOS builds that sync when back online.", fact: "app.offline" },
+      { text: "Offline-first web app (PWA) plus Android and iOS apps that sync when back online.", fact: "app.offline" },
       { text: "Land boundary mapping with automatic area, satellite thumbnail and land health score.", fact: "app.land" },
     ],
   },
@@ -39,15 +39,18 @@ export const SURFACES: SurfaceDef[] = [
     maturity: "live-limited",
     question: "How do I run my farmer network?",
     description:
-      "For FPOs, dealers, agri-input companies and agricultural enterprises: onboard your organisation, bring your farmers and their lands, set your brand, and follow farmer activity, all under your own name.",
+      "For organisations that serve farmers: one place to manage your farmers and their lands, field monitoring, products and dealers, farmer communication and reports, all under your own name.",
     screen: "tenant-dashboard",
     fact: "tenant.portal",
     capabilities: [
-      { text: "Partner onboarding and farmer management.", fact: "tenant.portal" },
-      { text: "Land management and farmer activity.", fact: "tenant.portal" },
-      { text: "Partner branding: the farmer experience runs under your name and colours.", fact: "tenant.portal" },
+      { text: "Partner onboarding, organisation setup, users, roles and permissions.", fact: "tenant.portal" },
+      { text: "Farmer and land management, with crop monitoring, satellite vegetation monitoring (NDVI) and soil analysis.", fact: "tenant.portal" },
+      { text: "Product catalogue, dealer management, sales and order workflows where enabled.", fact: "tenant.portal" },
+      { text: "Campaigns, notifications, messages and farmer communication tools.", fact: "tenant.portal" },
+      { text: "Analytics, reports, performance views and proactive alerts.", fact: "tenant.portal" },
+      { text: "White-label branding, appearance, localisation, integrations and partner settings.", fact: "tenant.portal" },
     ],
-    limits: ["Not a CRM, ERP, accounting or sales-force system."],
+    limits: ["Capabilities are enabled according to partner configuration and release maturity. The portal is not presented as a generic CRM, ERP or accounting replacement."],
   },
 ];
 

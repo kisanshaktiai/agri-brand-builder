@@ -4,6 +4,15 @@
    scene shows its finished state.
    ────────────────────────────────────────────────────────────────── */
 .ks-scene { width: 100%; height: 100%; display: block; font-family: var(--ks-font-mono); }
+/* Before IntersectionObserver activates, scenes must remain fully visible.
+   Motion is enhancement; it must never become the visibility mechanism. */
+.ks-scene-wrap .scene-static * {
+  animation: none !important;
+  opacity: 1 !important;
+  stroke-dashoffset: 0 !important;
+  transform: none !important;
+}
+
 .ks-scene text { font-family: var(--ks-font-mono); font-size: 11px; letter-spacing: 0.04em; fill: hsl(var(--ks-ink-3)); }
 .ks-scene .t-ink { fill: hsl(var(--ks-ink)); }
 .ks-scene .t-sans { font-family: var(--ks-font-text); letter-spacing: 0; }
@@ -34,20 +43,24 @@
 @keyframes sc-sun { from { transform: translate(-60px, 30px); } to { transform: translate(60px, -10px); } }
 @keyframes sc-green { from { fill: hsl(42 40% 86%); } to { fill: hsl(var(--ks-field-soft)); } }
 
-/* Utilities with staggered delays via --d (seconds) and --dur */
-.sc-draw { stroke-dasharray: var(--len, 600); stroke-dashoffset: var(--len, 600); animation: sc-draw var(--dur, 1.6s) var(--ks-ease-out) var(--d, 0s) forwards; }
-.sc-in { opacity: 0; animation: sc-fade-in var(--dur, 0.6s) var(--ks-ease-out) var(--d, 0s) forwards; }
-.sc-rise { opacity: 0; animation: sc-rise var(--dur, 0.7s) var(--ks-ease-out) var(--d, 0s) forwards; }
-.sc-pulse { transform-origin: center; transform-box: fill-box; animation: sc-pulse 2.4s ease-out var(--d, 0s) infinite; }
-.sc-sweep { transform-box: view-box; animation: sc-sweep 6s linear var(--d, 0s) infinite; }
-.sc-bar { transform-origin: bottom; transform-box: fill-box; animation: sc-bar var(--dur, 0.9s) var(--ks-ease-out) var(--d, 0s) both; }
-.sc-slide { transform-box: view-box; animation: sc-slide var(--dur, 8s) linear var(--d, 0s) infinite alternate; }
-.sc-blink { animation: sc-blink 3s ease-in-out var(--d, 0s) infinite; }
-.sc-wave { transform-origin: center; transform-box: fill-box; animation: sc-wave 1.1s ease-in-out var(--d, 0s) infinite; }
+/* Utilities with staggered delays via --d (seconds) and --dur.
+   --sc-tempo compresses every authored delay so a scene is fully built
+   within about a second of entering the viewport: scenes restart on each
+   entry, and long waits read as an empty phone while scrolling. */
+.ks-scene-wrap { --sc-tempo: 0.42; }
+.sc-draw { stroke-dasharray: var(--len, 600); stroke-dashoffset: var(--len, 600); animation: sc-draw var(--dur, 1.6s) var(--ks-ease-out) calc(var(--d, 0s) * var(--sc-tempo, 1)) forwards; }
+.sc-in { opacity: 0; animation: sc-fade-in var(--dur, 0.6s) var(--ks-ease-out) calc(var(--d, 0s) * var(--sc-tempo, 1)) forwards; }
+.sc-rise { opacity: 0; animation: sc-rise var(--dur, 0.7s) var(--ks-ease-out) calc(var(--d, 0s) * var(--sc-tempo, 1)) forwards; }
+.sc-pulse { transform-origin: center; transform-box: fill-box; animation: sc-pulse 2.4s ease-out calc(var(--d, 0s) * var(--sc-tempo, 1)) infinite; }
+.sc-sweep { transform-box: view-box; animation: sc-sweep 6s linear calc(var(--d, 0s) * var(--sc-tempo, 1)) infinite; }
+.sc-bar { transform-origin: bottom; transform-box: fill-box; animation: sc-bar var(--dur, 0.9s) var(--ks-ease-out) calc(var(--d, 0s) * var(--sc-tempo, 1)) both; }
+.sc-slide { transform-box: view-box; animation: sc-slide var(--dur, 8s) linear calc(var(--d, 0s) * var(--sc-tempo, 1)) infinite alternate; }
+.sc-blink { animation: sc-blink 3s ease-in-out calc(var(--d, 0s) * var(--sc-tempo, 1)) infinite; }
+.sc-wave { transform-origin: center; transform-box: fill-box; animation: sc-wave 1.1s ease-in-out calc(var(--d, 0s) * var(--sc-tempo, 1)) infinite; }
 .sc-orbit { transform-origin: var(--ox, 50%) var(--oy, 50%); animation: sc-orbit 14s linear infinite; }
-.sc-tick { stroke-dasharray: 40; stroke-dashoffset: 40; animation: sc-tick 0.8s var(--ks-ease-out) var(--d, 0s) forwards; }
+.sc-tick { stroke-dasharray: 40; stroke-dashoffset: 40; animation: sc-tick 0.8s var(--ks-ease-out) calc(var(--d, 0s) * var(--sc-tempo, 1)) forwards; }
 .sc-sun { transform-box: view-box; animation: sc-sun 10s ease-in-out infinite alternate; }
-.sc-green { animation: sc-green 3s var(--ks-ease-out) var(--d, 0s) forwards; }
+.sc-green { animation: sc-green 3s var(--ks-ease-out) calc(var(--d, 0s) * var(--sc-tempo, 1)) forwards; }
 .sc-loop { animation-iteration-count: infinite; animation-direction: alternate; }
 
 

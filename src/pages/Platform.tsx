@@ -3,8 +3,9 @@ import { Seo } from "@/components/site/Seo";
 import { PageHero } from "@/components/site/PageHero";
 import { Container, Section, Eyebrow, Heading, Body, MaturityBadge, ButtonLink } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
-import { Phone, Browser, ScreenImage } from "@/components/site/Device";
+import { Phone, ScreenImage } from "@/components/site/Device";
 import { TenantTransform } from "@/components/moments/TenantTransform";
+import { PartnerPortalSimulation } from "@/components/site/PartnerPortalSimulation";
 import { PlatformZoom } from "@/components/moments/PlatformZoom";
 import { ArchitectureDiagram } from "@/components/site/ArchitectureDiagram";
 import { TwoDays } from "@/components/site/TwoDays";
@@ -38,14 +39,12 @@ export default function Platform() {
                     </Phone>
                   </div>
                 ) : (
-                  <Browser url="partner.kisanshaktiai.in">
-                    <ScreenImage screen={s.screen} />
-                  </Browser>
+                  <PartnerPortalSimulation tenantIndex={0} />
                 )}
               </div>
               <p className="ks-label mb-2">{UI.answers}</p>
               <p className="font-medium text-ks-ink">“{s.question}”</p>
-              <p className="ks-body mt-3 text-sm">{s.description}</p>
+              <p className="ks-body mt-3">{s.description}</p>
               {s.limits && <p className="ks-small mt-4">{s.limits.join(" ")}</p>}
             </Reveal>
           ))}
@@ -90,9 +89,7 @@ export default function Platform() {
               </div>
             </Reveal>
             <Reveal delay={0.1} className="lg:col-span-7">
-              <Browser url="partner.kisanshaktiai.in">
-                <ScreenImage screen="tenant-dashboard" />
-              </Browser>
+              <PartnerPortalSimulation tenantIndex={1} />
             </Reveal>
           </div>
         </Container>

@@ -103,13 +103,13 @@ export function LivingPhone({ eyebrow, title, steps }: { eyebrow: string; title:
 
   return (
     <div className="ks-container">
-      <div className="mb-10 lg:mb-16">
+      <div className="mb-10 text-center lg:mb-16">
         <Eyebrow>{eyebrow}</Eyebrow>
         <Heading>{title}</Heading>
       </div>
       <div className="grid gap-x-16 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
         {/* Anchored phone */}
-        <div className="sticky top-16 z-10 -mx-[var(--ks-gutter)] bg-ks-paper/95 px-[var(--ks-gutter)] pb-4 pt-3 backdrop-blur-sm lg:top-24 lg:mx-0 lg:bg-transparent lg:px-0 lg:py-0 lg:backdrop-blur-none lg:self-start">
+        <div className="sticky top-16 z-10 -mx-[var(--ks-gutter)] bg-ks-paper px-[var(--ks-gutter)] pb-4 pt-3 lg:top-24 lg:mx-0 lg:bg-transparent lg:px-0 lg:py-0 lg:backdrop-blur-none lg:self-start">
           <div className="flex items-center gap-4 lg:block">
             <div className="w-[34%] max-w-[150px] shrink-0 lg:mx-auto lg:w-full lg:max-w-[340px]">
               <Phone label="Farmer App, following one farmer's day">

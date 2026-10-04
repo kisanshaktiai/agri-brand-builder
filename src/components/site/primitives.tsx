@@ -63,7 +63,7 @@ const TECH_HUE: Record<TechKey, string> = {
  */
 export function TechMark({ tech, name, house = true, size = "md", className }: { tech: TechKey; name: string; house?: boolean; size?: "sm" | "md" | "lg"; className?: string }) {
   const chip = size === "lg" ? "h-3 w-3" : size === "sm" ? "h-1.5 w-1.5" : "h-2 w-2";
-  const text = size === "lg" ? "text-base" : size === "sm" ? "text-[0.6875rem]" : "text-xs";
+  const text = size === "lg" ? "text-base" : size === "sm" ? "text-xs" : "text-xs";
   return (
     <span className={cn("inline-flex items-center gap-2 ks-mark text-ks-ink", text, className)}>
       <span aria-hidden className={cn("rounded-full", chip, TECH_HUE[tech])} />
@@ -80,6 +80,18 @@ export function TechMark({ tech, name, house = true, size = "md", className }: {
   );
 }
 
+/** Technology icon, as on the brand card: the mark alone on a soft field tint, no box line. */
+export function TechIcon({ src, name, size = "md", className }: { src: string; name: string; size?: "sm" | "md" | "lg"; className?: string }) {
+  const box = size === "lg" ? "h-24 w-24" : size === "sm" ? "h-12 w-12" : "h-16 w-16";
+  const pad = size === "lg" ? "p-3.5" : "p-2.5";
+  return (
+    <span className={cn("inline-flex shrink-0 items-center justify-center rounded-full bg-ks-field-soft", box, pad, className)}>
+      <img src={src} alt="" aria-hidden="true" className="block h-full w-full object-contain" />
+      <span className="sr-only">{name} icon</span>
+    </span>
+  );
+}
+
 export function MaturityBadge({ maturity, className }: { maturity: Maturity; className?: string }) {
   const { content } = useLocale();
   const tone =
@@ -89,7 +101,7 @@ export function MaturityBadge({ maturity, className }: { maturity: Maturity; cla
         ? "bg-transparent text-ks-ink-3 border-ks-line-strong"
         : "bg-ks-field-soft text-ks-field-deep border-transparent";
   return (
-    <span className={cn("inline-flex items-center rounded-full border px-2.5 py-1 ks-label normal-case tracking-[0.02em] text-[0.6875rem]", tone, className)}>
+    <span className={cn("inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-1 ks-label normal-case tracking-[0.02em] text-[0.6875rem]", tone, className)}>
       {content.MATURITY_LABEL[maturity]}
     </span>
   );

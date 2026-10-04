@@ -16,11 +16,11 @@ export default function Company() {
         <Container>
           <Eyebrow>{p.principles.eyebrow}</Eyebrow>
           <Heading>{p.principles.title}</Heading>
-          <ul className="mt-10 grid gap-4 md:grid-cols-5">
+          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {p.principles.items.map((it, i) => (
               <Reveal key={it.title} as="li" delay={i * 0.06} className="rounded-ks-md border border-ks-line bg-ks-white p-5">
                 <h3 className="font-medium text-ks-ink">{it.title}</h3>
-                <p className="ks-body mt-2 text-sm">{it.body}</p>
+                <p className="ks-body mt-3">{it.body}</p>
               </Reveal>
             ))}
           </ul>

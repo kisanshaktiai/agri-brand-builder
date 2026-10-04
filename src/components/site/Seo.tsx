@@ -49,7 +49,7 @@ export const ORGANIZATION_LD = {
   name: BRAND,
   url: SITE_URL,
   logo: `${SITE_URL}/brand/logo.png`,
-  description: "A complete digital companion for every farmer and every land, built in Maharashtra, India, and brought to farmers by partner organisations under their own brand.",
+  description: "One digital companion for every farmer and every land, built in Maharashtra, India, and brought to farmers by partner organisations under their own brand.",
   address: { "@type": "PostalAddress", addressRegion: "Maharashtra", addressCountry: "IN" },
   sameAs: ["https://www.youtube.com/@kisanshaktiai"],
 };
@@ -69,6 +69,6 @@ export const SOFTWARE_LD = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web, Android, iOS",
   url: "https://app.kisanshaktiai.in",
-  description: "A complete digital companion for every farmer and every land, in 14 Indian languages, voice-first and offline-first: understand what nature is doing, know what is changing, talk to your land, follow a crop plan that adapts, know the market, find schemes and services, and connect with farmers.",
+  description: "One digital companion for every farmer and every land, in 14 Indian languages, voice-first and offline-first: understand what nature is doing, know what is changing, talk to your land, follow a crop plan that adapts, know the market, find schemes, and connect with farmers.",
   publisher: { "@type": "Organization", name: BRAND, url: SITE_URL },
 };

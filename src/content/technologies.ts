@@ -1,7 +1,7 @@
 import type { Maturity } from "./site";
 
 /**
- * The Technology Family — locked brand assets.
+ * The Technology Family — public brand language. All descriptions stay at the farmer/partner level; implementation details remain internal.
  * Names, full forms and positioning lines are final and used verbatim.
  * Everything else is written for a farmer: what it does, in plain words.
  */
@@ -29,6 +29,8 @@ export interface Technology {
   limits: string[];
   /** Screen ids from src/content/screens.ts */
   screens: string[];
+  /** Public icon asset for this technology's visual identity. */
+  icon: string;
   /** Badge detail: TATVA carries a small numeral 5 for the five elements. */
   badge?: "5";
 }
@@ -36,13 +38,14 @@ export interface Technology {
 export const TECHNOLOGIES: Technology[] = [
   {
     key: "tatva",
+    icon: "/technology-icons/tatva.png",
     name: "TATVA",
-    fullForm: "Sky · Soil · Water · Temperature · Weather",
-    positioning: "Five-Element Land Intelligence",
+    fullForm: "Terrain, Atmosphere, Thermal & Vegetation Assessment",
+    positioning: "AI Land Intelligence",
     maturity: "live",
     arc: ["Observe", "Understand"],
     question: "What is nature doing on my land right now?",
-    tagline: "Understand what nature is doing.",
+    tagline: "AI that understands what nature is doing.",
     summary:
       "Five natural elements shape every season: Sky, Soil, Water, Temperature and Weather. KisanShakti TATVA reads all five for each of your lands, so you know what nature is doing on your field today, not what it is doing somewhere in the district.",
     capabilities: [
@@ -58,9 +61,10 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "pahra",
+    icon: "/technology-icons/pahra.png",
     name: "PAHRA",
-    fullForm: "Land-specific proactive farm alerts",
-    positioning: "Proactive Farm Alerts",
+    fullForm: "Proactive Agricultural Hazard & Risk Assessment",
+    positioning: "Proactive Farm Intelligence",
     maturity: "beta",
     arc: ["Anticipate"],
     question: "What is changing on my land while I am away?",
@@ -72,24 +76,25 @@ export const TECHNOLOGIES: Technology[] = [
       { text: "Each alert says what changed and what to go and look at. You decide what to do next.", fact: "pahra.no-prescription" },
       { text: "You choose which alerts reach you and how.", fact: "pahra.daily-risk" },
     ],
-    limits: ["Early access. Alerts help you notice change; they do not prescribe a treatment."],
+    limits: ["Alerts help you notice change; they do not prescribe a treatment. (Early access)"],
     screens: ["alerts"],
   },
   {
     key: "tarka",
+    icon: "/technology-icons/tarka.png",
     name: "TARKA",
-    fullForm: "A multilingual conversation for each land",
+    fullForm: "Trusted Agricultural Reasoning & Knowledge Architecture",
     positioning: "Land-Specific Multilingual AI",
     maturity: "live-limited",
     arc: ["Reason", "Decide"],
     question: "Can I just ask my land what it needs?",
     tagline: "Talk to your land.",
     summary:
-      "KisanShakti TARKA is a multilingual AI assistant developed in India, and it is not a generic chatbot. Every land you own has its own conversation, which already knows your crop, your field and your season. Ask in your language, add a photo, and get practical guidance that fits this field, explained with the reason why.",
+      "KisanShakti TARKA is a multilingual agricultural AI assistant developed in India. Every land you own has its own conversation, which already knows your crop, your field and your season. Ask in your language, add a photo, and get practical guidance that fits this field, explained with the reason why.",
     capabilities: [
       { text: "A separate conversation for each land, carrying that land's crop, stage and conditions into every answer.", fact: "tarka.land-space" },
       { text: "Understands questions by voice or text, photos of the crop, and the context of your field.", fact: "tarka.chain" },
-      { text: "Answers in your language. Many Indian languages are supported, and you can ask in one language and share in another.", fact: "app.languages" },
+      { text: "Answers in your language, in any of 14 Indian languages. You can ask in one language and share the answer in another.", fact: "app.languages" },
       { text: "Practical guidance checked against your field and expert-reviewed agricultural knowledge, never invented on the spot.", fact: "tarka.knowledge" },
     ],
     limits: ["Guidance is deepest for rice and growing for sugarcane, soybean, cotton, chickpea, onion and jowar.", "Where something needs a specialist's eye, it says so."],
@@ -97,15 +102,16 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "riitu",
+    icon: "/technology-icons/riitu.png",
     name: "RIITU",
-    fullForm: "Dynamic stage-wise crop scheduling",
-    positioning: "Dynamic Crop Scheduling & Guidance",
+    fullForm: "Responsive Intelligence for Integrated Temporal Agriculture",
+    positioning: "Adaptive Crop Intelligence",
     maturity: "live-limited",
     arc: ["Act"],
     question: "What should I do on this land today?",
     tagline: "A crop plan that adapts to nature.",
     summary:
-      "KisanShakti RIITU turns your crop's biology into a practical, stage-wise plan for each land: what to do, when, and in what order. When TATVA sees the field or the weather change, the plan changes with it, so Farm Today always reflects your field's actual stage.",
+      "KisanShakti RIITU turns your crop's biology into a practical, stage-wise plan for each land: what to do, when, and in what order. When TATVA sees the field or the weather change, the plan changes with it. Every night it is checked against your field's actual stage, so Farm Today stays in step with the crop.",
     capabilities: [
       { text: "A stage-wise crop plan for each land and the way the crop is grown, Maharashtra first.", fact: "riitu.stage-graph" },
       { text: "Farm Today: what is Due, what to Watch, what is Blocked by conditions, and what is simply good to know.", fact: "riitu.farm-today" },
@@ -117,19 +123,20 @@ export const TECHNOLOGIES: Technology[] = [
   },
   {
     key: "rukh",
+    icon: "/technology-icons/rukh.png",
     name: "RUKH",
-    fullForm: "Market intelligence around your crop",
+    fullForm: "Regional Understanding, Knowledge & Harvest",
     positioning: "Crop & Market Intelligence",
     maturity: "live-limited",
     arc: ["Predict"],
     question: "What is the market doing around my crop?",
     tagline: "Know the market around your crop.",
     summary:
-      "KisanShakti RUKH brings the market to your crop: today's prices at mandis near you, how they compare across the state and over time, and a selling advisor that puts it in plain words, so selling decisions are made with information, not guesswork.",
+      "KisanShakti RUKH brings the market to your crop: today's prices at mandis near you, how they compare across the state and over time, and a selling advisor that puts it in plain words. You decide when and where to sell with information, not guesswork.",
     capabilities: [
       { text: "Current mandi prices, nearby markets, comparison across the state and over time.", fact: "rukh.prices" },
       { text: "A selling advisor that explains what the numbers mean for your crop.", fact: "rukh.prices" },
-      { text: "The same market view feeds your farm economics.", fact: "rukh.analytics" },
+      { text: "The same market view feeds your Farm Analytics.", fact: "rukh.analytics" },
     ],
     limits: ["Market insight, never a guaranteed price.", "The marketplace is early access."],
     screens: ["market"],

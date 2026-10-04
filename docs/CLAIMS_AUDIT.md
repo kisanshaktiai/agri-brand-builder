@@ -1,6 +1,6 @@
 # Claims audit
 
-Generated 2026-10-02T12:57:12.350Z. Every product statement below carries the fact it traces to and that fact's maturity label.
+Generated 2026-10-04T04:46:04.457Z. Every product statement below carries the fact it traces to and that fact's maturity label.
 
 | Where | Statement | Fact | Maturity | Check |
 |---|---|---|---|---|
@@ -28,10 +28,13 @@ Generated 2026-10-02T12:57:12.350Z. Every product statement below carries the fa
 | platform.farmer-app | Mobile number and PIN login. | app.login | Live | ok |
 | platform.farmer-app | Offline-first PWA plus Android and iOS builds that sync when back online. | app.offline | Live | ok |
 | platform.farmer-app | Land boundary mapping with automatic area, satellite thumbnail and land health score. | app.land | Live | ok |
-| platform.tenant-portal | For FPOs, dealers, agri-input companies and agricultural enterprises: onboard your organisation, bring your farmers and their lands, set your brand, and follow farmer activity, all under your own name. | tenant.portal | Live, limited | ok |
-| platform.tenant-portal | Partner onboarding and farmer management. | tenant.portal | Live, limited | ok |
-| platform.tenant-portal | Land management and farmer activity. | tenant.portal | Live, limited | ok |
-| platform.tenant-portal | Partner branding: the farmer experience runs under your name and colours. | tenant.portal | Live, limited | ok |
+| platform.tenant-portal | For organisations that serve farmers: onboard your organisation, bring your farmers and their lands, configure your enabled capabilities, set your brand and manage the farmer ecosystem from one partner portal, all under your own name. | tenant.portal | Live, limited | ok |
+| platform.tenant-portal | Partner onboarding, organisation setup, users, roles and permissions. | tenant.portal | Live, limited | ok |
+| platform.tenant-portal | Farmer and land management, with crop monitoring, NDVI and soil-analysis surfaces. | tenant.portal | Live, limited | ok |
+| platform.tenant-portal | Product catalog, dealer management, sales and order workflows where enabled. | tenant.portal | Live, limited | ok |
+| platform.tenant-portal | Campaigns, notifications, messages and farmer communication tools. | tenant.portal | Live, limited | ok |
+| platform.tenant-portal | Analytics, reports, performance views and proactive alerts. | tenant.portal | Live, limited | ok |
+| platform.tenant-portal | White-label branding, appearance, localization, integrations and partner settings. | tenant.portal | Live, limited | ok |
 | architecture.farmer-app | Where a farmer talks to each land, sees what nature is doing, and knows what to do today. | app.companion | Live | ok |
 | architecture.tenant-portal | Where an FPO, dealer or agri-input company runs its branded farmer network. | tenant.portal | Live, limited | ok |
 | architecture.tatva | Sky, soil, water, temperature and weather, read for each land. | tatva.ndvi | Live | ok |
@@ -45,9 +48,9 @@ Generated 2026-10-02T12:57:12.350Z. Every product statement below carries the fa
 | pages.ENTERPRISES_PAGE.journey.steps[2] | Partner branding puts your name and colours on the farmer experience, running under your context. | tenant.portal | Live, limited | ok |
 | pages.ENTERPRISES_PAGE.journey.steps[3] | Farmer management and land management hold your network and its fields. | tenant.portal | Live, limited | ok |
 | pages.ENTERPRISES_PAGE.journey.steps[4] | Farmer activity shows how your network uses the companion, day by day. | tenant.portal | Live, limited | ok |
-| pages.ENTERPRISES_PAGE.honest | It covers partner onboarding, farmer management, land management, partner branding and farmer activity. It is not a CRM, ERP, accounting or sales-force system, and we do not claim it is. | tenant.portal | Live, limited | ok (negated: "accounting") |
+| pages.ENTERPRISES_PAGE.honest | The portal brings together farmer and land operations, field intelligence, products and dealer workflows, campaigns, communications, analytics, alerts, organisation controls and white-label configuration. Capabilities are enabled according to partner configuration and release maturity. It is not claimed as a generic CRM, ERP or accounting replacement, and industry-specific banking, insurance or government workflows are not implied unless separately implemented. | tenant.portal | Live, limited | ok |
 | pages.FARMER_APP_PAGE.sections[0] | Map the boundary and get the area automatically. Record season, crop, variety, sowing date and how the crop is grown. Each land carries a satellite thumbnail and a land health score, and from then on the companion knows this field. | app.land | Live | ok |
-| pages.FARMER_APP_PAGE.sections[1] | KisanShakti TATVA reads the five natural elements for each land: Sky, Soil, Water, Temperature and Weather. The satellite's daily view of the field, hourly weather and a 7-day outlook, rainfall and water, the heat the crop has gathered, and a soil picture from your own soil test. | tatva.ndvi | Live | ok |
+| pages.FARMER_APP_PAGE.sections[1] | KisanShakti TATVA reads Panch Tatva for each land — Sky, Soil, Water, Temperature and Weather. The satellite's daily view of the field, hourly weather and a 7-day outlook, rainfall and water, the heat the crop has gathered, and a soil picture from your own soil test. | tatva.ndvi | Live | ok |
 | pages.FARMER_APP_PAGE.sections[2] | KisanShakti PAHRA sends land-specific alerts as farm and weather conditions change, so you notice what matters and know when a field needs attention. Early access. | pahra.daily-risk | Early access | ok |
 | pages.FARMER_APP_PAGE.sections[3] | Photo Scan: capture or upload a photo of the crop or field for AI-assisted observation. It helps identify visible crop, pest, disease, deficiency or field issues, and connects what it sees with this land's context. | app.photo-scan | Live | ok |
 | pages.FARMER_APP_PAGE.sections[4] | KisanShakti TARKA is a multilingual AI assistant developed in India, and it is not a generic chatbot. Every land has its own conversation, which already knows your crop and your field. Ask by voice or text, add a photo, and get practical guidance with the reason why. Many Indian languages, and you can ask in one and share in another. | tarka.land-space | Live, limited | ok |
@@ -63,9 +66,9 @@ Generated 2026-10-02T12:57:12.350Z. Every product statement below carries the fa
 | pages.FARMER_APP_PAGE.more[3] | Voice onboarding, voice land capture, questions by voice and answers read aloud. | app.voice | Live | ok |
 | pages.FARMER_APP_PAGE.more[4] | A PWA plus Android and iOS builds that work on weak networks and sync when back online. | app.offline | Live | ok |
 | pages.FARMER_APP_PAGE.more[5] | Sign in with a mobile number and a PIN. No email needed. | app.login | Live | ok |
-| pages.HOME.thesis | From the first signal nature gives to the last rupee counted, one app stays with the farmer and with each of their lands: observing, alerting, seeing, understanding, planning, informing, connecting and accounting. FPOs, dealers, agri-input companies and agricultural enterprises bring that same companion to their farmers under their own name. | app.companion | Live | ok |
+| pages.HOME.thesis | KisanShakti AI brings together conversation, field intelligence, agricultural knowledge and land context in one experience. It observes what is happening, notices what is changing, helps the farmer see and understand the crop, keeps the season's plan aligned, brings market and support information closer, and helps make each step easier to act on. Partner organisations can bring the same AI-powered agricultural experience to their farmer networks under their own name and context. | platform.ai-intelligence | Live | ok |
 | pages.HOME.living.steps[0] | Map each land once, record the crop and season, and give the companion the field it needs to follow. Everything that comes next is tied to this land. | app.land | Live | ok |
-| pages.HOME.living.steps[1] | Sky, soil, water, temperature and weather, read for this land: the satellite's view of the field, hourly weather, rainfall and the heat the crop has gathered. | tatva.weather | Live | ok |
+| pages.HOME.living.steps[1] | Panch Tatva — Sky, Soil, Water, Temperature and Weather, read for this land: the satellite's view of the field, hourly weather, rainfall and the heat the crop has gathered. | tatva.weather | Live | ok |
 | pages.HOME.living.steps[2] | As conditions shift, a land-specific alert tells you what changed and what deserves a look. Early access. | pahra.daily-risk | Early access | ok |
 | pages.HOME.living.steps[3] | Capture a leaf, a pest or a patch of field. The photo is read in the context of this land, so the observation means something. | app.photo-scan | Live | ok |
 | pages.HOME.living.steps[4] | Talk to your land, in your language. Each field has its own conversation that already knows the crop and the season, and answers with practical guidance and the reason why. | tarka.land-space | Live, limited | ok |
@@ -75,12 +78,12 @@ Generated 2026-10-02T12:57:12.350Z. Every product statement below carries the fa
 | pages.HOME.living.steps[8] | Connect with practical agricultural services such as labour and machinery, so the work the crop needs can be organised. | app.services | Live, limited | ok |
 | pages.HOME.living.steps[9] | Farmers can share knowledge across languages—for example, a Telugu-speaking farmer can communicate with a Marathi-speaking farmer through the platform. | app.community | Live | ok |
 | pages.HOME.living.steps[10] | Record crop-wise income and expenses for every land and understand the season's economics. Beta, under development and in testing. | app.economics | Early access | beta: statement itself lacks 'early access' (badge/limits must carry it) |
-| pages.HOME.separation | The AI understands your question and explains the answer in your language. What to apply, how much and when come only from expert-approved guidance that has been checked against your field and your crop's stage. The AI never invents a dose. | platform.separation | Live | ok |
+| pages.HOME.separation | The AI understands the farmer's question and explains the answer in the farmer's language. What to apply, how much and when come only from governed, expert-approved agricultural guidance checked for the field and crop stage. The AI does not invent a dose. | platform.separation | Live | ok |
 | pages.HOME.evidence | Follow one question from a rice field to the answer the farmer hears. Five plain checks stand between a question and a recommendation. | tarka.chain | Live, limited | ok |
-| pages.HOME.enterprise | Onboard your organisation, bring your farmers and their lands, set your brand, and follow farmer activity from the Partner Portal. KisanShakti AI is sold to organisations, never directly to farmers. | tenant.portal | Live, limited | ok |
-| pages.INVESTORS_PAGE.hero | We publish no customer logos, revenue, accuracy figures or certifications because we have none to publish yet. What we can show is a working companion, a governed knowledge base, and a clear thesis. | company.stage | Live | ok |
-| pages.PLATFORM_PAGE.hero | Two connected surfaces on one shared, centrally governed foundation. The Farmer App is the farmer's daily companion. The Partner Portal is where a partner organisation runs its own farmer network under its own brand. | platform.surfaces | Live | ok |
-| pages.PLATFORM_PAGE.transform | A partner runs the farmer experience under its own name, colours and context. The guidance, crop plans and safety checks are shared and governed centrally. Partners configure their ecosystem; they do not receive or fork the platform's code. | platform.multi-tenant | Live, limited | ok |
+| pages.HOME.enterprise | Onboard your organisation, bring your farmers and their lands, configure the capabilities your organisation needs, set your brand, and operate your farmer ecosystem from the Partner Portal. KisanShakti AI is sold to organisations, never directly to farmers. | tenant.portal | Live, limited | ok |
+| pages.INVESTORS_PAGE.hero | We publish no customer logos, revenue, accuracy figures or certifications because we have none to publish yet. What we can show is working AI-powered agricultural intelligence, a governed knowledge base, and a clear product thesis. | company.stage | Live | ok |
+| pages.PLATFORM_PAGE.hero | Two connected surfaces on one shared, centrally governed agricultural intelligence foundation. The Farmer App is the farmer's daily companion. The Partner Portal is where a partner organisation brings that AI-powered experience to its own farmer network under its own brand. | platform.surfaces | Live | ok |
+| pages.PLATFORM_PAGE.transform | A partner runs the farmer experience under its own name, colours and context. The agricultural intelligence, crop guidance and safety controls are governed centrally, while the partner configures the farmer ecosystem around its needs. Partners receive the service, not the underlying source code. | platform.core | Live | ok |
 | pages.PLATFORM_PAGE.days.farmer[0] | TATVA shows what nature is doing on each land: sky, soil, water, temperature and weather. | tatva.weather | Live | ok |
 | pages.PLATFORM_PAGE.days.farmer[1] | PAHRA surfaces a land-specific change worth noticing; Early access. | pahra.daily-risk | Early access | ok |
 | pages.PLATFORM_PAGE.days.farmer[2] | Photo Scan helps inspect a crop photo, then TARKA lets the farmer ask that land about it. | app.photo-scan | Live | ok |
@@ -103,25 +106,18 @@ Generated 2026-10-02T12:57:12.350Z. Every product statement below carries the fa
 
 ## Built HTML sweep for forbidden language
 
-- ok (negated) dist/farmer-app/index.html: "--d:3s">market insight · not a guaranteed"
 - ok (negated) dist/farmer-app/index.html: "n words. Market insight, not a guaranteed"
-- ok (negated) dist/hi/farmer-app/index.html: "--d:3s">market insight · not a guaranteed"
-- ok (negated) dist/hi/index.html: "--d:3s">market insight · not a guaranteed"
-- ok (negated) dist/hi/technology/index.html: "--d:3s">market insight · not a guaranteed"
-- ok (negated) dist/index.html: "--d:3s">market insight · not a guaranteed"
-- ok (negated) dist/mr/farmer-app/index.html: "--d:3s">market insight · not a guaranteed"
-- ok (negated) dist/mr/index.html: "--d:3s">market insight · not a guaranteed"
-- ok (negated) dist/mr/technology/index.html: "--d:3s">market insight · not a guaranteed"
 - ok (negated) dist/technology/index.html: "t-sm"> Market insight, never a guaranteed"
-- ok (negated) dist/technology/index.html: "--d:3s">market insight · not a guaranteed"
 - No forbidden language found in built HTML.
 
 ## Maturity labels
 
 - platform.surfaces — Live
+- platform.core — Live
 - platform.separation — Live
 - platform.multi-tenant — Live, limited — limits: Partners run under their own context and brand. They do not receive or fork source code.
 - platform.commercial — Live
+- platform.ai-intelligence — Live
 - app.languages — Live
 - app.voice — Live
 - app.login — Live
@@ -152,7 +148,7 @@ Generated 2026-10-02T12:57:12.350Z. Every product statement below carries the fa
 - pahra.no-prescription — Early access
 - rukh.prices — Live, limited — limits: The marketplace is early access.
 - rukh.analytics — Live, limited
-- tenant.portal — Live, limited — limits: No CRM, ERP, accounting or sales-force modules are claimed.
+- tenant.portal — Live, limited — limits: Portal capabilities are delivered according to the partner's enabled configuration and release maturity. Some modules are early access or under active development. The portal is not claimed as a generic CRM, ERP or accounting system, and industry-specific banking, insurance or government workflows are not claimed unless separately implemented.
 - admin.portal — Live
 - security.verified — Live — limits: A partner-isolation security audit is pending. No technical isolation, certification, zero-trust or military-grade claims.
 - company.stage — Live

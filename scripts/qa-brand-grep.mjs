@@ -7,13 +7,13 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
 const LOCKED = [
-  ["TARKA", "A multilingual conversation for each land", "Land-Specific Multilingual AI"],
-  ["TATVA", "Sky · Soil · Water · Temperature · Weather", "Five-Element Land Intelligence"],
-  ["RIITU", "Dynamic stage-wise crop scheduling", "Dynamic Crop Scheduling & Guidance"],
-  ["PAHRA", "Land-specific proactive farm alerts", "Proactive Farm Alerts"],
-  ["RUKH", "Market intelligence around your crop", "Crop & Market Intelligence"],
+  ["TARKA", "Trusted Agricultural Reasoning & Knowledge Architecture", "Land-Specific Multilingual AI"],
+  ["TATVA", "Terrain, Atmosphere, Thermal & Vegetation Assessment", "AI Land Intelligence"],
+  ["RIITU", "Responsive Intelligence for Integrated Temporal Agriculture", "Adaptive Crop Intelligence"],
+  ["PAHRA", "Proactive Agricultural Hazard & Risk Assessment", "Proactive Farm Intelligence"],
+  ["RUKH", "Regional Understanding, Knowledge & Harvest", "Crop & Market Intelligence"],
 ];
-const NEAR_MISS = [/\bTarka\b/, /\bTatva\b/, /\bRiitu\b/, /\bRitu\b/, /\bPahra\b/, /\bRukh\b/, /\bRIITU\s*5/, /Panchatatva/i, /Pancha ?Tatva/i, /KisanShaktiAI\b/, /Kisan Shakti AI/, /KisanShakti Ai\b/, /TATVA5/];
+const NEAR_MISS = [/\bTarka\b/, /(?<!Panch )\bTatva\b/, /\bRiitu\b/, /\bRitu\b/, /\bPahra\b/, /\bRukh\b/, /\bRIITU\s*5/, /Panchatatva/i, /Pancha ?Tatva/i, /KisanShaktiAI\b/, /Kisan Shakti AI/, /KisanShakti Ai\b/, /TATVA5/];
 
 async function* walk(dir, exts) {
   for (const e of await readdir(dir, { withFileTypes: true })) {

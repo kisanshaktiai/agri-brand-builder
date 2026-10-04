@@ -4,6 +4,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { Container, Section, Eyebrow, Heading, Body, ButtonLink, MaturityBadge } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
 import { Phone, ScreenImage } from "@/components/site/Device";
+import { FeatureDemos } from "@/components/moments/FeatureDemos";
 import { type Maturity } from "@/content/site";
 import { useContent } from "@/i18n";
 import { track } from "@/lib/analytics";
@@ -20,18 +21,22 @@ export default function FarmerApp() {
           </ButtonLink>
         </div>
       </PageHero>
+      <Section id="demos" labelledBy="farmer-demos-h">
+        <FeatureDemos id="farmer-demos" />
+      </Section>
       {FARMER_APP_PAGE.sections.map((s, i) => (
         <Section key={s.id} id={s.id} band={i % 2 === 0} className="!py-[calc(var(--ks-section)*0.6)]">
           <Container>
-            <div className={"grid items-center gap-10 lg:grid-cols-12 " + (i % 2 ? "lg:[&>*:first-child]:order-2" : "")}>
-              <Reveal className="lg:col-span-4">
-                <div className="mx-auto w-[60%] max-w-[260px]">
+            {/* Phone and text share one vertical centre on every slide; sides alternate by explicit column placement, not CSS order. */}
+            <div className="grid items-center gap-10 lg:min-h-[640px] lg:grid-cols-12 lg:gap-12">
+              <Reveal className={"lg:col-span-5 lg:row-start-1 " + (i % 2 ? "lg:col-start-8" : "lg:col-start-1")}>
+                <div className="mx-auto w-[74%] max-w-[340px] lg:w-full lg:max-w-[360px]">
                   <Phone label={s.title}>
                     <ScreenImage screen={s.screen} />
                   </Phone>
                 </div>
               </Reveal>
-              <Reveal delay={0.1} className="lg:col-span-6 lg:col-start-6">
+              <Reveal delay={0.1} className={"lg:col-span-6 lg:row-start-1 lg:self-center " + (i % 2 ? "lg:col-start-1" : "lg:col-start-7")}>
                 <Eyebrow>{String(i + 1).padStart(2, "0")}</Eyebrow>
                 <Heading>{s.title}</Heading>
                 {"maturity" in s && s.maturity && <div className="mt-4"><MaturityBadge maturity={s.maturity as Maturity} /></div>}
@@ -41,7 +46,7 @@ export default function FarmerApp() {
           </Container>
         </Section>
       ))}
-      <Section>
+      <Section band={FARMER_APP_PAGE.sections.length % 2 === 0}>
         <Container>
           <Eyebrow>{UI.alsoInCompanion}</Eyebrow>
           <ul className="grid gap-4 md:grid-cols-2">

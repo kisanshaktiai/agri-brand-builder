@@ -1,7 +1,7 @@
 import React from "react";
 import { Seo } from "@/components/site/Seo";
 import { PageHero } from "@/components/site/PageHero";
-import { Container, Section, Eyebrow, Heading, Body, TechMark, MaturityBadge, HairlineList, ButtonLink } from "@/components/site/primitives";
+import { Container, Section, Eyebrow, Heading, Body, TechMark, TechIcon, MaturityBadge, HairlineList, ButtonLink } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
 import { Phone, ScreenImage } from "@/components/site/Device";
 import { FamilyEmerge } from "@/components/moments/FamilyEmerge";
@@ -20,7 +20,7 @@ export default function Technology() {
       <PageHero eyebrow={TECHNOLOGY_PAGE.hero.eyebrow} title={TECHNOLOGY_PAGE.hero.title} lead={TECHNOLOGY_PAGE.hero.lead} size="display-1" />
 
       <Section band className="!pt-[calc(var(--ks-section)*0.6)]">
-        <FamilyEmerge eyebrow={UI.theFamily} title={UI.fiveTechOneCompanion} linkTo={null} />
+        <FamilyEmerge eyebrow={UI.theFamily} title={UI.fiveTechOneCompanion} linkTo={null} compact />
       </Section>
 
       <Section>
@@ -29,11 +29,11 @@ export default function Technology() {
             <Eyebrow>{TECHNOLOGY_PAGE.hierarchy.eyebrow}</Eyebrow>
             <Heading>{TECHNOLOGY_PAGE.hierarchy.title}</Heading>
           </Reveal>
-          <ol className="mt-10 grid gap-2 sm:grid-cols-3 lg:grid-cols-6">
+          <ol className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {HIERARCHY.map((h, i) => (
               <Reveal key={h} as="li" delay={i * 0.06} className="rounded-ks-md border border-ks-line bg-ks-white p-4">
                 <p className="ks-mono text-xs text-ks-ink-4">{String(i + 1).padStart(2, "0")}</p>
-                <p className="mt-2 text-sm font-medium text-ks-ink">{h}</p>
+                <p className="mt-2 text-base font-medium text-ks-ink">{h}</p>
               </Reveal>
             ))}
           </ol>
@@ -48,17 +48,22 @@ export default function Technology() {
           <Section key={key} id={key} band={band} labelledBy={`${key}-h`} className="scroll-mt-16">
             <Container>
               <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
-                <div className="lg:col-span-7">
+                <div className="min-w-0 lg:col-span-7">
                   <Reveal>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <TechMark tech={key} name={t.name} size="lg" />
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                      <div className="flex min-w-0 items-center gap-4">
+                        <TechIcon src={t.icon} name={t.name} size="lg" />
+                        <div>
+                          <TechMark tech={key} name={t.name} size="lg" />
+                          <p className="ks-label mt-1 normal-case tracking-normal text-xs text-ks-ink-3">{t.positioning}</p>
+                        </div>
+                      </div>
                       <MaturityBadge maturity={t.maturity} />
                     </div>
                     <p className="ks-label mt-4 normal-case tracking-normal text-sm text-ks-ink-2">{t.fullForm}</p>
                     <Heading id={`${key}-h`} className="mt-6">
                       {t.tagline}
                     </Heading>
-                    <p className="ks-label mt-3">{t.positioning}</p>
                     <Body className="mt-6">{t.summary}</Body>
                   </Reveal>
                   <Reveal delay={0.1} className="mt-10">
@@ -67,7 +72,7 @@ export default function Technology() {
                   </Reveal>
                   <Reveal delay={0.15} className="mt-8">
                     <p className="ks-label mb-3">{t.maturity === "beta" ? UI.earlyAccess : UI.statedLimits}</p>
-                    <ul className="ks-body list-disc space-y-1 pl-5 text-sm">
+                    <ul className="ks-body list-disc space-y-2 pl-5">
                       {t.limits.map((l) => (
                         <li key={l}>{l}</li>
                       ))}

@@ -8,6 +8,7 @@ import { LivingPhone, type LivingStep } from "@/components/moments/LivingPhone";
 import { HeroSignals } from "@/components/moments/HeroSignals";
 import { FamilyEmerge } from "@/components/moments/FamilyEmerge";
 import { FinalStatement } from "@/components/moments/FinalStatement";
+import { FeatureDemos } from "@/components/moments/FeatureDemos";
 import { useLocale } from "@/i18n";
 import { track } from "@/lib/analytics";
 
@@ -57,8 +58,13 @@ export default function Home() {
         <FamilyEmerge eyebrow={HOME.family.eyebrow} title={HOME.family.title} body={HOME.family.body} />
       </Section>
 
+      {/* 3. Step-through feature demos */}
+      <Section id="demos" labelledBy="demos-h">
+        <FeatureDemos />
+      </Section>
+
       {/* Separation */}
-      <Section>
+      <Section band>
         <Container>
           <div className="grid gap-10 lg:grid-cols-12">
             <Reveal className="lg:col-span-5">
@@ -91,7 +97,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="mt-6">
-                <Link to={href("/technology#tarka")} className="text-sm font-medium text-ks-field underline-offset-4 hover:underline">
+                <Link to={href("/technology#tarka")} className="inline-flex min-h-[44px] items-center text-sm font-medium text-ks-field underline-offset-4 hover:underline">
                   {UI.seeHowAnswerExplains}
                 </Link>
               </p>
@@ -101,7 +107,7 @@ export default function Home() {
       </Section>
 
       {/* Enterprise */}
-      <Section band>
+      <Section>
         <Container>
           <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
             <Reveal className="lg:col-span-7">
