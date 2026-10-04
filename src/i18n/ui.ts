@@ -56,7 +56,7 @@ export const UI = {
   founderProfile: "Founder profile",
   contact: "Contact",
   fourOfFour: "/ 04",
-  signals: ["Panch Tatva · Sky", "Panch Tatva · Soil", "Panch Tatva · Water", "Panch Tatva · Temperature", "Panch Tatva · Weather"],
+  signals: ["Sky", "Soil", "Water", "Temperature", "Weather"],
   signalsLabel: "What the companion reads for every land",
   heroPhoneLabel: "Farmer App, Farm Today",
   comingNext: "(coming next)",

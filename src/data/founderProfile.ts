@@ -152,7 +152,7 @@ export const founderProfile: FounderProfile = {
       },
       {
         acronym: "TATVA",
-        expansion: "Terrain, Atmosphere, Thermal & Vegetation Analytics",
+        expansion: "Terrain, Atmosphere, Thermal & Vegetation Assessment",
         category: "Land and environmental intelligence",
       },
       {
