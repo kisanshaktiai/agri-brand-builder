@@ -41,7 +41,7 @@ export function Nav() {
     cn("whitespace-nowrap text-sm transition-colors duration-200 hover:text-ks-ink", isActive ? "text-ks-ink" : "text-ks-ink-2");
 
   return (
-    <header className={cn("sticky top-0 z-40 border-b transition-colors duration-300", scrolled ? "border-ks-line bg-ks-paper/85 backdrop-blur-md" : "border-transparent bg-transparent")}>
+    <header className={cn("sticky top-0 z-40 border-b transition-colors duration-300", scrolled ? "border-ks-line bg-ks-paper shadow-ks-1" : "border-transparent bg-ks-paper")}>
       <a href="#main" className="ks-skip">
         {UI.skip}
       </a>
@@ -58,8 +58,9 @@ export function Nav() {
           ))}
         </nav>
 
-        <div className="hidden lg:flex items-center gap-2">
-          <LanguageSwitch />
+        <div className="hidden lg:flex shrink-0 items-center gap-2">
+          {/* Short labels here so the switch never gets squeezed; the footer carries the full names. */}
+          <LanguageSwitch compact className="shrink-0" />
           <ButtonLink to={CTA.partner.to} variant="secondary" className="hidden xl:inline-flex" onClick={() => track("partner_cta", { where: "nav" })}>
             {CTA.partner.label}
           </ButtonLink>

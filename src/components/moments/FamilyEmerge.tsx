@@ -50,12 +50,12 @@ export function FamilyEmerge({ eyebrow, title, body, linkTo = "/technology" }: {
             return (
               <li
                 key={key}
-                className={cn("group relative flex flex-col justify-between rounded-ks-md border border-ks-line bg-ks-white p-5 shadow-ks-1 hover:border-ks-line-strong", shown ? "ks-emerge-in" : "ks-emerge-out")}
+                className={cn("ks-card group relative flex flex-col justify-between p-5", shown ? "ks-emerge-in" : "ks-emerge-out")}
                 style={{ "--emerge-x": `${centerOffset}%`, transitionDelay: shown ? `${0.15 + i * 0.08}s` : "0s" } as React.CSSProperties}
                 onMouseEnter={() => track("technology_engaged", { tech: key, where: "family" }, true)}
               >
                 <div>
-                  <div className="flex items-start justify-between gap-2">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
                     <TechIcon src={t.icon} name={t.name} size="lg" />
                     <MaturityBadge maturity={t.maturity} />
                   </div>
@@ -67,7 +67,7 @@ export function FamilyEmerge({ eyebrow, title, body, linkTo = "/technology" }: {
                 </div>
                 <p className="mt-6 ks-label text-ks-ink-4">{t.arc.join(" · ")}</p>
                 {linkTo && (
-                  <Link to={href(`${linkTo}#${key}`)} className="absolute inset-0 rounded-ks-md focus-visible:outline-offset-[-2px]" aria-label={`KisanShakti ${t.name}: ${t.positioning}`}>
+                  <Link to={href(`${linkTo}#${key}`)} className="absolute inset-0 rounded-ks-lg focus-visible:outline-offset-[-2px]" aria-label={`KisanShakti ${t.name}: ${t.positioning}`}>
                     <span className="sr-only">Read about KisanShakti {t.name}</span>
                   </Link>
                 )}

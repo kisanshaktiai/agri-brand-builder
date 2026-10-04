@@ -24,7 +24,7 @@ export function PartnerPortalSimulation({ tenantIndex = 0 }: { tenantIndex?: num
 
   return (
     <div
-      className="overflow-hidden rounded-ks-lg border border-ks-line bg-[#fbfcfc] shadow-ks-2"
+      className="overflow-hidden rounded-ks-lg border border-ks-line bg-ks-white shadow-ks-2"
       style={{ "--portal-brand": tenant.brand, "--portal-soft": tenant.soft, "--portal-accent": tenant.accent } as React.CSSProperties}
       aria-label="Illustrative Partner Portal simulation"
     >
@@ -88,7 +88,7 @@ export function PartnerPortalSimulation({ tenantIndex = 0 }: { tenantIndex?: num
               ))}
             </div>
 
-            <div className="mt-4 flex gap-1 rounded-md bg-[#f3f5f5] p-1">
+            <div className="mt-4 flex gap-1 rounded-md bg-ks-paper-2 p-1">
               {["Overview", "Farmers", "Land Data", "Analytics"].map((tab, i) => (
                 <div key={tab} className={cn("flex-1 rounded px-2 py-2 text-center text-[9px]", i === 0 ? "bg-white font-medium text-ks-ink shadow-sm" : "text-ks-ink-3")}>{tab}</div>
               ))}

@@ -48,10 +48,10 @@ export default function Technology() {
           <Section key={key} id={key} band={band} labelledBy={`${key}-h`} className="scroll-mt-16">
             <Container>
               <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
-                <div className="lg:col-span-7">
+                <div className="min-w-0 lg:col-span-7">
                   <Reveal>
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                      <div className="flex min-w-0 items-center gap-4">
                         <TechIcon src={t.icon} name={t.name} size="lg" />
                         <div>
                           <TechMark tech={key} name={t.name} size="lg" />

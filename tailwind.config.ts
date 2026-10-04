@@ -67,6 +67,7 @@ export default {
 					'field-ink': 'hsl(var(--ks-field-ink))',
 					leaf: 'hsl(var(--ks-leaf))',
 					lime: 'hsl(var(--ks-lime))',
+					sun: 'hsl(var(--ks-sun))',
 					night: 'hsl(var(--ks-night))',
 					'night-2': 'hsl(var(--ks-night-2))',
 					signal: 'hsl(var(--ks-signal))',

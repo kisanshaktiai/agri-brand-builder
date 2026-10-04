@@ -100,7 +100,7 @@ export function MaturityBadge({ maturity, className }: { maturity: Maturity; cla
         ? "bg-transparent text-ks-ink-3 border-ks-line-strong"
         : "bg-ks-field-soft text-ks-field-deep border-transparent";
   return (
-    <span className={cn("inline-flex items-center rounded-full border px-2.5 py-1 ks-label normal-case tracking-[0.02em] text-[0.6875rem]", tone, className)}>
+    <span className={cn("inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-1 ks-label normal-case tracking-[0.02em] text-[0.6875rem]", tone, className)}>
       {content.MATURITY_LABEL[maturity]}
     </span>
   );
@@ -114,10 +114,19 @@ const btn = (variant: BtnVariant, size: "md" | "lg") =>
   cn(
     "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-[background-color,color,transform] duration-200 ease-ks-out active:scale-[0.98] whitespace-nowrap",
     size === "lg" ? "h-12 px-6 text-base" : "h-10 px-4 text-sm",
-    variant === "primary" && "bg-ks-ink text-ks-paper hover:bg-ks-field-deep",
-    variant === "secondary" && "bg-transparent text-ks-ink border border-ks-line-strong hover:border-ks-ink",
+    variant === "primary" && "bg-ks-field text-ks-field-ink shadow-ks-1 hover:bg-ks-field-deep",
+    variant === "secondary" && "bg-ks-white text-ks-ink border border-ks-line-strong hover:border-ks-ink",
     variant === "ghost" && "bg-transparent text-ks-ink-2 hover:text-ks-ink",
   );
+
+/** Forward arrow on link buttons; nudges on hover (.ks-arrow). Decorative. */
+function Arrow() {
+  return (
+    <svg className="ks-arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M1.5 6h9M7 2.5 10.5 6 7 9.5" />
+    </svg>
+  );
+}
 
 export function ButtonLink({ to, href, children, variant = "primary", size = "md", className, onClick, ...rest }: { to?: string; href?: string; children: React.ReactNode; variant?: BtnVariant; size?: "md" | "lg"; className?: string; onClick?: () => void } & Record<string, unknown>) {
   const cls = cn(btn(variant, size), className);
@@ -126,12 +135,14 @@ export function ButtonLink({ to, href, children, variant = "primary", size = "md
     return (
       <a href={href} className={cls} data-variant={variant} onClick={onClick} target="_blank" rel="noopener" {...rest}>
         {children}
+        <Arrow />
       </a>
     );
   }
   return (
     <Link to={localize(to ?? "/")} className={cls} data-variant={variant} onClick={onClick} {...rest}>
       {children}
+      <Arrow />
     </Link>
   );
 }
