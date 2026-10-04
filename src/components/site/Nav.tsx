@@ -41,7 +41,7 @@ export function Nav() {
     cn("whitespace-nowrap text-sm transition-colors duration-200 hover:text-ks-ink", isActive ? "text-ks-ink" : "text-ks-ink-2");
 
   return (
-    <header className={cn("sticky top-0 z-40 border-b transition-colors duration-300", scrolled ? "border-ks-line bg-ks-paper shadow-ks-1" : "border-transparent bg-ks-paper")}>
+    <header className={cn("sticky top-0 z-40 border-b transition-colors duration-300", scrolled ? "border-ks-line bg-ks-paper/85 backdrop-blur-md" : "border-transparent bg-transparent")}>
       <a href="#main" className="ks-skip">
         {UI.skip}
       </a>

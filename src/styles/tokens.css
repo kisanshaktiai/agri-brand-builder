@@ -1,40 +1,40 @@
-/* Self-hosted fonts (latin subsets, SIL Open Font License). Preloaded from index.html. */
-@font-face { font-family: "Geist Variable"; font-style: normal; font-display: swap; font-weight: 100 900; src: url(/fonts/geist-latin-wght.woff2) format("woff2-variations"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
-@font-face { font-family: "Geist Mono Variable"; font-style: normal; font-display: swap; font-weight: 100 900; src: url(/fonts/geist-mono-latin-wght.woff2) format("woff2-variations"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
-@font-face { font-family: "Geist Fallback"; src: local("Arial"); size-adjust: 104%; ascent-override: 90%; descent-override: 22%; line-gap-override: 0%; }
+/* Self-hosted fonts (latin subsets). Preloaded from index.html. */
+@font-face { font-family: "Bricolage Grotesque Variable"; font-style: normal; font-display: swap; font-weight: 200 800; src: url(/fonts/bricolage-grotesque-latin-opsz.woff2) format("woff2-variations"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: "Instrument Sans Variable"; font-style: normal; font-display: swap; font-weight: 400 700; src: url(/fonts/instrument-sans-latin-wght.woff2) format("woff2-variations"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: "Bricolage Fallback"; src: local("Arial"); size-adjust: 97%; ascent-override: 92%; descent-override: 22%; line-gap-override: 0%; }
+@font-face { font-family: "Instrument Fallback"; src: local("Arial"); size-adjust: 99%; ascent-override: 94%; descent-override: 24%; line-gap-override: 0%; }
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-display: swap; font-weight: 400; src: url(/fonts/jetbrains-mono-latin-400.woff2) format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-display: swap; font-weight: 500; src: url(/fonts/jetbrains-mono-latin-500.woff2) format("woff2"); }
 
 /* ──────────────────────────────────────────────────────────────────
    KisanShakti AI website design system — tokens
-   Identity: "field light". Crisp white surfaces and deep field ink, the
-   three logo greens (field, leaf, lime) as the only brand colours, and one
-   signature: the harvest band, a slow gradient from field green through
-   leaf and lime to sun, cut at an angle. Geist for display and text,
-   Geist Mono for marks, labels and evidence. Tinted, layered shadows;
-   generous radii; slow, settled motion. No blur.
+   One typographic point of view: Bricolage Grotesque for display
+   (tight, optical-size aware), Instrument Sans for text, JetBrains
+   Mono for marks, labels and evidence. One accent (field green) on
+   warm paper. Everything else is ink at four strengths and hairlines.
    ────────────────────────────────────────────────────────────────── */
 
 :root {
-  /* Colour — white surfaces, deep field ink, the logo greens. */
-  --ks-paper: 0 0% 100%;         /* #ffffff page */
-  --ks-paper-2: 100 24% 96.5%;   /* #f5f8f3 quiet band, a hint of leaf */
+  /* Colour — warm paper, deep ink, one accent. */
+  --ks-paper: 80 25% 98%;        /* #f9faf6 page, a hint of leaf */
+  --ks-paper-2: 90 22% 95%;      /* #f1f4ec alternate band */
   --ks-white: 0 0% 100%;
-  --ks-ink: 152 48% 9%;          /* #0c2217 deep field ink: headings */
-  --ks-ink-2: 152 16% 27%;       /* #3a5046 body */
-  --ks-ink-3: 152 9% 37%;        /* #566760, 5.6:1 on paper */
-  --ks-ink-4: 152 9% 35%;        /* #515f59, 5.5:1 on the quiet band */
-  --ks-line: 120 14% 90%;        /* #e3e9e1 hairline */
-  --ks-line-strong: 120 10% 80%;
+  --ks-ink: 130 28% 7%;          /* #0d1710 deep leaf-black */
+  --ks-ink-2: 130 10% 30%;       /* #455148 */
+  --ks-ink-3: 150 6% 40%;        /* #606b65, 5.6:1 on paper */
+  --ks-ink-4: 150 6% 39%;        /* #5e6963, 5.2:1 on the darker band */
+  --ks-line: 90 10% 87%;         /* #dde0d8 hairline */
+  --ks-line-strong: 90 8% 77%;
   --ks-field: 108 62% 28%;       /* #2b7418 logo wordmark green: buttons, links */
   --ks-field-deep: 112 60% 19%;  /* #1d4e13 */
-  --ks-field-soft: 96 52% 94%;   /* tint for accent surfaces */
-  --ks-field-ink: 96 40% 98%;    /* text on accent */
+  --ks-field-soft: 96 45% 93%;   /* #edf5e6 tint for accent surfaces */
+  --ks-field-ink: 96 40% 96%;    /* text on accent */
   --ks-leaf: 96 62% 42%;         /* #60b028 logo leaf: marks, highlights */
   --ks-lime: 78 78% 45%;         /* #a0d018 logo lime: accent lines */
-  --ks-sun: 42 92% 60%;          /* harvest sun: the warm end of the band only */
-  --ks-night: 152 48% 8%;        /* deep canvas for dark bands */
-  --ks-night-2: 152 36% 13%;
+  --ks-night: 132 30% 7%;        /* #0d1a10 hero canvas */
+  --ks-night-2: 128 24% 11%;
   --ks-signal: 34 72% 30%;       /* amber for early access / beta, 5.3:1 on its tint */
-  --ks-signal-soft: 38 70% 94%;
+  --ks-signal-soft: 36 60% 93%;
   --ks-danger: 8 60% 45%;
 
   /* Technology marks: low-saturation hues, used only in the mark badge. */
@@ -45,11 +45,11 @@
   --ks-rukh: 248 30% 38%;
 
   /* Type */
-  --ks-font-display: "Geist Variable", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
-  --ks-font-text: "Geist Variable", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
-  --ks-font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ks-font-display: "Bricolage Grotesque Variable", "Bricolage Fallback", ui-sans-serif, system-ui, sans-serif;
+  --ks-font-text: "Instrument Sans Variable", "Instrument Fallback", ui-sans-serif, system-ui, sans-serif;
+  --ks-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --ks-size-display-1: clamp(2.75rem, 1.4rem + 5.8vw, 6.5rem);
+  --ks-size-display-1: clamp(2.875rem, 1.5rem + 5.6vw, 6.25rem);
   --ks-size-display-2: clamp(2.375rem, 1.25rem + 4vw, 4.5rem);
   --ks-size-h2: clamp(1.875rem, 1.1rem + 2.4vw, 3rem);
   --ks-size-h3: clamp(1.3125rem, 1.05rem + 0.9vw, 1.625rem);
@@ -60,27 +60,26 @@
 
   /* Spacing and layout */
   --ks-gutter: 1rem;
-  --ks-container: 80rem;
+  --ks-container: 76rem;
   --ks-section: clamp(5rem, 4rem + 8vw, 11rem);
   --ks-stack: clamp(2rem, 1.5rem + 2vw, 3.5rem);
 
   /* Radius and elevation */
-  --ks-radius-sm: 8px;
-  --ks-radius-md: 14px;
-  --ks-radius-lg: 24px;
+  --ks-radius-sm: 6px;
+  --ks-radius-md: 12px;
+  --ks-radius-lg: 20px;
   --ks-radius-device: 44px;
-  /* Layered and tinted with the ink, never grey. */
-  --ks-shadow-1: 0 1px 2px hsl(var(--ks-ink) / 0.06), 0 3px 8px -3px hsl(var(--ks-ink) / 0.08);
-  --ks-shadow-2: 0 2px 6px hsl(var(--ks-ink) / 0.05), 0 14px 28px -12px hsl(var(--ks-ink) / 0.22), 0 8px 16px -8px rgb(0 0 0 / 0.08);
-  --ks-shadow-device: 0 0 0 1px hsl(var(--ks-ink) / 0.10), 0 30px 60px -12px hsl(var(--ks-ink) / 0.32), 0 18px 36px -18px rgb(0 0 0 / 0.30);
+  --ks-shadow-1: 0 1px 2px hsl(var(--ks-ink) / 0.05), 0 1px 0 hsl(var(--ks-ink) / 0.03);
+  --ks-shadow-2: 0 2px 6px hsl(var(--ks-ink) / 0.06), 0 24px 48px -24px hsl(var(--ks-ink) / 0.22);
+  --ks-shadow-device: 0 0 0 1px hsl(var(--ks-ink) / 0.08), 0 40px 80px -32px hsl(var(--ks-ink) / 0.35);
 
   /* Motion */
-  --ks-ease-out: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ks-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ks-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --ks-dur-1: 160ms;
   --ks-dur-2: 240ms;
   --ks-dur-3: 420ms;
-  --ks-dur-4: 800ms;
+  --ks-dur-4: 720ms;
 
   /* shadcn tokens re-pointed at the brand so the lead form and buttons match. */
   --background: var(--ks-paper);
@@ -145,13 +144,14 @@ body {
 /* Type utilities */
 .ks-display-1, .ks-display-2, .ks-h2, .ks-h3 {
   font-family: var(--ks-font-display);
-  letter-spacing: -0.035em;
+  font-variation-settings: "opsz" 96;
+  letter-spacing: -0.028em;
   text-wrap: balance;
 }
-.ks-display-1 { font-size: var(--ks-size-display-1); line-height: 0.98; font-weight: 600; }
-.ks-display-2 { font-size: var(--ks-size-display-2); line-height: 1.02; font-weight: 600; }
-.ks-h2 { font-size: var(--ks-size-h2); line-height: 1.08; font-weight: 600; letter-spacing: -0.03em; }
-.ks-h3 { font-size: var(--ks-size-h3); line-height: 1.2; font-weight: 600; letter-spacing: -0.018em; }
+.ks-display-1 { font-size: var(--ks-size-display-1); line-height: 0.98; font-weight: 500; }
+.ks-display-2 { font-size: var(--ks-size-display-2); line-height: 1.02; font-weight: 500; }
+.ks-h2 { font-size: var(--ks-size-h2); line-height: 1.08; font-weight: 500; letter-spacing: -0.022em; }
+.ks-h3 { font-size: var(--ks-size-h3); line-height: 1.2; font-weight: 500; letter-spacing: -0.012em; font-variation-settings: "opsz" 48; }
 .ks-lead { font-size: var(--ks-size-lead); line-height: 1.45; color: hsl(var(--ks-ink-2)); text-wrap: pretty; }
 .ks-body { font-size: var(--ks-size-body); line-height: 1.6; color: hsl(var(--ks-ink-2)); text-wrap: pretty; }
 .ks-small { font-size: var(--ks-size-small); line-height: 1.5; color: hsl(var(--ks-ink-3)); }
@@ -247,90 +247,29 @@ body {
   color: hsl(var(--ks-ink-3));
 }
 
-/* ── Dark canvas: buttons and marks on a night band ─────────────────── */
+/* ── Dark canvas: buttons and marks on the hero ───────────────────── */
 .ks-on-dark [data-variant="primary"] { background: hsl(var(--ks-leaf)); color: hsl(var(--ks-ink)); }
 .ks-on-dark [data-variant="primary"]:hover { background: hsl(var(--ks-lime)); }
 .ks-on-dark [data-variant="secondary"] { border-color: hsl(var(--ks-paper) / 0.3); color: hsl(var(--ks-paper)); }
 .ks-on-dark [data-variant="secondary"]:hover { border-color: hsl(var(--ks-lime)); }
 .ks-on-dark .ks-mark, .ks-on-dark .ks-label { color: hsl(var(--ks-paper) / 0.75); }
 
-/* ── The harvest band: the identity's one signature ────────────────
-   A slow gradient of the logo greens warming into sun, cut at an angle.
-   Sits behind hero art, never behind running text. */
-.ks-band {
+/* ── Home hero ───────────────────────────────────────────────────── */
+.ks-hero-glow {
+  position: absolute; inset: -20% -10% auto -10%; height: 90%;
   background:
-    radial-gradient(60% 80% at 85% 20%, hsl(var(--ks-sun) / 0.85), transparent 60%),
-    radial-gradient(55% 70% at 55% 70%, hsl(var(--ks-lime) / 0.9), transparent 65%),
-    radial-gradient(70% 90% at 20% 30%, hsl(var(--ks-leaf)), transparent 70%),
-    linear-gradient(120deg, hsl(var(--ks-field-deep)), hsl(var(--ks-field)) 45%, hsl(var(--ks-leaf)));
-  background-size: 160% 160%;
-  animation: ks-band-drift 18s var(--ks-ease-in-out) infinite alternate;
+    radial-gradient(60% 50% at 78% 55%, hsl(var(--ks-leaf) / 0.22), transparent 70%),
+    radial-gradient(40% 40% at 10% 10%, hsl(var(--ks-lime) / 0.08), transparent 70%);
+  pointer-events: none;
 }
-@keyframes ks-band-drift { from { background-position: 0% 0%; } to { background-position: 100% 60%; } }
-.ks-hero { position: relative; isolation: isolate; }
-.ks-hero-band {
-  position: absolute; z-index: -1; top: 0; right: 0; height: 100%; width: 100%;
-}
-@media (min-width: 1024px) {
-  .ks-hero-band { width: 46%; clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%); }
-}
-/* Phones: the band sits only behind the phone, never behind text. */
-.ks-hero-band-m {
-  position: absolute; z-index: -1; top: 12%; bottom: calc(var(--ks-section) * -0.7);
-  left: calc(var(--ks-gutter) * -1); right: calc(var(--ks-gutter) * -1);
-  clip-path: polygon(0 14%, 100% 0, 100% 100%, 0 100%);
-}
-.ks-hero-band-thin { position: absolute; z-index: -1; inset: auto 0 0 0; height: 10px; }
-.ks-hero .ks-phone { box-shadow: 0 0 0 1px hsl(var(--ks-white) / 0.4), var(--ks-shadow-device); }
-
-/* Dashed guide lines behind a container: the quiet structure of the page. */
-.ks-guides { position: relative; }
-.ks-guides::before {
-  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  margin-inline: auto; max-width: var(--ks-container);
-  background-image:
-    linear-gradient(hsl(var(--ks-line-strong)) 50%, transparent 50%),
-    linear-gradient(hsl(var(--ks-line-strong)) 50%, transparent 50%);
-  background-size: 1px 8px, 1px 8px;
-  background-repeat: repeat-y;
-  background-position: var(--ks-gutter) 0, calc(100% - var(--ks-gutter)) 0;
-  opacity: 0.55;
-}
-.ks-guides > :not([aria-hidden]) { position: relative; z-index: 1; }
-
-/* Angled band edge, for alternate sections that open a new chapter. */
-.ks-angle { clip-path: polygon(0 clamp(1.5rem, 4vw, 4rem), 100% 0, 100% 100%, 0 100%); padding-top: calc(var(--ks-section) + clamp(1.5rem, 4vw, 4rem)); }
-
-/* Cards: white, hairline, layered shadow; lift settles slowly. */
-.ks-card {
-  background: hsl(var(--ks-white));
-  border: 1px solid hsl(var(--ks-line));
-  border-radius: var(--ks-radius-lg);
-  box-shadow: var(--ks-shadow-1);
-  transition: box-shadow var(--ks-dur-4) var(--ks-ease-out), transform var(--ks-dur-4) var(--ks-ease-out), border-color var(--ks-dur-2);
-}
-.ks-card:hover { box-shadow: var(--ks-shadow-2); transform: translateY(-2px); border-color: hsl(var(--ks-line-strong)); }
-/* A card that also emerges (technology family) keeps both transitions. */
-.ks-card.ks-emerge-in { transition: opacity 900ms var(--ks-ease-out), transform 900ms var(--ks-ease-out), box-shadow var(--ks-dur-4) var(--ks-ease-out), border-color var(--ks-dur-2); }
-
-/* Button arrow: nudges forward on hover. */
-.ks-arrow { width: 0.75em; height: 0.75em; flex: none; transition: transform var(--ks-dur-2) var(--ks-ease-out); }
-a:hover > .ks-arrow, button:hover > .ks-arrow { transform: translateX(3px); }
-
-@media (prefers-reduced-motion: reduce) {
-  .ks-band { animation: none; }
-  .ks-card, .ks-card:hover { transform: none; transition: none; }
-  .ks-arrow { transition: none; }
-}
-
+.ks-hero .ks-phone { box-shadow: 0 0 0 1px hsl(var(--ks-lime) / 0.25), 0 60px 120px -40px hsl(var(--ks-lime) / 0.35), 0 40px 80px -32px rgb(0 0 0 / 0.6); }
+.ks-phone-halo { position: absolute; inset: -12%; border-radius: 50%; background: radial-gradient(closest-side, hsl(var(--ks-leaf) / 0.18), transparent); filter: blur(12px); }
 @keyframes ks-word-in { from { opacity: 0; transform: translateY(0.35em); filter: blur(4px); } to { opacity: 1; transform: none; filter: blur(0); } }
 .ks-word { display: inline-block; animation: ks-word-in 0.9s var(--ks-ease-out) both; }
 .ks-word-block { animation: ks-word-in 0.9s var(--ks-ease-out) both; }
 .ks-signal { fill: none; stroke: hsl(var(--ks-lime)); stroke-width: 1; stroke-opacity: 0.38; stroke-dasharray: 900; stroke-dashoffset: 900; animation: sc-draw 2.2s var(--ks-ease-out) both; }
 @keyframes ks-travel { 0% { offset-distance: 0%; opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
 .ks-signal-dot { fill: hsl(var(--ks-lime)); animation: ks-travel 4.5s linear infinite; }
-.ks-hero .ks-signal { stroke: hsl(var(--ks-white)); stroke-opacity: 0.6; }
-.ks-hero .ks-signal-dot { fill: hsl(var(--ks-white)); }
 @media (prefers-reduced-motion: reduce) {
   .ks-word, .ks-word-block { animation: none; }
   .ks-signal { animation: none; stroke-dashoffset: 0; }
@@ -348,6 +287,6 @@ a:hover > .ks-arrow, button:hover > .ks-arrow { transform: translateX(3px); }
 /* Devanagari: Noto Sans Devanagari, loaded only when those glyphs render. */
 @font-face { font-family: "Noto Sans Devanagari"; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/noto-sans-devanagari-400.woff2) format("woff2"); unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FF; }
 @font-face { font-family: "Noto Sans Devanagari"; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/noto-sans-devanagari-600.woff2) format("woff2"); unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FF; }
-:lang(mr), :lang(hi) { --ks-font-display: "Noto Sans Devanagari", "Geist Variable", ui-sans-serif, system-ui, sans-serif; --ks-font-text: "Noto Sans Devanagari", "Geist Variable", ui-sans-serif, system-ui, sans-serif; }
+:lang(mr), :lang(hi) { --ks-font-display: "Noto Sans Devanagari", "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif; --ks-font-text: "Noto Sans Devanagari", "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif; }
 :lang(mr) .ks-display-1, :lang(hi) .ks-display-1, :lang(mr) .ks-display-2, :lang(hi) .ks-display-2, :lang(mr) .ks-h2, :lang(hi) .ks-h2 { letter-spacing: 0; line-height: 1.15; font-weight: 600; }
 :lang(mr) .ks-h3, :lang(hi) .ks-h3 { letter-spacing: 0; line-height: 1.3; font-weight: 600; }
