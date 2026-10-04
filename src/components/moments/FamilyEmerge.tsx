@@ -13,7 +13,8 @@ import { cn } from "@/lib/utils";
  * Five marks emerge from one point (the brand) and settle into a row, with
  * their part of the arc beneath. Under reduced motion they simply fade in.
  */
-export function FamilyEmerge({ eyebrow, title, body, linkTo = "/technology" }: { eyebrow: string; title: string; body?: string; linkTo?: string | null }) {
+/** `compact` hides the full form on the cards (the Technology page states it once, in each section). */
+export function FamilyEmerge({ eyebrow, title, body, linkTo = "/technology", compact = false }: { eyebrow: string; title: string; body?: string; linkTo?: string | null; compact?: boolean }) {
   const reduced = useReducedMotion();
   const { content, href } = useLocale();
   const { TECHNOLOGIES, UI } = content;
@@ -62,7 +63,7 @@ export function FamilyEmerge({ eyebrow, title, body, linkTo = "/technology" }: {
                   <div className="mt-4">
                     <TechMark tech={key} name={t.name} house={false} size="lg" />
                   </div>
-                  <p className="mt-3 text-sm leading-snug text-ks-ink-2">{t.fullForm}</p>
+                  {!compact && <p className="mt-3 text-sm leading-snug text-ks-ink-2">{t.fullForm}</p>}
                   <p className="ks-label mt-4 normal-case tracking-normal text-[0.75rem] text-ks-ink-3">{t.positioning}</p>
                 </div>
                 <p className="mt-6 ks-label text-ks-ink-4">{t.arc.join(" · ")}</p>

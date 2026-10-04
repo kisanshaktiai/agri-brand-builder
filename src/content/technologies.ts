@@ -76,7 +76,7 @@ export const TECHNOLOGIES: Technology[] = [
       { text: "Each alert says what changed and what to go and look at. You decide what to do next.", fact: "pahra.no-prescription" },
       { text: "You choose which alerts reach you and how.", fact: "pahra.daily-risk" },
     ],
-    limits: ["Early access. Alerts help you notice change; they do not prescribe a treatment."],
+    limits: ["Alerts help you notice change; they do not prescribe a treatment. (Early access)"],
     screens: ["alerts"],
   },
   {

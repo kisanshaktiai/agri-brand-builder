@@ -14,7 +14,7 @@ export const HOME = {
   hero: {
     eyebrow: "For every farmer. For every land.",
     title: "AI that understands every land. A companion for the whole season.",
-    lead: "KisanShakti AI brings agricultural intelligence to every land—helping you understand what is happening in the field, notice what is changing while you are away, ask questions in your language and follow a crop plan that adapts with the season. Partner organisations can bring the same AI-powered experience to their farmer networks under their own brand.",
+    lead: "Your land. Your language. One companion that watches the field, warns you early, plans the season and prices the crop. Organisations bring it to their farmers under their own brand.",
   },
   thesis: {
     eyebrow: "What it is",
@@ -24,19 +24,19 @@ export const HOME = {
   },
   living: {
     eyebrow: "One farmer. One land. One season.",
-    title: "Start with the land. Let the companion follow the season.",
+    title: "Start with the land. Then watch the season unfold.",
     steps: [
-      { key: "land", arc: "Begin", feature: "Land setup", screen: "land", title: "Start with your land.", body: "Map each land once, record the crop and season, and give the companion the field it needs to follow. Everything that comes next is tied to this land.", fact: "app.land" },
+      { key: "land", arc: "Begin", feature: "Land setup", screen: "land", title: "Start with your land.", body: "Map each land once, record the crop and season, and give the app the field it needs to follow. Everything that comes next is tied to this land.", fact: "app.land" },
       { key: "observe", arc: "Observe", tech: "tatva", screen: "weather", title: "TATVA understands what nature is doing.", body: "Panch Tatva — Sky, Soil, Water, Temperature and Weather, read for this land: the satellite's view of the field, hourly weather, rainfall and the heat the crop has gathered.", fact: "tatva.weather" },
-      { key: "alert", arc: "Anticipate", tech: "pahra", screen: "alerts", title: "PAHRA says what is changing, even when you are away.", body: "As conditions shift, a land-specific alert tells you what changed and what deserves a look. Early access.", fact: "pahra.daily-risk" },
+      { key: "alert", arc: "Anticipate", tech: "pahra", screen: "alerts", title: "PAHRA says what is changing, even when you are away.", body: "As conditions shift, a land-specific alert tells you what changed and what deserves a look. (Early access)", fact: "pahra.daily-risk" },
       { key: "see", arc: "See", feature: "Photo Scan", screen: "photo-scan", title: "Photo Scan helps you see the crop.", body: "Capture a leaf, a pest or a patch of field. The photo is read in the context of this land, so the observation means something.", fact: "app.photo-scan" },
       { key: "understand", arc: "Understand", tech: "tarka", screen: "chat-marathi", title: "TARKA understands and guides.", body: "Talk to your land, in your language. Each field has its own conversation that already knows the crop and the season, and answers with practical guidance and the reason why.", fact: "tarka.land-space" },
       { key: "plan", arc: "Plan", tech: "riitu", screen: "farm-today", title: "RIITU adapts the crop plan.", body: "A stage-wise plan for this land, updated as nature changes, so Farm Today always says what is due, what to watch and what is blocked.", fact: "riitu.farm-today" },
-      { key: "market", arc: "Decide", tech: "rukh", screen: "market", title: "Market intelligence supports the decision.", body: "RUKH brings nearby mandi prices, comparisons and market context into the farmer's day. Information for the decision, never a promised price.", fact: "rukh.prices" },
+      { key: "market", arc: "Decide", tech: "rukh", screen: "market", title: "RUKH prices the crop before you sell.", body: "RUKH brings nearby mandi prices, comparisons and market context into the farmer's day. Information for the decision, never a promised price.", fact: "rukh.prices" },
       { key: "schemes", arc: "Support", feature: "Government Schemes", screen: "schemes", title: "Find support available to the farmer.", body: "Understand applicable agriculture schemes, benefits and eligibility in the farmer's language. No government affiliation is implied.", fact: "app.schemes" },
       { key: "services", arc: "Execute", feature: "Agri Services", screen: "services", title: "Find the help the farm needs.", body: "Connect with practical agricultural services such as labour and machinery, so the work the crop needs can be organised.", fact: "app.services" },
       { key: "connect", arc: "Connect", feature: "Community", screen: "community", title: "Community connects farmers beyond language.", body: "Farmers can share knowledge across languages—for example, a Telugu-speaking farmer can communicate with a Marathi-speaking farmer through the platform.", fact: "app.community" },
-      { key: "result", arc: "Understand", feature: "Farm Economics", screen: "economics", title: "Farm Economics helps understand the result.", body: "Record crop-wise income and expenses for every land and understand the season's economics. Beta, under development and in testing.", fact: "app.economics" },
+      { key: "result", arc: "Understand", feature: "Farm Economics", screen: "economics", title: "Farm Economics helps understand the result.", body: "Record crop-wise income and expenses for every land and understand the season's economics. (Early access)", fact: "app.economics" },
     ],
   },
   family: {
@@ -124,7 +124,7 @@ export const PLATFORM_PAGE = {
     title: "One farmer's day. One partner's day.",
     farmer: [
       { time: "06:30", text: "TATVA shows what nature is doing on each land: sky, soil, water, temperature and weather.", fact: "tatva.weather" },
-      { time: "08:00", text: "PAHRA surfaces a land-specific change worth noticing; Early access.", fact: "pahra.daily-risk" },
+      { time: "08:00", text: "PAHRA surfaces a land-specific change worth noticing. (Early access)", fact: "pahra.daily-risk" },
       { time: "10:30", text: "Photo Scan helps inspect a crop photo, then TARKA lets the farmer ask that land about it.", fact: "app.photo-scan" },
       { time: "12:00", text: "TARKA answers in the farmer's language with practical guidance and the reason why.", fact: "tarka.land-space" },
       { time: "15:00", text: "RIITU keeps Farm Today aligned with the crop's stage and changing conditions.", fact: "riitu.farm-today" },
@@ -188,7 +188,7 @@ export const ENTERPRISES_PAGE = {
   hero: {
     eyebrow: "For partner organisations",
     title: "Your farmers. Your brand. AI-powered agricultural intelligence.",
-    lead: "KisanShakti AI is sold to organisations, not directly to farmers. Government programmes, sugar factories, co-operative societies, FPOs, agri companies, dealers and retailers, NGOs, banks, insurers and other farmer-serving organisations can bring the AI-powered agricultural experience to their own farmer network under their own brand.",
+    lead: "Bring AI-powered farming guidance to your own farmer network, under your own brand. KisanShakti AI is sold to organisations, never directly to farmers.",
   },
   capabilities: {
     eyebrow: "The Partner Portal",
@@ -295,8 +295,8 @@ export const INVESTORS_PAGE = {
   },
   hero: {
     eyebrow: "Investors & Press",
-    title: "Early-stage, bootstrapped, pre-revenue.",
-    lead: "We publish no customer logos, revenue, accuracy figures or certifications because we have none to publish yet. What we can show is working AI-powered agricultural intelligence, a governed knowledge base, and a clear product thesis.",
+    title: "Early-stage, bootstrapped, pre-revenue. Built in Maharashtra.",
+    lead: "No customer logos, revenue or certifications yet, so we do not show any. What is real today: a live Farmer App in 14 Indian languages, a Partner Portal in limited release, crop plans built Maharashtra-first, and a governed knowledge base behind every answer.",
     fact: "company.stage",
   },
   thesis: [

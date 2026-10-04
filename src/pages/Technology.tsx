@@ -20,7 +20,7 @@ export default function Technology() {
       <PageHero eyebrow={TECHNOLOGY_PAGE.hero.eyebrow} title={TECHNOLOGY_PAGE.hero.title} lead={TECHNOLOGY_PAGE.hero.lead} size="display-1" />
 
       <Section band className="!pt-[calc(var(--ks-section)*0.6)]">
-        <FamilyEmerge eyebrow={UI.theFamily} title={UI.fiveTechOneCompanion} linkTo={null} />
+        <FamilyEmerge eyebrow={UI.theFamily} title={UI.fiveTechOneCompanion} linkTo={null} compact />
       </Section>
 
       <Section>
