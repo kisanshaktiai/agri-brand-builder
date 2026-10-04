@@ -335,8 +335,8 @@ body {
   .ks-aurora::before, .ks-aurora::after, .ks-fieldgrid, .ks-chip, .ks-chip::before { animation: none; }
   .ks-progress { display: none; }
 }
-.ks-phone-halo { position: absolute; inset: -12%; border-radius: 50%; background: radial-gradient(closest-side, hsl(var(--ks-leaf) / 0.18), transparent); filter: blur(12px); }
-@keyframes ks-word-in { from { opacity: 0; transform: translateY(0.35em); filter: blur(4px); } to { opacity: 1; transform: none; filter: blur(0); } }
+.ks-phone-halo { position: absolute; inset: -12%; border-radius: 50%; background: radial-gradient(closest-side, hsl(var(--ks-leaf) / 0.18), transparent 70%); }
+@keyframes ks-word-in { from { opacity: 0; transform: translateY(0.35em); } to { opacity: 1; transform: none; } }
 .ks-word { display: inline-block; animation: ks-word-in 0.9s var(--ks-ease-out) both; }
 .ks-word-block { animation: ks-word-in 0.9s var(--ks-ease-out) both; }
 .ks-signal { fill: none; stroke: hsl(var(--ks-lime)); stroke-width: 1; stroke-opacity: 0.38; stroke-dasharray: 900; stroke-dashoffset: 900; animation: sc-draw 2.2s var(--ks-ease-out) both; }
@@ -352,7 +352,7 @@ body {
 .ks-lang-thumb { transition: left 420ms var(--ks-ease-out), transform 420ms var(--ks-ease-out); }
 @keyframes ks-lang-pulse { 0% { box-shadow: 0 0 0 0 hsl(var(--ks-leaf) / 0.45); } 100% { box-shadow: 0 0 0 10px hsl(var(--ks-leaf) / 0); } }
 .ks-lang-pulse { animation: ks-lang-pulse 500ms var(--ks-ease-out); }
-@keyframes ks-locale-in { from { opacity: 0; transform: translateY(10px); filter: blur(3px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes ks-locale-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 /* "backwards", never "both": a transform or filter left on <main> after the
    fade would become the containing block for position:fixed and break every
    GSAP pin inside the page. */
@@ -365,3 +365,8 @@ body {
 :lang(mr), :lang(hi) { --ks-font-display: "Noto Sans Devanagari", "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif; --ks-font-text: "Noto Sans Devanagari", "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif; }
 :lang(mr) .ks-display-1, :lang(hi) .ks-display-1, :lang(mr) .ks-display-2, :lang(hi) .ks-display-2, :lang(mr) .ks-h2, :lang(hi) .ks-h2 { letter-spacing: 0; line-height: 1.15; font-weight: 600; }
 :lang(mr) .ks-h3, :lang(hi) .ks-h3 { letter-spacing: 0; line-height: 1.3; font-weight: 600; }
+
+/* Mid-range phones: the hero's continuous background loops are desktop-only. */
+@media (pointer: coarse) {
+  .ks-fieldgrid, .ks-aurora::before, .ks-aurora::after { animation: none; }
+}

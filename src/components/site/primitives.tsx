@@ -63,7 +63,7 @@ const TECH_HUE: Record<TechKey, string> = {
  */
 export function TechMark({ tech, name, house = true, size = "md", className }: { tech: TechKey; name: string; house?: boolean; size?: "sm" | "md" | "lg"; className?: string }) {
   const chip = size === "lg" ? "h-3 w-3" : size === "sm" ? "h-1.5 w-1.5" : "h-2 w-2";
-  const text = size === "lg" ? "text-base" : size === "sm" ? "text-[0.6875rem]" : "text-xs";
+  const text = size === "lg" ? "text-base" : size === "sm" ? "text-xs" : "text-xs";
   return (
     <span className={cn("inline-flex items-center gap-2 ks-mark text-ks-ink", text, className)}>
       <span aria-hidden className={cn("rounded-full", chip, TECH_HUE[tech])} />

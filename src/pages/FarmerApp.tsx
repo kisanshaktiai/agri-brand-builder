@@ -4,6 +4,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { Container, Section, Eyebrow, Heading, Body, ButtonLink, MaturityBadge } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
 import { Phone, ScreenImage } from "@/components/site/Device";
+import { FeatureDemos } from "@/components/moments/FeatureDemos";
 import { type Maturity } from "@/content/site";
 import { useContent } from "@/i18n";
 import { track } from "@/lib/analytics";
@@ -20,6 +21,9 @@ export default function FarmerApp() {
           </ButtonLink>
         </div>
       </PageHero>
+      <Section id="demos" labelledBy="farmer-demos-h">
+        <FeatureDemos id="farmer-demos" />
+      </Section>
       {FARMER_APP_PAGE.sections.map((s, i) => (
         <Section key={s.id} id={s.id} band={i % 2 === 0} className="!py-[calc(var(--ks-section)*0.6)]">
           <Container>
@@ -42,7 +46,7 @@ export default function FarmerApp() {
           </Container>
         </Section>
       ))}
-      <Section>
+      <Section band={FARMER_APP_PAGE.sections.length % 2 === 0}>
         <Container>
           <Eyebrow>{UI.alsoInCompanion}</Eyebrow>
           <ul className="grid gap-4 md:grid-cols-2">

@@ -2,8 +2,8 @@
  * Page copy. Product statements reference fact ids in src/content/facts.ts.
  * The story: Nature gives signals → TATVA observes → PAHRA alerts → Photo Scan
  * helps see → TARKA understands and guides → RIITU adapts the crop plan →
- * Market Intelligence supports decisions → Government Schemes and Agri
- * Services help execution → Community connects farmers → Farm Economics
+ * Market Intelligence supports decisions → Government Schemes support →
+ * Community connects farmers → Farm Economics
  * helps understand the result.
  */
 export const HOME = {
@@ -34,15 +34,52 @@ export const HOME = {
       { key: "plan", arc: "Plan", tech: "riitu", screen: "farm-today", title: "RIITU adapts the crop plan.", body: "A stage-wise plan for this land, updated as nature changes, so Farm Today always says what is due, what to watch and what is blocked.", fact: "riitu.farm-today" },
       { key: "market", arc: "Decide", tech: "rukh", screen: "market", title: "RUKH prices the crop before you sell.", body: "RUKH brings nearby mandi prices, comparisons and market context into the farmer's day. Information for the decision, never a promised price.", fact: "rukh.prices" },
       { key: "schemes", arc: "Support", feature: "Government Schemes", screen: "schemes", title: "Find support available to the farmer.", body: "Understand applicable agriculture schemes, benefits and eligibility in the farmer's language. No government affiliation is implied.", fact: "app.schemes" },
-      { key: "services", arc: "Execute", feature: "Agri Services", screen: "services", title: "Find the help the farm needs.", body: "Connect with practical agricultural services such as labour and machinery, so the work the crop needs can be organised.", fact: "app.services" },
       { key: "connect", arc: "Connect", feature: "Community", screen: "community", title: "Community connects farmers beyond language.", body: "Farmers can share knowledge across languages—for example, a Telugu-speaking farmer can communicate with a Marathi-speaking farmer through the platform.", fact: "app.community" },
       { key: "result", arc: "Understand", feature: "Farm Economics", screen: "economics", title: "Farm Economics helps understand the result.", body: "Record crop-wise income and expenses for every land and understand the season's economics. (Early access)", fact: "app.economics" },
+    ],
+  },
+  demos: {
+    eyebrow: "See it work",
+    title: "Six features, one step at a time.",
+    body: "Pick a feature and step through it. Each phone shows what the farmer sees in the app; the numbers on it are examples.",
+    prev: "Back",
+    next: "Next",
+    again: "Start again",
+    stepOf: "Step {n} of {total}",
+    tabs: [
+      { key: "chat", label: "AI chat with photo", tech: "tarka", maturity: "live-limited", steps: [
+        { screen: "photo-scan", title: "Take a photo of the problem.", body: "In the chat for this land, tap the camera and photograph the leaf, pest or patch. The photo stays tied to this land.", fact: "app.photo-scan" },
+        { screen: "chat-marathi", title: "Ask in your own words.", body: "Ask by voice or text, in your language. TARKA already knows the crop, its stage and the field.", fact: "tarka.land-space" },
+        { screen: "evidence", title: "See why it said that.", body: "The answer shows what it was checked against: this land, this crop stage and expert-approved guidance. It never makes up a dose.", fact: "tarka.chain" },
+      ] },
+      { key: "plan", label: "Crop plan and Farm Today", tech: "riitu", maturity: "live-limited", steps: [
+        { screen: "land", title: "Add the land once.", body: "Map the boundary, then record the crop, variety and sowing date. The area is worked out for you.", fact: "app.land" },
+        { screen: "schedule", title: "Get a plan for each stage.", body: "RIITU builds the season's plan from days since sowing, the heat the crop has gathered and the variety.", fact: "riitu.stage-graph" },
+        { screen: "farm-today", title: "Know what to do today.", body: "Farm Today sorts the day into Due, Watch, Blocked and Info, and the plan is checked again every night.", fact: "riitu.farm-today" },
+      ] },
+      { key: "weather", label: "Weather and satellite", tech: "tatva", maturity: "live", steps: [
+        { screen: "weather", title: "Weather for this land, hour by hour.", body: "Hourly and 7-day forecasts, rainfall and weather alerts for where this land is.", fact: "tatva.weather" },
+        { screen: "ndvi", title: "The satellite's view of the field.", body: "Daily satellite readings give a land health score and show which part of the field is changing.", fact: "tatva.ndvi" },
+      ] },
+      { key: "alerts", label: "Alerts", tech: "pahra", maturity: "beta", steps: [
+        { screen: "alerts", title: "An alert for this land.", body: "When risk rises, PAHRA says what changed and asks you to go and look. It never prescribes a chemical. Early access.", fact: "pahra.daily-risk" },
+        { screen: "photo-scan", title: "Check it with a photo.", body: "Walk the field, photograph what you see, then ask TARKA about it before you decide.", fact: "app.photo-scan" },
+      ] },
+      { key: "market", label: "Market prices", tech: "rukh", maturity: "live-limited", steps: [
+        { screen: "market", title: "Today's mandi prices.", body: "Today's prices, markets within 50 km, the price trend and selling advice in plain words. Information for the decision, never a promised price.", fact: "rukh.prices" },
+        { screen: "analytics", title: "Prices feed your farm numbers.", body: "Market prices flow into Farm Analytics, so projected revenue uses today's price. Every projection says it is a projection.", fact: "rukh.analytics" },
+      ] },
+      { key: "partner", label: "Partner platform", maturity: "live-limited", steps: [
+        { portal: 0, title: "One platform underneath.", body: "Farmers, lands, field signals and engagement are run from one Partner Portal on a shared, governed platform.", fact: "tenant.portal" },
+        { portal: 1, title: "Your name and colours on top.", body: "A partner such as an FPO runs the farmer experience under its own brand. Partners do not receive or fork the source code.", fact: "platform.multi-tenant" },
+        { portal: 2, title: "Every partner, the same guidance.", body: "A dealer network or an agri company gets its own workspace, while the agronomy guidance underneath stays the same and centrally governed.", fact: "platform.multi-tenant" },
+      ] },
     ],
   },
   family: {
     eyebrow: "The Technology Family",
     title: "Five intelligence technologies behind one AI companion.",
-    body: "Five named intelligence technologies work together across the season. Around them, the Farmer App brings practical features such as Photo Scan, government schemes, agri services, community and farm economics into one farmer experience.",
+    body: "Five named intelligence technologies work together across the season. Around them, the Farmer App brings practical features such as Photo Scan, government schemes, community and farm economics into one farmer experience.",
   },
   separation: {
     eyebrow: "Why it can be trusted",
@@ -129,7 +166,7 @@ export const PLATFORM_PAGE = {
       { time: "12:00", text: "TARKA answers in the farmer's language with practical guidance and the reason why.", fact: "tarka.land-space" },
       { time: "15:00", text: "RIITU keeps Farm Today aligned with the crop's stage and changing conditions.", fact: "riitu.farm-today" },
       { time: "18:00", text: "RUKH brings nearby mandi prices and market context into the decision.", fact: "rukh.prices" },
-      { time: "19:00", text: "Government schemes, agri services and community help the farmer act; Farm Economics records the season's numbers in beta.", fact: "app.companion" },
+      { time: "19:00", text: "Government schemes and community help the farmer act; Farm Economics records the season's numbers in beta.", fact: "app.companion" },
     ],
     partner: [
       { time: "09:00", text: "Onboard a new farmer group and their lands.", fact: "tenant.portal" },
@@ -150,7 +187,7 @@ export const PLATFORM_PAGE = {
 export const FARMER_APP_PAGE = {
   seo: {
     title: "Farmer App — A complete digital companion for every farmer and every land",
-    description: "Understand what nature is doing, know what is changing, see the crop, talk to your land, follow a plan that adapts, know the market, find schemes and services, connect with farmers, and understand farm economics.",
+    description: "Understand what nature is doing, know what is changing, see the crop, talk to your land, follow a plan that adapts, know the market, find schemes, connect with farmers, and understand farm economics.",
   },
   hero: {
     eyebrow: "Farmer App · Live",
@@ -166,7 +203,6 @@ export const FARMER_APP_PAGE = {
     { id: "today", title: "Follow a crop plan that adapts to nature.", body: "KisanShakti RIITU builds a practical, stage-wise plan for each land, then adapts it when TATVA sees the field or the weather change. Farm Today lists what is Due, what to Watch, what is Blocked and what is good to know.", screen: "farm-today", fact: "riitu.farm-today" },
     { id: "market", title: "Know the market around your crop.", body: "KisanShakti RUKH: today's mandi prices, nearby markets, comparisons across the state and over time, and a selling advisor in plain words. Market insight, not a guaranteed price.", screen: "market", fact: "rukh.prices" },
     { id: "schemes", title: "Discover the support you are eligible for.", body: "Government Schemes: find and understand applicable agriculture schemes, benefits and eligibility, such as PM-Kisan, crop insurance and Soil Health Card, in your language. No government affiliation is implied.", screen: "schemes", fact: "app.schemes" },
-    { id: "services", title: "Find the help the farm needs.", body: "Agri Services: a practical service ecosystem connecting you with agricultural services such as labour and machinery, so the work the plan calls for actually gets done.", screen: "services", fact: "app.services" },
     { id: "community", title: "Farmers connected beyond language.", body: "A multilingual farmer community: feed, photos, comments, groups and group chat, trending topics and read-aloud. A Telugu-speaking farmer can talk with a Marathi-speaking farmer through the platform.", screen: "community", fact: "app.community" },
     { id: "economics", title: "Understand income and expenses.", body: "Farm Economics, for every farmer and every land: record and understand crop-wise income, expenses and the season's result. This capability is in beta, under development and in testing. It is not yet a fully released feature.", screen: "economics", fact: "app.economics", maturity: "beta" },
   ],
@@ -177,6 +213,7 @@ export const FARMER_APP_PAGE = {
     { title: "Voice-first", body: "Voice onboarding, voice land capture, questions by voice and answers read aloud.", fact: "app.voice", maturity: "live" },
     { title: "Offline-first", body: "A PWA plus Android and iOS builds that work on weak networks and sync when back online.", fact: "app.offline", maturity: "live" },
     { title: "Mobile number and PIN", body: "Sign in with a mobile number and a PIN. No email needed.", fact: "app.login", maturity: "live" },
+    { title: "Agri Services", body: "Finding labour and machinery near the farm is on the roadmap. It is not in the app yet.", fact: "app.services", maturity: "planned" },
   ],
 };
 

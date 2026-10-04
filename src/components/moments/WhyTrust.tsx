@@ -57,7 +57,7 @@ export function WhyTrust({ eyebrow, title, body }: { eyebrow: string; title: str
                 <div className="rounded-ks-md border border-ks-line bg-ks-white p-5 shadow-ks-1">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <h3 className="ks-h3 text-[1.0625rem]">{step.title}</h3>
-                    <span className={cn("rounded-full px-2.5 py-0.5 text-[0.6875rem] font-medium", OWNER_CLS[step.owner])}>{TRUST_OWNERS[step.owner].label}</span>
+                    <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium", OWNER_CLS[step.owner])}>{TRUST_OWNERS[step.owner].label}</span>
                   </div>
                   <p className="ks-body mt-2">{step.body}</p>
                 </div>
@@ -67,7 +67,7 @@ export function WhyTrust({ eyebrow, title, body }: { eyebrow: string; title: str
           <dl className="mt-6 grid gap-2 text-sm">
             {(Object.keys(TRUST_OWNERS) as TrustStep["owner"][]).map((k) => (
               <div key={k} className="flex items-center gap-3">
-                <dt className={cn("rounded-full px-2.5 py-0.5 text-[0.6875rem] font-medium", OWNER_CLS[k])}>{TRUST_OWNERS[k].label}</dt>
+                <dt className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium", OWNER_CLS[k])}>{TRUST_OWNERS[k].label}</dt>
                 <dd className="text-ks-ink-3">{TRUST_OWNERS[k].note}</dd>
               </div>
             ))}

@@ -39,7 +39,7 @@ export const FACTS: Fact[] = [
   { id: "app.videos", area: "Videos", maturity: "live", statement: "Short education reels from the KisanShakti AI YouTube channel with comments, including crop-wise season journeys such as sugarcane from pre-season through ratoon." },
   { id: "app.soil", area: "Soil Health Report", maturity: "live-limited", statement: "Built from the farmer's own soil-test results.", limits: ["There is no soil-sensing hardware."] },
   { id: "app.schemes", area: "Government Schemes", maturity: "live", statement: "Plain-language information and eligibility for schemes such as PM-Kisan, crop insurance and Soil Health Card, in the farmer's language.", limits: ["No government affiliation is implied."] },
-  { id: "app.services", area: "Agri Services", maturity: "live-limited", statement: "A service ecosystem connecting farmers with agricultural services such as labour and machinery." },
+  { id: "app.services", area: "Agri Services", maturity: "planned", statement: "Roadmap: connecting farmers with agricultural services such as labour and machinery.", limits: ["Not in the Farmer App today."] },
 
   // TARKA
   { id: "tarka.land-space", area: "TARKA", maturity: "live-limited", statement: "Every land has its own contextual conversation for that farmer's crop and field." },

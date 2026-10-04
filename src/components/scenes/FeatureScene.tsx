@@ -232,7 +232,7 @@ function Reels() {
           <circle cx={110 + (i % 2) * 170} cy={240 + Math.floor(i / 2) * 290} r="22" className="fill-white" />
           <path d={`M${104 + (i % 2) * 170} ${230 + Math.floor(i / 2) * 290} l16 10 l-16 10z`} className="fill-ink" />
           <text x={48 + (i % 2) * 170} y={360 + Math.floor(i / 2) * 290} className="t-sans" style={{ fontSize: 13, fill: i === 0 ? "hsl(var(--ks-field-ink))" : "hsl(var(--ks-ink-2))" }}>
-            {["Sugarcane: pre-season", "Sugarcane: planting", "Sugarcane: grand growth", "Sugarcane: ratoon"][i]}
+            {S[208 + i]}
           </text>
         </g>
       ))}
@@ -282,7 +282,7 @@ function Analytics() {
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
       <Header title={S[88]} />
-      {[["Land area", "Example"], ["Crop count", "2"], ["Revenue view", "Example"], ["Profit view", "Example"]].map((k, i) => (
+      {[[S[212], S[216]], [S[213], "2"], [S[214], S[216]], [S[215], S[216]]].map((k, i) => (
         <g key={k[0]} className="sc-rise" style={D(0.3 + i * 0.2)}>
           <rect x={32 + (i % 2) * 170} y={130 + Math.floor(i / 2) * 96} width="156" height="80" rx="14" className="fill-white" stroke="hsl(var(--ks-line))" />
           <text x={48 + (i % 2) * 170} y={158 + Math.floor(i / 2) * 96} style={{ fontSize: 11 }}>{k[0]}</text>
@@ -330,11 +330,11 @@ function Alerts() {
         <text x="32" y="596" className="t-sans t-ink" style={{ fontSize: 15 }}>{S[190]}</text>
         {[S[191], S[192], S[193]].map((t, i) => (
           <g key={t}>
-            <rect x={32 + i * 110} y="616" width="100" height="44" rx="22" className={i === 0 ? "fill-field-soft" : "fill-white"} stroke="hsl(var(--ks-line))" />
+            <rect x={32 + i * 110} y="616" width="100" height="44" rx="22" className={i === 1 ? "fill-field-soft" : "fill-white"} stroke="hsl(var(--ks-line))" />
             <text x={82 + i * 110} y="644" textAnchor="middle" className="t-sans t-ink" style={{ fontSize: 14 }}>{t}</text>
           </g>
         ))}
-        <path d="M110 632 l5 5 l9 -10" className="field sc-tick" strokeWidth="2.2" style={D(3.2)} />
+        <rect x="142" y="616" width="100" height="44" rx="22" className="sc-pulse" fill="none" stroke="hsl(var(--ks-field))" strokeWidth="2" style={D(3.2)} />
       </g>
     </svg>
   );
@@ -349,7 +349,7 @@ function Growth() {
         <g key={i} className="sc-rise" style={D(0.3 + i * 0.3)}>
           <rect x={40 + i * 80} y="140" width="64" height="120" rx="12" className="fill-soft" />
           <path d={`M${72 + i * 80} 250 v-${30 + i * 22}`} className="field sc-draw" strokeWidth="2.5" style={{ "--len": "120", "--d": `${0.5 + i * 0.3}s` } as React.CSSProperties} />
-          <text x={72 + i * 80} y="285" textAnchor="middle">{["wk 2", "wk 4", "wk 6", "wk 8"][i]}</text>
+          <text x={72 + i * 80} y="285" textAnchor="middle">{S[245].replace("{n}", String(2 + i * 2))}</text>
         </g>
       ))}
       <Pill x="32" y="330" w="326" text={S[92]} tone="fill-field-soft" d={1.6} />
@@ -412,6 +412,10 @@ function TenantPortal() {
         </g>
       ))}
       <text x="360" y="90" className="t-sans t-ink" style={{ fontSize: 30 }}>{S[48]}</text>
+      <g className="sc-in" style={D(0.4)}>
+        <rect x="1060" y="62" width="340" height="36" rx="18" className="fill-signal-soft" />
+        <text x="1230" y="86" textAnchor="middle" className="t-sans t-ink" style={{ fontSize: 15 }}>{S[205]}</text>
+      </g>
       {[0, 1, 2, 3].map((i) => (
         <g key={i} className="sc-rise" style={D(0.6 + i * 0.15)}>
           <rect x={360 + i * 260} y="130" width="236" height="120" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
@@ -447,6 +451,10 @@ function AdminPortal() {
         </g>
       ))}
       <text x="360" y="90" className="t-sans t-ink" style={{ fontSize: 30 }}>{S[51]}</text>
+      <g className="sc-in" style={D(0.4)}>
+        <rect x="1060" y="62" width="340" height="36" rx="18" className="fill-signal-soft" />
+        <text x="1230" y="86" textAnchor="middle" className="t-sans t-ink" style={{ fontSize: 15 }}>{S[205]}</text>
+      </g>
       {[["Guidance under review", "38"], ["Approved this month", "112"], ["Sources", "ICAR · state universities"]].map((k, i) => (
         <g key={k[0]} className="sc-rise" style={D(0.6 + i * 0.15)}>
           <rect x={360 + i * 346} y="130" width="320" height="120" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
@@ -502,9 +510,9 @@ function PhotoScan() {
 function Schemes() {
   const S = useT().SCENE;
   const items = [
-    ["PM-Kisan", "Income support information", "Check eligibility"],
-    ["Crop insurance", "Coverage and enrolment information", "View details"],
-    ["Soil Health Card", "How to obtain and use it", "Learn more"],
+    ["PM-Kisan", S[217], S[218]],
+    [S[219], S[220], S[221]],
+    [S[222], S[223], S[224]],
   ];
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
@@ -514,8 +522,8 @@ function Schemes() {
           <rect x="32" y={130 + i * 130} width="326" height="110" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
           <text x="52" y={166 + i * 130} className="t-sans t-ink" style={{ fontSize: 17 }}>{name}</text>
           <text x="52" y={192 + i * 130} className="t-sans" style={{ fontSize: 14 }}>{detail}</text>
-          <rect x="52" y={206 + i * 130} width={action === "Check eligibility" ? 118 : 96} height="22" rx="11" className="fill-field-soft" />
-          <text x={action === "Check eligibility" ? 111 : 100} y={221 + i * 130} textAnchor="middle" className="t-sans" style={{ fontSize: 11 }}>{action}</text>
+          <rect x="52" y={206 + i * 130} width="130" height="22" rx="11" className="fill-field-soft" />
+          <text x="117" y={221 + i * 130} textAnchor="middle" className="t-sans" style={{ fontSize: 11 }}>{action}</text>
         </g>
       ))}
       <text x="32" y="560" className="sc-in" style={D(1.8)}>{S[54]}</text>
@@ -527,37 +535,6 @@ function Schemes() {
         <rect x="32" y="692" width="326" height="48" rx="14" className="fill-white" stroke="hsl(var(--ks-line))" />
         <circle cx="54" cy="716" r="6" className="fill-field" />
         <text x="80" y="721" className="t-sans t-ink" style={{ fontSize: 14 }}>{S[201]}</text>
-      </g>
-    </svg>
-  );
-}
-function Services() {
-  const S = useT().SCENE;
-  const items = [
-    ["Labour", "Search workers for the task", "Find labour"],
-    ["Machinery", "Find equipment near the land", "Find machinery"],
-    ["Transport", "Arrange movement to market", "Request service"],
-  ];
-  return (
-    <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
-      <Header title={S[101]} />
-      {items.map(([name, detail, action], i) => (
-        <g key={name} className="sc-rise" style={D(0.3 + i * 0.4)}>
-          <rect x="32" y={130 + i * 150} width="326" height="128" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
-          <rect x="48" y={146 + i * 150} width="64" height="64" rx="12" className="fill-soft" />
-          <text x="128" y={176 + i * 150} className="t-sans t-ink" style={{ fontSize: 17 }}>{name}</text>
-          <text x="128" y={200 + i * 150} className="t-sans" style={{ fontSize: 14 }}>{detail}</text>
-          <text x="128" y={240 + i * 150} className="t-sans" style={{ fontSize: 13, fill: "hsl(var(--ks-field-deep))" }}>{action} ›</text>
-        </g>
-      ))}
-      <text x="32" y="620" className="sc-in" style={D(1.8)}>{S[56]}</text>
-      <g className="sc-rise" style={D(2.6)}>
-        <rect x="32" y="660" width="326" height="62" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
-        <circle cx="62" cy="691" r="7" className="fill-field" />
-        <circle cx="62" cy="691" r="7" className="sc-pulse" fill="none" stroke="hsl(var(--ks-field))" strokeWidth="2" />
-        <text x="82" y="696" className="t-sans t-ink" style={{ fontSize: 14 }}>{S[203]}</text>
-        <rect x="236" y="674" width="108" height="34" rx="17" className="fill-ink" />
-        <text x="290" y="696" textAnchor="middle" className="t-sans" style={{ fill: "hsl(var(--ks-paper))", fontSize: 12 }}>{S[202]}</text>
       </g>
     </svg>
   );
@@ -575,7 +552,7 @@ function Economics() {
         <text x="32" y="276" className="t-sans t-ink" style={{ fontSize: 15 }}>{S[59]}</text>
         <rect x="140" y="262" width="128" height="18" rx="6" className="fill-line sc-bar" style={{ "--d": "0.9s" } as React.CSSProperties} />
       </g>
-      {[["Seed", "₹ 2,400"], ["Fertiliser", "₹ 5,100"], ["Labour", "₹ 7,800"], ["Sale · 18 quintal", "₹ 41,400"]].map((r, i) => (
+      {[[S[225], "₹ 2,400"], [S[226], "₹ 5,100"], [S[227], "₹ 7,800"], [S[228], "₹ 41,400"]].map((r, i) => (
         <g key={r[0]} className="sc-rise" style={D(1.2 + i * 0.2)}>
           <text x="32" y={340 + i * 40} className="t-sans" style={{ fontSize: 15 }}>{r[0]}</text>
           <text x="358" y={340 + i * 40} textAnchor="end" className="t-sans t-ink" style={{ fontSize: 15 }}>{r[1]}</text>
@@ -597,11 +574,11 @@ function Economics() {
 function Schedule() {
   const S = useT().SCENE;
   const stages = [
-    ["1", "Sowing", "Foundation"],
-    ["2", "Vegetative growth", "Build"],
-    ["3", "Reproductive stage", "Watch"],
-    ["4", "Flowering", "Protect"],
-    ["5", "Maturity", "Harvest"],
+    ["1", S[229], S[230]],
+    ["2", S[231], S[232]],
+    ["3", S[233], S[234]],
+    ["4", S[235], S[236]],
+    ["5", S[237], S[238]],
   ];
   return (
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
@@ -612,8 +589,9 @@ function Schedule() {
         <g key={n} className="sc-rise" style={D(0.4 + i * 0.25)}>
           <circle cx={52 + i * 71} cy="188" r={i === 2 ? 10 : 6} className={i === 2 ? "fill-field" : "fill-line"} />
           <text x={52 + i * 71} y="218" textAnchor="middle">{n}</text>
-          <text x={52 + i * 71} y="244" textAnchor="middle" className="t-sans t-ink" style={{ fontSize: 12 }}>{title}</text>
-          <text x={52 + i * 71} y="263" textAnchor="middle" style={{ fontSize: 11 }}>{sub}</text>
+          {i % 2 === 1 && <line x1={52 + i * 71} y1="226" x2={52 + i * 71} y2="262" className="ln" />}
+          <text x={52 + i * 71} y={i % 2 ? 278 : 242} textAnchor={i === 0 ? "start" : i === 4 ? "end" : "middle"} dx={i === 0 ? -14 : i === 4 ? 14 : 0} className="t-sans t-ink" style={{ fontSize: 12 }}>{title}</text>
+          <text x={52 + i * 71} y={i % 2 ? 295 : 259} textAnchor={i === 0 ? "start" : i === 4 ? "end" : "middle"} dx={i === 0 ? -14 : i === 4 ? 14 : 0} style={{ fontSize: 11 }}>{sub}</text>
         </g>
       ))}
       <g className="sc-rise" style={D(2.2)}>
@@ -642,9 +620,9 @@ function Evidence() {
     <svg className="ks-scene" viewBox="0 0 390 844" aria-hidden>
       <Header title={S[107]} />
       {[
-        ["01", "This land", "Field conditions"],
-        ["02", "This crop", "Current biological stage"],
-        ["03", "Trusted guidance", "Agricultural evidence"],
+        ["01", S[239], S[240]],
+        ["02", S[241], S[242]],
+        ["03", S[243], S[244]],
       ].map(([n, title, sub], i) => (
         <g key={n} className="sc-rise" style={D(0.35 + i * 0.45)}>
           <circle cx="58" cy={160 + i * 118} r="18" className="fill-field-soft" />
@@ -668,7 +646,6 @@ function Evidence() {
 const VIGNETTES: Record<string, { C: React.FC; label: number }> = {
   "photo-scan": { C: PhotoScan, label: 119 },
   schemes: { C: Schemes, label: 120 },
-  services: { C: Services, label: 121 },
   economics: { C: Economics, label: 122 },
   "tenant-dashboard": { C: TenantPortal, label: 123 },
   "tenant-farmers": { C: TenantPortal, label: 124 },

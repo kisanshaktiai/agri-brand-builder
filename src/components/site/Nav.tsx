@@ -38,10 +38,10 @@ export function Nav() {
   }, []);
 
   const linkCls = ({ isActive }: { isActive: boolean }) =>
-    cn("whitespace-nowrap text-[0.8125rem] transition-colors duration-200 hover:text-ks-ink", isActive ? "text-ks-ink" : "text-ks-ink-2");
+    cn("inline-flex min-h-[44px] items-center whitespace-nowrap text-[0.8125rem] transition-colors duration-200 hover:text-ks-ink", isActive ? "text-ks-ink" : "text-ks-ink-2");
 
   return (
-    <header className={cn("sticky top-0 z-40 border-b transition-colors duration-300", scrolled ? "border-ks-line bg-ks-paper/85 backdrop-blur-md" : "border-transparent bg-transparent")}>
+    <header className={cn("sticky top-0 z-40 border-b transition-colors duration-300", scrolled ? "border-ks-line bg-ks-paper [@media(pointer:fine)]:bg-ks-paper/85 [@media(pointer:fine)]:backdrop-blur-md" : "border-transparent bg-transparent")}>
       <span aria-hidden className="ks-progress" />
       <a href="#main" className="ks-skip">
         {UI.skip}

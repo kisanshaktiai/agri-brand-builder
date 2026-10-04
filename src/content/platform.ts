@@ -22,7 +22,7 @@ export const SURFACES: SurfaceDef[] = [
     maturity: "live",
     question: "What should I do on this land today?",
     description:
-      "A complete digital companion for every farmer and every land, in 14 Indian languages, voice-first and offline-first: land mapping, Farm Today, a conversation for each land, Photo Scan, weather and satellite, a crop plan that adapts, market intelligence, schemes, services, community and farm economics.",
+      "A complete digital companion for every farmer and every land, in 14 Indian languages, voice-first and offline-first: land mapping, Farm Today, a conversation for each land, Photo Scan, weather and satellite, a crop plan that adapts, market intelligence, schemes, community and farm economics.",
     screen: "farm-today",
     fact: "app.companion",
     capabilities: [
