@@ -67,7 +67,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
       });
 
       // Continuous zoom is the backbone of the scene.
-      tl.fromTo(stageRef.current, { scale: 2.6 }, { scale: 1, ease: "none", duration: 4 }, 0);
+      tl.fromTo(stageRef.current, { scale: 1.6 }, { scale: 1, ease: "none", duration: 4 }, 0);
 
       // The composition and copy advance on the same four-part rhythm.
       // Keep one caption visible at a time. Each new step fades in while
@@ -95,15 +95,16 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
 
   // lvl 0 = farmer; 1 = partner workspace; 2 = many partner ecosystems;
   // 3 = shared platform.
+  // In the flow layout a step shows its own layer fully and the deeper layers faintly, so no step is a phone floating in blank space.
   const vis = (minLvl: number, lvl: number): React.CSSProperties | undefined =>
-    !pinned && lvl < minLvl ? { opacity: 0 } : undefined;
+    !pinned && lvl < minLvl ? { opacity: 0.18 } : undefined;
 
   const Composite = ({ lvl, className }: { lvl: number; className?: string }) => (
-    <div className={cn("relative mx-auto w-full max-w-[880px]", className)}>
+    <div className={cn("relative mx-auto w-full max-w-[880px]", pinned && "min-h-[520px]", className)}>
       <div className="relative p-4 md:p-6">
         <div aria-hidden className="pz-l3 absolute inset-0 rounded-ks-lg border border-ks-line bg-ks-paper-2" style={vis(3, lvl)} />
         <p className="pz-l3 relative ks-label mb-3" style={vis(3, lvl)} aria-hidden={!pinned && lvl < 3}>{UI.sharedPlatformLabel}</p>
-        <div className="relative grid grid-cols-3 gap-3">
+        <div className="relative grid grid-cols-3 gap-4">
           {TENANT_EXAMPLES.slice(1).map((t, i) => (
             <div key={t.id} className={cn("relative p-3", i > 0 && "pz-l2")} style={i > 0 ? vis(2, lvl) : undefined}>
               <div aria-hidden className={cn("absolute inset-0 rounded-ks-md border", i === 0 ? "pz-l1 border-ks-line bg-ks-white shadow-ks-1" : "border-ks-line/70 bg-ks-white/70")} style={i === 0 ? vis(1, lvl) : undefined} />
@@ -112,7 +113,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
                 <span className="truncate text-xs text-ks-ink-2">{t.name}</span>
               </div>
               {i === 0 ? (
-                <div className="relative mx-auto w-[42%] min-w-[64px]">
+                <div className="relative mx-auto w-[58%] min-w-[96px]">
                   <Phone className="!rounded-[16px] !p-[3px] [&>.ks-phone-screen]:!rounded-[13px] after:!hidden" label={UI.aFarmer}>
                     <ScreenImage screen="farm-today" />
                   </Phone>
@@ -167,10 +168,9 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
                       <h3 className="ks-h3">{s.title}</h3>
                       <p className="ks-body mt-2">{s.body}</p>
                     </div>
-                    <div className="overflow-hidden rounded-ks-lg">
-                      <div style={{ transform: `scale(${[2.2, 1.5, 1.1, 1][i]})`, transformOrigin: "18% 40%" }} className="transition-transform duration-700 ease-ks-out">
-                        <Composite lvl={i} />
-                      </div>
+                    {/* Natural size on every step; deeper layers fade in as the steps progress (no zoom crop in the flow layout). */}
+                    <div className="rounded-ks-lg">
+                      <Composite lvl={i} />
                     </div>
                   </li>
                 ))}
@@ -180,7 +180,7 @@ export function PlatformZoom({ eyebrow, title, steps }: { eyebrow: string; title
 
           {pinned && (
             <div className="relative overflow-hidden rounded-ks-lg" style={{ maskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)" }}>
-              <div ref={stageRef} style={{ transformOrigin: "22% 46%" }}>
+              <div ref={stageRef} style={{ transformOrigin: "20% 50%" }}>
                 <Composite lvl={3} />
               </div>
             </div>

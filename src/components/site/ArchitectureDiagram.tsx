@@ -33,7 +33,9 @@ function ArchNodeButton({ n, active, panelId, onSelect }: { n: ArchNode; active:
  * On phones the detail opens beneath the diagram (progressive disclosure).
  */
 export function ArchitectureDiagram({ eyebrow, title, hint }: { eyebrow: string; title: string; hint: string }) {
-  const { ARCHITECTURE, UI } = useContent();
+  const { ARCHITECTURE, UI, SURFACES } = useContent();
+  /** The screen caption in the page language: the surface question, not the untranslated screen manifest. */
+  const captionFor = (screen: string) => (screenById(screen).surface === "farmer-app" ? SURFACES[0]?.question : SURFACES[1]?.question) ?? screenById(screen).question;
   const [activeId, setActiveId] = useState<string>("farmer-app");
   const panelId = useId();
   const active = ARCHITECTURE.find((n) => n.id === activeId) ?? ARCHITECTURE[0];
@@ -95,7 +97,7 @@ export function ArchitectureDiagram({ eyebrow, title, hint }: { eyebrow: string;
                   <ScreenImage screen={active.screen} />
                 </Browser>
               )}
-              <p className="ks-small mt-3 text-center">{screenById(active.screen).question}</p>
+              <p className="ks-small mt-3 text-center">{captionFor(active.screen)}</p>
             </div>
           )}
         </div>
