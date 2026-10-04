@@ -60,7 +60,7 @@ export function TenantTransform({ eyebrow, title, body, layers }: { eyebrow: str
         <Heading>{title}</Heading>
         <Body className="mt-6">{body}</Body>
         <ul className="mt-12 grid gap-6 md:grid-cols-2">
-          {TENANT_EXAMPLES.map((tenant) => (
+          {TENANT_EXAMPLES.map((tenant, i) => (
             <li key={tenant.id}>
               <Plate tenantIndex={i} />
             </li>

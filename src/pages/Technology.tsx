@@ -1,7 +1,7 @@
 import React from "react";
 import { Seo } from "@/components/site/Seo";
 import { PageHero } from "@/components/site/PageHero";
-import { Container, Section, Eyebrow, Heading, Body, TechMark, MaturityBadge, HairlineList, ButtonLink } from "@/components/site/primitives";
+import { Container, Section, Eyebrow, Heading, Body, TechMark, TechIcon, MaturityBadge, HairlineList, ButtonLink } from "@/components/site/primitives";
 import { Reveal } from "@/components/site/Reveal";
 import { Phone, ScreenImage } from "@/components/site/Device";
 import { FamilyEmerge } from "@/components/moments/FamilyEmerge";
