@@ -9,10 +9,12 @@ import { SceneFrame } from "./SceneFrame";
  */
 const D = (d: number) => ({ "--d": `${d}s` }) as React.CSSProperties;
 
+/** App bar shared by every phone scene: the official KisanShakti AI logo, then the screen title. */
 const Header = ({ title }: { title: string }) => (
   <g>
-    <text x="32" y="86" className="t-sans t-ink" style={{ fontSize: 22, fontWeight: 500 }}>{title}</text>
-    <line x1="32" y1="104" x2="358" y2="104" className="ln" />
+    <image href="/brand/logo.png" x="32" y="30" width="98" height="42" preserveAspectRatio="xMinYMid meet" />
+    <text x="32" y="98" className="t-sans t-ink" style={{ fontSize: 22, fontWeight: 500 }}>{title}</text>
+    <line x1="32" y1="114" x2="358" y2="114" className="ln" />
   </g>
 );
 
@@ -260,6 +262,17 @@ function Land() {
       <Pill x="32" y="490" w="326" text={S[85]} d={3.6} />
       <Pill x="32" y="540" w="326" text={S[86]} d={3.9} />
       <Pill x="32" y="590" w="326" text={S[87]} tone="fill-field-soft" d={4.2} />
+      <g className="sc-rise" style={D(4.6)}>
+        <rect x="32" y="648" width="326" height="150" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
+        <rect x="48" y="664" width="96" height="118" rx="12" className="fill-field-soft" />
+        <polygon points="62,680 126,676 130,760 66,766" className="fill-field" opacity="0.55" />
+        <polygon points="80,700 110,698 112,730 82,732" className="fill-signal-soft" opacity="0.9" />
+        <text x="160" y="690" className="t-sans t-ink" style={{ fontSize: 15 }}>{S[188]}</text>
+        <text x="160" y="714" className="t-sans" style={{ fontSize: 13 }}>{S[189]}</text>
+        <rect x="160" y="736" width="180" height="8" rx="4" className="fill-soft" />
+        <rect x="160" y="736" width="130" height="8" rx="4" className="fill-field sc-bar" style={{ transformOrigin: "left", "--d": "5s" } as React.CSSProperties} />
+        <text x="160" y="770" style={{ fontSize: 11 }}>{S[87]}</text>
+      </g>
     </svg>
   );
 }
@@ -313,6 +326,16 @@ function Alerts() {
       <Pill x="32" y="440" w="326" text={S[90]} tone="fill-signal-soft" d={1.6} />
       <text x="32" y="520" className="sc-in" style={D(2)}>{S[42]}</text>
       <text x="32" y="542" className="sc-in" style={D(2.2)}>{S[43]}</text>
+      <g className="sc-rise" style={D(2.6)}>
+        <text x="32" y="596" className="t-sans t-ink" style={{ fontSize: 15 }}>{S[190]}</text>
+        {[S[191], S[192], S[193]].map((t, i) => (
+          <g key={t}>
+            <rect x={32 + i * 110} y="616" width="100" height="44" rx="22" className={i === 0 ? "fill-field-soft" : "fill-white"} stroke="hsl(var(--ks-line))" />
+            <text x={82 + i * 110} y="644" textAnchor="middle" className="t-sans t-ink" style={{ fontSize: 14 }}>{t}</text>
+          </g>
+        ))}
+        <path d="M110 632 l5 5 l9 -10" className="field sc-tick" strokeWidth="2.2" style={D(3.2)} />
+      </g>
     </svg>
   );
 }
@@ -333,6 +356,15 @@ function Growth() {
       <Pill x="32" y="380" w="326" text={S[93]} d={1.9} />
       <Pill x="32" y="430" w="326" text={S[94]} d={2.2} />
       <text x="32" y="520" className="sc-in" style={D(2.6)}>{S[44]}</text>
+      <g className="sc-rise" style={D(2.2)}>
+        <line x1="48" y1="640" x2="342" y2="640" className="ln" strokeWidth="3" />
+        <line x1="48" y1="640" x2="230" y2="640" className="field sc-draw" strokeWidth="3" style={{ "--len": "200", "--d": "2.4s" } as React.CSSProperties} />
+        {[48, 120, 230, 342].map((x, i) => (
+          <circle key={x} cx={x} cy="640" r={i === 2 ? 9 : 5} className={i <= 2 ? "fill-field" : "fill-line"} />
+        ))}
+        <text x="32" y="690" className="t-sans t-ink" style={{ fontSize: 15 }}>{S[196]}</text>
+        <text x="32" y="714" className="t-sans" style={{ fontSize: 13 }}>{S[197]}</text>
+      </g>
     </svg>
   );
 }
@@ -350,6 +382,17 @@ function Login() {
         <text x="195" y="350" textAnchor="middle">{S[45]}</text>
       </g>
       <text x="195" y="440" textAnchor="middle" className="sc-in" style={D(1.4)}>{S[46]}</text>
+      <g className="sc-rise" style={D(2)}>
+        <text x="32" y="520" className="t-sans t-ink" style={{ fontSize: 15 }}>{S[194]}</text>
+        {[0, 1].map((i) => (
+          <g key={i} className="sc-rise" style={D(2.4 + i * 0.4)}>
+            <rect x="32" y={540 + i * 70} width="326" height="58" rx="14" className="fill-white" stroke="hsl(var(--ks-line))" />
+            <rect x="46" y={552 + i * 70} width="34" height="34" rx="8" className="fill-field-soft" />
+            <text x="94" y={575 + i * 70} className="t-sans t-ink" style={{ fontSize: 14 }}>{i === 0 ? S[189] : S[57]}</text>
+          </g>
+        ))}
+        <text x="195" y="720" textAnchor="middle" className="sc-in" style={D(3.4)}>{S[195]}</text>
+      </g>
     </svg>
   );
 }
@@ -443,6 +486,15 @@ function PhotoScan() {
       <Pill x="32" y="470" w="326" text={S[98]} tone="fill-signal-soft" d={2.4} />
       <Pill x="32" y="520" w="326" text={S[99]} tone="fill-field-soft" d={2.8} />
       <text x="32" y="600" className="sc-in" style={D(3.2)}>{S[53]}</text>
+      <g className="sc-rise" style={D(2.6)}>
+        <rect x="32" y="640" width="326" height="56" rx="14" className="fill-signal-soft" />
+        <circle cx="58" cy="668" r="7" className="fill-signal" />
+        <text x="76" y="673" className="t-sans t-ink" style={{ fontSize: 15 }}>{S[198]}</text>
+      </g>
+      <g className="sc-rise" style={D(3.1)}>
+        <rect x="32" y="716" width="326" height="52" rx="26" className="fill-ink" />
+        <text x="195" y="748" textAnchor="middle" className="t-sans" style={{ fill: "hsl(var(--ks-paper))", fontSize: 15 }}>{S[199]}</text>
+      </g>
     </svg>
   );
 }
@@ -468,6 +520,14 @@ function Schemes() {
       ))}
       <text x="32" y="560" className="sc-in" style={D(1.8)}>{S[54]}</text>
       <text x="32" y="582" className="sc-in" style={D(2)}>{S[55]}</text>
+      <g className="sc-rise" style={D(2.4)}>
+        <rect x="32" y="630" width="326" height="48" rx="14" className="fill-field-soft" />
+        <path d="M52 654 l6 6 l11 -12" className="field sc-tick" strokeWidth="2.2" style={D(2.8)} />
+        <text x="80" y="659" className="t-sans t-ink" style={{ fontSize: 14 }}>{S[200]}</text>
+        <rect x="32" y="692" width="326" height="48" rx="14" className="fill-white" stroke="hsl(var(--ks-line))" />
+        <circle cx="54" cy="716" r="6" className="fill-field" />
+        <text x="80" y="721" className="t-sans t-ink" style={{ fontSize: 14 }}>{S[201]}</text>
+      </g>
     </svg>
   );
 }
@@ -491,6 +551,14 @@ function Services() {
         </g>
       ))}
       <text x="32" y="620" className="sc-in" style={D(1.8)}>{S[56]}</text>
+      <g className="sc-rise" style={D(2.6)}>
+        <rect x="32" y="660" width="326" height="62" rx="16" className="fill-white" stroke="hsl(var(--ks-line))" />
+        <circle cx="62" cy="691" r="7" className="fill-field" />
+        <circle cx="62" cy="691" r="7" className="sc-pulse" fill="none" stroke="hsl(var(--ks-field))" strokeWidth="2" />
+        <text x="82" y="696" className="t-sans t-ink" style={{ fontSize: 14 }}>{S[203]}</text>
+        <rect x="236" y="674" width="108" height="34" rx="17" className="fill-ink" />
+        <text x="290" y="696" textAnchor="middle" className="t-sans" style={{ fill: "hsl(var(--ks-paper))", fontSize: 12 }}>{S[202]}</text>
+      </g>
     </svg>
   );
 }
@@ -515,6 +583,12 @@ function Economics() {
         </g>
       ))}
       <text x="32" y="540" className="sc-in" style={D(2.2)}>{S[60]}</text>
+      <g className="sc-rise" style={D(2.4)}>
+        <text x="32" y="600" className="t-sans t-ink" style={{ fontSize: 15 }}>{S[204]}</text>
+        <rect x="32" y="616" width="326" height="22" rx="11" className="fill-soft" />
+        <rect x="32" y="616" width="226" height="22" rx="11" className="fill-field sc-bar" style={{ transformOrigin: "left", "--d": "2.8s" } as React.CSSProperties} />
+        <text x="32" y="672" style={{ fontSize: 11 }}>{S[205]}</text>
+      </g>
     </svg>
   );
 }
@@ -551,6 +625,13 @@ function Schedule() {
       <Pill x="32" y="442" w="326" text={S[105]} tone="fill-soft" d={2.7} />
       <Pill x="32" y="492" w="326" text={S[106]} tone="fill-soft" d={3.0} />
       <text x="32" y="574" className="sc-in" style={D(3.5)}>{S[65]}</text>
+      <g className="sc-rise" style={D(2.8)}>
+        <rect x="32" y="640" width="326" height="92" rx="16" className="fill-signal-soft" />
+        <circle cx="60" cy="672" r="8" className="fill-signal" />
+        <circle cx="60" cy="672" r="8" className="sc-pulse" fill="none" stroke="hsl(var(--ks-signal))" strokeWidth="2" />
+        <text x="80" y="677" className="t-sans t-ink" style={{ fontSize: 15 }}>{S[206]}</text>
+        <text x="80" y="703" className="t-sans" style={{ fontSize: 13 }}>{S[207]}</text>
+      </g>
     </svg>
   );
 }

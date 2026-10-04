@@ -46,9 +46,9 @@ export function Nav() {
       <a href="#main" className="ks-skip">
         {UI.skip}
       </a>
-      <div className="ks-container flex h-[56px] items-center justify-between gap-6">
+      <div className="ks-container flex h-[64px] items-center justify-between gap-6">
         <Link to={href("/")} className="flex items-center gap-2.5 text-ks-ink" aria-label={`${BRAND} ${UI.home}`}>
-          <Wordmark height={34} />
+          <Wordmark height={44} />
         </Link>
 
         <nav aria-label="Primary" className="hidden flex-1 items-center justify-center gap-5 lg:flex xl:gap-8">
