@@ -49,7 +49,10 @@ window.addEventListener('unhandledrejection', (event) => {
 
     // Prerendered routes carry server markup; hydrate it. Anything else (an
     // unknown route served by the SPA fallback) renders from scratch.
-    if (rootElement.hasChildNodes() && rootElement.dataset.prerendered === 'true') {
+    const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+    const routeMatches = !rootElement.dataset.route || rootElement.dataset.route === currentPath;
+    if (!routeMatches) rootElement.innerHTML = '';
+    if (routeMatches && rootElement.hasChildNodes() && rootElement.dataset.prerendered === 'true') {
       await preloadRoute(window.location.pathname);
       hydrateRoot(rootElement, tree);
     } else {

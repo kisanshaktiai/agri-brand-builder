@@ -6,13 +6,11 @@
   RewriteBase /
   RewriteRule ^index\.html$ - [L]
 
-  # Explicit SPA entry for the /founder route.
-  # Keep this route-specific rule independent of the generic !-d fallback.
-  RewriteRule ^founder/?$ /index.html [L]
-
+  # Prerendered routes (e.g. /founder) are served from their own folder's
+  # index.html. Anything else falls back to the clean SPA shell.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
+  RewriteRule . /spa.html [L]
 </IfModule>
 
 # Security and Caching Headers
