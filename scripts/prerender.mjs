@@ -64,9 +64,12 @@ async function main() {
     // the first interaction (scroll, touch, key, pointer) or when the browser
     // is idle, whichever comes first. Readers on slow phones get the page
     // immediately; the menu, form and choreography arrive moments later.
+    page = page.replace('data-prerendered="true"', `data-prerendered="true" data-route="${route}"`);
     const entry = page.match(/<script type="module" crossorigin src="([^"]+)"><\/script>/);
     if (entry) {
-      const loader = `<script>(function(){var s=${JSON.stringify(entry[1])},d=0;function go(){if(d)return;d=1;var e=document.createElement("script");e.type="module";e.crossOrigin="";e.src=s;document.head.appendChild(e);}["scroll","touchstart","pointerdown","keydown","mousemove"].forEach(function(n){addEventListener(n,go,{once:true,passive:true})});if("requestIdleCallback"in window){requestIdleCallback(go,{timeout:2500})}else{setTimeout(go,1200)}})();</script>`;
+      // If a host serves this file for a different path (SPA fallback), drop the
+      // stale markup and load the app immediately so the wrong page never shows.
+      const loader = `<script>(function(){var s=${JSON.stringify(entry[1])},d=0;function go(){if(d)return;d=1;var e=document.createElement("script");e.type="module";e.crossOrigin="";e.src=s;document.head.appendChild(e);}var r=document.getElementById("root"),p=location.pathname.replace(/\\/+$/,"")||"/";if(r&&r.getAttribute("data-route")!==p){r.innerHTML="";r.removeAttribute("data-prerendered");go();return;}["scroll","touchstart","pointerdown","keydown","mousemove"].forEach(function(n){addEventListener(n,go,{once:true,passive:true})});if("requestIdleCallback"in window){requestIdleCallback(go,{timeout:2500})}else{setTimeout(go,1200)}})();</script>`;
       page = page.replace(entry[0], "").replace("</body>", `${loader}\n  </body>`);
     }
     const outDir = route === "/" ? dist : path.join(dist, route.replace(/^\//, ""));
